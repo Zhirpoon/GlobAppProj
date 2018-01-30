@@ -1,3 +1,0 @@
-# GlobAppProj
-# GlobAppProj
-# GlobAppProj
