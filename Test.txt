@@ -1,0 +1,6 @@
+create table ExpertiseEntity(
+expertiseName varchar(255) NOT NULL,
+CONSTRAINT ExpertiseEntity_pk PRIMARY KEY (expertiseName));
+
+insert into ExpertiseEntity(EXPERTISENAME)
+values ('PHP'), ('JAVA'), ('PERL'), ('C'), ('C#'), ('C++'), ('SQL');
