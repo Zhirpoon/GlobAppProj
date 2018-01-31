@@ -1,6 +1,7 @@
 package se.kth.id1212.globalapps.controller;
 
 import javax.ejb.Stateless;
+import se.kth.id1212.globalapps.view.RegistrationDTO;
 
 /**
  *
@@ -8,5 +9,9 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class Controller {
+
+    public void register(RegistrationDTO registrationDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
