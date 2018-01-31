@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import se.kth.id1212.globalapps.dtos.RegistrationDTO;
@@ -18,8 +19,6 @@ import se.kth.id1212.globalapps.dtos.RegistrationDTO;
  */
 @Entity
 public class UserEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     
     @Id
     @Basic(optional = false)
@@ -31,6 +30,7 @@ public class UserEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "REGISTRATIONDATE")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date registrationDate;
     
     @Basic(optional = false)
@@ -72,8 +72,24 @@ public class UserEntity implements Serializable {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getHashedPassword() {
+        return hashedPassword;
     }
     
     
@@ -92,10 +108,7 @@ public class UserEntity implements Serializable {
             return false;
         }
         UserEntity other = (UserEntity) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
-            return false;
-        }
-        return true;
+        return !((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username)));
     }
 
     @Override
