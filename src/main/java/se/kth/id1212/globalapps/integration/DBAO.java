@@ -3,6 +3,8 @@ package se.kth.id1212.globalapps.integration;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import se.kth.id1212.globalapps.model.ApplicationEntity;
+import se.kth.id1212.globalapps.model.UserEntity;
 
 /**
  *
@@ -17,6 +19,7 @@ public class DBAO {
     }
     
     public void addUser(UserEntity user){
+        
     }
     
     public UserEntity getUser(){
