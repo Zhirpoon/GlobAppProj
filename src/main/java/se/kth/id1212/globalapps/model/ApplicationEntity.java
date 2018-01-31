@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 
 /**
  *
@@ -18,10 +21,29 @@ public class ApplicationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long applicationId;
     
+    @NotNull
+    @ManyToOne
+    private UserEntity userEntity;
+    
+    @NotNull
+    private TimePeriod[] periodsOfAvailability;
+    
+    @NotNull
+    private YearsWithExpertise[] expertises;
+    
+    @NotNull
     private boolean status;
+    
+    @NotNull
     private int versionNumber;
     
-
+    public ApplicationEntity() {
+    }
+    
+    public ApplicationEntity(ApplicationDTO application) {
+            
+    }
+    
     public Long getApplicationId() {
         return applicationId;
     }
