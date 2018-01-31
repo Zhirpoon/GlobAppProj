@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 /**
  *
- * @author Anders Klasson <aklasson@kth.se>
+ * @author Johan Rosengren <jrosengr@kth.se>
  */
 @Entity
 public class ApplicationEntity implements Serializable {
@@ -16,26 +16,24 @@ public class ApplicationEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long applicationId;
     
-    //TimePeriod[] periodsOfAvailability;
+    private boolean status;
+    private int versionNumber;
     
-    public ApplicationEntity(){
-        
-    }
-    
-    public Long getId() {
-        return id;
+
+    public Long getApplicationId() {
+        return applicationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setApplicationId(Long id) {
+        this.applicationId = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (applicationId != null ? applicationId.hashCode() : 0);
         return hash;
     }
 
@@ -46,15 +44,12 @@ public class ApplicationEntity implements Serializable {
             return false;
         }
         ApplicationEntity other = (ApplicationEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.applicationId == null && other.applicationId != null) || (this.applicationId != null && !this.applicationId.equals(other.applicationId)));
     }
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.ApplicationEntity[ id=" + id + " ]";
+        return "se.kth.id1212.globalapps.model.ApplicationEntity[ id=" + applicationId + " ]";
     }
     
 }
