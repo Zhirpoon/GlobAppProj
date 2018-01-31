@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <head>
         <title>TODO supply a title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
-        <div>TODO write content</div>
+        <h:form>
+            <h:outputLabel value="First Name: "/>
+            <h:inputText value="#{accountHandler.firstName}"/>
+            <h:outputLabel value="Last Name: "/>
+            <h:inputText value="#{accountHandler.lastName}"/>
+            <h:outputLabel value="Email: "/>
+            <h:inputText value="#{accountHandler.email}"/>
+            <h:outputLabel value="Username: "/>
+            <h:inputText value="#{accountHandler.username}"/>
+            <h:outputLabel value="Password: "/>
+            <h:inputText value="#{accountHandler.password}"/>
+            <h:commandButton action="#{accountHandler.register()}" value="Register new user"/>
+        </h:form>
     </body>
 </html>

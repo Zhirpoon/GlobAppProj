@@ -2,6 +2,7 @@ package se.kth.id1212.globalapps.integration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
@@ -19,10 +20,15 @@ public class DBAO {
     }
     
     public void addUser(UserEntity user){
-        
+        try{
+            EntityManager em = beginTransaction();
+            em.persist(user);
+        }finally{
+            commitTransaction();
+        }
     }
     
-    public UserEntity getUser(){
+/*    public UserEntity getUser(){
     }
     
     public String[] getAllExpertises(){
@@ -38,6 +44,20 @@ public class DBAO {
     }
     
     public void updateApplicationStatusAccepted(){
+    }*/
+
+    private EntityManager beginTransaction() {
+         EntityManager em = emFactory.createEntityManager();
+         this.threadEM.set(em);
+         EntityTransaction transaction = em.getTransaction();
+         if(!transaction.isActive()){
+             transaction.begin();
+         }
+         return em;
+    }
+
+    private void commitTransaction() {
+        this.threadEM.get().getTransaction().commit();
     }
     
     
