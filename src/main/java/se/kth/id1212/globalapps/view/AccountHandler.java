@@ -25,33 +25,58 @@ public class AccountHandler {
       private String firstName;
       private String lastName;
       private String email;
+      private Exception failure;
 
     public void register(){
+        try{
         controller.register(new RegistrationDTO(firstName, lastName, email, username, password));
+        }
+        catch(Exception e){
+            handleException(e);
+        }
     }
       
-
-
-    public String getUsername() {
-        return username;
+    public void login(){
+        try{
+        controller.login(new LoginCredentialsDTO(username, password));
+        }
+        catch(Exception e){
+            handleException(e);
+        }
     }
 
-    public String getPassword() {
-        return password;
+ 
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getLastName() {
-        return lastName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getEmail() {
-        return email;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private void handleException(Exception e) {
+       failure = e;
     }
           
-      
-    
+   public boolean getSuccess(){
+       return failure == null;
+   }   
+   
+   public String getFailureReason(){
+       return failure.getMessage();
+   }
+   
 }
