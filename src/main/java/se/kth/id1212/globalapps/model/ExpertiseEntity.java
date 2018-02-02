@@ -23,6 +23,10 @@ public class ExpertiseEntity implements Serializable {
     
     public ExpertiseEntity() {
     }
+    
+    public ExpertiseEntity(String expertiseName) {
+        this.expertiseName = expertiseName;
+    }
 
     public String getExpertiseName() {
         return expertiseName;

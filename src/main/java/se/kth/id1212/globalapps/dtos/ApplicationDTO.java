@@ -15,5 +15,5 @@ public interface ApplicationDTO {
     public String getUsername();
     public UserDTO getUserDTO();
     // status is either accepted or rejected
-    public String getStatus();
+    public boolean getStatus();
 }

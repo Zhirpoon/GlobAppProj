@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
+import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 
 /**
  *
@@ -16,13 +18,12 @@ import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 @Entity
 public class ApplicationEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long applicationId;
     
-    @NotNull
     @ManyToOne
+    @JoinColumn(name= "owner", nullable= false)
     private UserEntity userEntity;
     
     @NotNull
@@ -40,16 +41,22 @@ public class ApplicationEntity implements Serializable {
     public ApplicationEntity() {
     }
     
-    public ApplicationEntity(ApplicationDTO application) {
-            
+    public ApplicationEntity(ApplicationDTO applicationDTO , UserEntity userEntity) {
+            this.userEntity = userEntity;
+            this.expertises = new YearsWithExpertise[applicationDTO.getExpertises().length];
+            this.periodsOfAvailability = new TimePeriod[applicationDTO.getAvailabilityPeriods().length];
+            for(int i=0;i<this.expertises.length;i++) {
+                this.expertises[i] = new YearsWithExpertise(applicationDTO.getExpertises()[i]);
+            }
+            for(int i=0;i<this.periodsOfAvailability.length;i++) {
+                this.periodsOfAvailability[i] = new TimePeriod(applicationDTO.getAvailabilityPeriods()[i]);
+            }
+            this.status = applicationDTO.getStatus();
+            this.versionNumber = 1;
     }
     
     public Long getApplicationId() {
         return applicationId;
-    }
-
-    public void setApplicationId(Long id) {
-        this.applicationId = id;
     }
 
     @Override
@@ -61,12 +68,31 @@ public class ApplicationEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ApplicationEntity)) {
             return false;
         }
         ApplicationEntity other = (ApplicationEntity) object;
         return !((this.applicationId == null && other.applicationId != null) || (this.applicationId != null && !this.applicationId.equals(other.applicationId)));
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public TimePeriod[] getPeriodsOfAvailability() {
+        return periodsOfAvailability;
+    }
+
+    public YearsWithExpertise[] getExpertises() {
+        return expertises;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public int getVersionNumber() {
+        return versionNumber;
     }
 
     @Override
