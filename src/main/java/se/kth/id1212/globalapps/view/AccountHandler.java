@@ -30,10 +30,31 @@ public class AccountHandler {
     public void register(){
         try{
         controller.register(new RegistrationDTO(firstName, lastName, email, username, password));
+        System.out.println(firstName + lastName + email + username + password);
         }
         catch(Exception e){
             handleException(e);
         }
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
     }
       
     public void login(){
@@ -49,6 +70,7 @@ public class AccountHandler {
 
     public void setUsername(String username) {
         this.username = username;
+        System.out.println("Username: " + username);
     }
 
     public void setPassword(String password) {
