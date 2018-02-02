@@ -1,9 +1,11 @@
 package se.kth.id1212.globalapps.integration;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 
@@ -11,24 +13,32 @@ import se.kth.id1212.globalapps.model.UserEntity;
  *
  * @author Anders Klasson <aklasson@kth.se>
  */
+@Stateless
 public class DBAO {
-    private final EntityManagerFactory emFactory;
-    private final ThreadLocal<EntityManager> threadEM = new ThreadLocal<>();
-    
-    public DBAO(){
-        this.emFactory = Persistence.createEntityManagerFactory("GlobalAppPU");
-    }
+
+    @PersistenceContext(unitName = "GlobalAppPU")
+    private EntityManager em;
     
     public void addUser(UserEntity user){
-        try{
-            EntityManager em = beginTransaction();
-            em.persist(user);
-        }finally{
-            commitTransaction();
-        }
+        em.persist(user);
     }
     
-/*    public UserEntity getUser(){
+//    private final EntityManagerFactory emFactory;
+    // private final ThreadLocal<EntityManager> threadEM = new ThreadLocal<>();
+
+//    public DBAO(){
+//        this.emFactory = Persistence.createEntityManagerFactory("GlobalAppPU");
+//    }
+////    
+//    public void addUser(UserEntity user){
+//        try{
+//            EntityManager em = beginTransaction();
+//            em.persist(user);
+//        }finally{
+//            commitTransaction();
+//        }
+//    }
+    /*    public UserEntity getUser(){
     }
     
     public String[] getAllExpertises(){
@@ -45,21 +55,17 @@ public class DBAO {
     
     public void updateApplicationStatusAccepted(){
     }*/
-
-    private EntityManager beginTransaction() {
-         EntityManager em = emFactory.createEntityManager();
-         this.threadEM.set(em);
-         EntityTransaction transaction = em.getTransaction();
-         if(!transaction.isActive()){
-             transaction.begin();
-         }
-         return em;
-    }
-
-    private void commitTransaction() {
-        this.threadEM.get().getTransaction().commit();
-    }
-    
-    
-    
+//    private EntityManager beginTransaction() {
+//         EntityManager em = emFactory.createEntityManager();
+//         this.threadEM.set(em);
+//         EntityTransaction transaction = em.getTransaction();
+//         if(!transaction.isActive()){
+//             transaction.begin();
+//         }
+//         return em;
+//    }
+//
+//    private void commitTransaction() {
+//        this.threadEM.get().getTransaction().commit();
+//    }
 }

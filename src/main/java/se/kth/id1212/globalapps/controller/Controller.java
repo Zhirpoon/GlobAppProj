@@ -3,6 +3,7 @@ package se.kth.id1212.globalapps.controller;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import se.kth.id1212.globalapps.integration.DBAO;
+import se.kth.id1212.globalapps.model.UserEntity;
 import se.kth.id1212.globalapps.view.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.RegistrationDTO;
 
@@ -17,7 +18,7 @@ public class Controller {
     DBAO dbao;
     
     public void register(RegistrationDTO registrationDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        dbao.addUser(new UserEntity(registrationDTO, 1));
     }
 
     public void login(LoginCredentialsDTO loginCredentialsDTO) {
