@@ -3,11 +3,14 @@ package se.kth.id1212.globalapps.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,40 +24,28 @@ import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 public class UserEntity implements Serializable {
     
     @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", nullable = false)
     private String username;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "REGISTRATIONDATE")
+
+    @Column(name = "REGISTRATIONDATE", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date registrationDate;
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", nullable = false)
     private String email;
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "FIRSTNAME")
+    @Column(name = "FIRSTNAME", nullable = false)
     private String firstName;
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "LASTNAME")
+    @Column(name = "LASTNAME", nullable = false)
     private String lastName;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PASSWORD")
+
+    @Column(name = "PASSWORD", nullable = false)
     private int hashedPassword;
+    
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ACCOUNTTYPE", nullable = false)
+    private AccountTypeEntity accountType;
     
     public UserEntity() {        
     }
@@ -66,6 +57,7 @@ public class UserEntity implements Serializable {
         this.email = registrationInformation.getMail();
         this.hashedPassword = hashedPassword;
         this.registrationDate = new Date();
+        //this.accountType = new AccountTypeEntity("APPLICANT");
     }
 
     public String getUsername() {

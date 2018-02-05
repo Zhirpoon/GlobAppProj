@@ -1,6 +1,7 @@
 package se.kth.id1212.globalapps.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,19 +24,19 @@ public class ApplicationEntity implements Serializable {
     private Long applicationId;
     
     @ManyToOne
-    @JoinColumn(name= "owner", nullable= false)
+    @JoinColumn(name= "OWNER", nullable= false)
     private UserEntity userEntity;
     
-    @NotNull
+    @Column(name = "PERIODSOFAVAILABILITY", nullable = false)
     private TimePeriod[] periodsOfAvailability;
     
-    @NotNull
+    @Column(name = "YEARSWITHEXPERTISE", nullable = false)
     private YearsWithExpertise[] expertises;
     
-    @NotNull
+    @Column(name = "STATUS", nullable = false)
     private boolean status;
     
-    @NotNull
+    @Column(name = "VERSION", nullable = false)
     private int versionNumber;
     
     public ApplicationEntity() {
