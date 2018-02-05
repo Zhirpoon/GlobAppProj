@@ -4,3 +4,10 @@ CONSTRAINT ExpertiseEntity_pk PRIMARY KEY (expertiseName));
 
 insert into ExpertiseEntity(EXPERTISENAME)
 values ('PHP'), ('JAVA'), ('PERL'), ('C'), ('C#'), ('C++'), ('SQL');
+
+CREATE TABLE ACCOUNTTYPE(
+NAME VARCHAR(255) NOT NULL,
+CONSTRAINT ACCOUNTTYPE_pk PRIMARY KEY (NAME));
+
+INSERT INTO ACCOUNTTYPE(NAME)
+values ('APPLICANT'), ('RECRUITER');

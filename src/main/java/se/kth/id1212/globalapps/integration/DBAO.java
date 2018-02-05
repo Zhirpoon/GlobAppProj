@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import javax.persistence.PersistenceException;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
@@ -23,6 +24,10 @@ public class DBAO {
     
     public void addUser(UserEntity user) throws SQLIntegrityConstraintViolationException{
         em.persist(user);
+    }
+    
+    public AccountTypeEntity getAccountTypeApplicant(){
+        return em.find(AccountTypeEntity.class,"APPLICANT");
     }
     
 //    private final EntityManagerFactory emFactory;

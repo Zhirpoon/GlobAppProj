@@ -3,14 +3,11 @@ package se.kth.id1212.globalapps.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -57,16 +54,12 @@ public class UserEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PASSWORD")
-    private byte[] hashedPassword;
-    
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ACCOUNTTYPE", nullable = false)
-    private AccountTypeEntity accountType;
+    private int hashedPassword;
     
     public UserEntity() {        
     }
     
-    public UserEntity(RegistrationDTO registrationInformation, byte[] hashedPassword) {
+    public UserEntity(RegistrationDTO registrationInformation, int hashedPassword) {
         this.username = registrationInformation.getUsername();
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
@@ -95,7 +88,7 @@ public class UserEntity implements Serializable {
         return lastName;
     }
 
-    public byte[] getHashedPassword() {
+    public int getHashedPassword() {
         return hashedPassword;
     }
     
