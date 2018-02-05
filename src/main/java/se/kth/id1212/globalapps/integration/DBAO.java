@@ -1,11 +1,13 @@
 package se.kth.id1212.globalapps.integration;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 
@@ -19,7 +21,7 @@ public class DBAO {
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
     
-    public void addUser(UserEntity user){
+    public void addUser(UserEntity user) throws SQLIntegrityConstraintViolationException{
         em.persist(user);
     }
     

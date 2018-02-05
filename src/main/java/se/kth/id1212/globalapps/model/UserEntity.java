@@ -54,12 +54,12 @@ public class UserEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PASSWORD")
-    private int hashedPassword;
+    private byte[] hashedPassword;
     
     public UserEntity() {        
     }
     
-    public UserEntity(RegistrationDTO registrationInformation, int hashedPassword) {
+    public UserEntity(RegistrationDTO registrationInformation, byte[] hashedPassword) {
         this.username = registrationInformation.getUsername();
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
@@ -88,7 +88,7 @@ public class UserEntity implements Serializable {
         return lastName;
     }
 
-    public int getHashedPassword() {
+    public byte[] getHashedPassword() {
         return hashedPassword;
     }
     
