@@ -18,7 +18,7 @@ public class Controller {
     DBAO dbao;
     
     public void register(RegistrationDTO registrationDTO) {
-        dbao.addUser(new UserEntity(registrationDTO, 1));
+        dbao.addUser(new UserEntity(registrationDTO, 1, dbao.getAccountTypeApplicant()));
     }
 
     public void login(LoginCredentialsDTO loginCredentialsDTO) {

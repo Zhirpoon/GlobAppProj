@@ -8,7 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import se.kth.id1212.globalapps.model.AccountTypeEntity;
-import javax.persistence.PersistenceException;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 
@@ -22,7 +21,7 @@ public class DBAO {
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
     
-    public void addUser(UserEntity user) throws SQLIntegrityConstraintViolationException{
+    public void addUser(UserEntity user){
         em.persist(user);
     }
     
