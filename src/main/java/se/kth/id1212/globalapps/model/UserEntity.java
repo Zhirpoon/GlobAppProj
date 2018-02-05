@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import se.kth.id1212.globalapps.dtos.RegistrationDTO;
+import se.kth.id1212.globalapps.integration.DBAO;
 
 /**
  *
@@ -50,14 +51,14 @@ public class UserEntity implements Serializable {
     public UserEntity() {        
     }
     
-    public UserEntity(RegistrationDTO registrationInformation, int hashedPassword) {
+    public UserEntity(RegistrationDTO registrationInformation, int hashedPassword, AccountTypeEntity accountType) {
         this.username = registrationInformation.getUsername();
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
         this.email = registrationInformation.getMail();
         this.hashedPassword = hashedPassword;
         this.registrationDate = new Date();
-        //this.accountType = new AccountTypeEntity("APPLICANT");
+        this.accountType = accountType;
     }
 
     public String getUsername() {
