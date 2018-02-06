@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import org.apache.commons.codec.binary.Hex;
 import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 
 /**
@@ -59,7 +60,7 @@ public class UserEntity implements Serializable {
             digest = MessageDigest.getInstance("SHA-256");
             String toHash = registrationInformation.getPassword();
             byte[] hash = digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
-            this.hashedPassword = new String(hash);
+            this.hashedPassword = new String(Hex.encodeHex(hash));
         } catch (NoSuchAlgorithmException ex) {
             this.hashedPassword="couldNotHash";
             Logger.getLogger(UserEntity.class.getName()).log(Level.SEVERE, null, ex);
