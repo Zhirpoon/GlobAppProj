@@ -65,7 +65,6 @@ public class UserEntity implements Serializable {
             Logger.getLogger(UserEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        this.hashedPassword = registrationInformation.getPassword();
         this.registrationDate = new Date();
         this.accountType = accountType;
     }
