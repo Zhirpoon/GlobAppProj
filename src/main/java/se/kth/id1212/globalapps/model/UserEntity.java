@@ -1,7 +1,12 @@
 package se.kth.id1212.globalapps.model;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -56,6 +61,17 @@ public class UserEntity implements Serializable {
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
         this.email = registrationInformation.getMail();
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+            String toHash = registrationInformation.getPassword();
+            byte[] hash = digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
+            this.hashedPassword = new String(hash);
+        } catch (NoSuchAlgorithmException ex) {
+            this.hashedPassword="couldNotHash";
+            Logger.getLogger(UserEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.hashedPassword = registrationInformation.getPassword();
         this.registrationDate = new Date();
         this.accountType = accountType;
