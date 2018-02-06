@@ -42,9 +42,9 @@ public class UserEntity implements Serializable {
     private String lastName;
 
     @Column(name = "PASSWORD", nullable = false)
-    private int hashedPassword;
+    private String hashedPassword;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "ACCOUNTTYPE", nullable = false)
     private AccountTypeEntity accountType;
     
@@ -56,7 +56,7 @@ public class UserEntity implements Serializable {
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
         this.email = registrationInformation.getMail();
-        this.hashedPassword = hashedPassword;
+        this.hashedPassword = registrationInformation.getPassword();
         this.registrationDate = new Date();
         this.accountType = accountType;
     }
@@ -81,7 +81,7 @@ public class UserEntity implements Serializable {
         return lastName;
     }
 
-    public int getHashedPassword() {
+    public String getHashedPassword() {
         return hashedPassword;
     }
     
