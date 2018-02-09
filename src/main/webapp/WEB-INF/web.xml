@@ -11,7 +11,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -25,8 +25,22 @@
         <auth-method>FORM</auth-method>
         <realm-name>User</realm-name>
         <form-login-config>
-            <form-login-page>/logged_in.xhtml</form-login-page>
-            <form-error-page>/welcome.xhtml</form-error-page>
+            <form-login-page>/welcome.xhtml</form-login-page>
+            <form-error-page>/loginerror.xhtml</form-error-page>
         </form-login-config>
     </login-config>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Applicant resources</web-resource-name>
+            <url-pattern>/applicant/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>APPLICANT</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    
+    
 </web-app>
