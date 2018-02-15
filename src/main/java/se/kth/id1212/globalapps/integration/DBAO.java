@@ -9,6 +9,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
+import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
@@ -35,6 +37,22 @@ public class DBAO {
     public Collection<ExpertiseEntity> getAllExpertises() {
         Query query = em.createQuery("SELECT * FROM EXPERTISEENTITY");
         return (Collection<ExpertiseEntity>) query.getResultList();
+    }
+    
+    public UserEntity findUserByUsername(String username) {
+        return em.find(UserEntity.class, username);
+    }
+
+    public void saveApplication(ApplicationEntity application) {
+        em.persist(application);
+    }
+    
+    public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
+        
+    }
+    
+    public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
+        
     }
     
 //    private final EntityManagerFactory emFactory;
