@@ -17,7 +17,7 @@ public class AccountTypeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = true)
     private String name;
     
     public AccountTypeEntity() {
@@ -44,15 +44,11 @@ public class AccountTypeEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof AccountTypeEntity)) {
             return false;
         }
         AccountTypeEntity other = (AccountTypeEntity) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name))) {
-            return false;
-        }
-        return true;
+        return !((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name)));
     }
 
     @Override

@@ -3,8 +3,6 @@ package se.kth.id1212.globalapps.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
@@ -17,7 +15,7 @@ public class ExpertiseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "EXPERTISENAME")
+    @Column(name = "EXPERTISENAME", nullable= true)
     @Size(min = 1, max = 255)
     private String expertiseName;
     
@@ -45,7 +43,6 @@ public class ExpertiseEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ExpertiseEntity)) {
             return false;
         }
