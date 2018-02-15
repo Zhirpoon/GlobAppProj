@@ -1,8 +1,10 @@
 package se.kth.id1212.globalapps.controller;
 
+import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import se.kth.id1212.globalapps.integration.DBAO;
+import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
@@ -26,7 +28,14 @@ public class Controller {
     }
 
     public String[] getAllExpertises() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collection<ExpertiseEntity> expertiseEntities = dbao.getAllExpertises();
+        String[] expertises = new String[expertiseEntities.size()];
+        int position = 0;
+        for(ExpertiseEntity exp : expertiseEntities) {
+            expertises[position] = exp.getExpertiseName();
+            position++;
+        }
+        return expertises;
     }
     
 }
