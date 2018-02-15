@@ -18,7 +18,7 @@ import se.kth.id1212.globalapps.view.DTOs.YearsWithExpertiseDTO;
  */
 @Named(value = "applicationCreator")
 @SessionScoped
-public class ApplicationCreator implements Serializable{
+public class ApplicationCreator implements Serializable {
 
     @EJB
     private Controller controller;
@@ -28,54 +28,71 @@ public class ApplicationCreator implements Serializable{
     private Application application;
     private Date startDate;
     private Date endDate;
-    
-    
-    /**
-             * Creates a new instance of ApplicationCreator
-             */
 
+    /**
+     * Creates a new instance of ApplicationCreator
+     */
     public ApplicationCreator() {
         expertises = controller.getAllExpertises();
         application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-    } 
+    }
 
-    public String[] getExpertises(){
-        return expertises;
-    }
-    
-    public void setYears(int years){
-        this.years = years;
-    }
-    
-    public void setExpertise(String expertise){
-        this.expertise = expertise;
-    }
-    
-    public void setStartDate(Date startDate){
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-    
-    public void setEndDate(Date endDate){
+
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-    
-    public se.kth.id1212.globalapps.dtos.TimePeriodDTO[] getAvailiabilityPeriods(){
-        return this.application.getAvailabilityPeriods();
+
+    public Date getStartDate() {
+        return startDate;
     }
-    
-    public se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO[] getYearswithExpertises(){
-        return this.application.getExpertises();
-    } 
-    
-    public void addAvailabilityPeriod(){
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void addAvailabilityPeriod() {
         TimePeriodDTO availabilityPeriod = new TimePeriodDTO(startDate, endDate);
         this.application.addAvailabilityPeriod(availabilityPeriod);
     }
-    
-    public void addYearsWithExpertise(){
+
+    public void setYears(int years) {
+        this.years = years;
+    }
+
+    public int getYears() {
+        return years;
+    }
+
+    public String getExpertise() {
+        return expertise;
+    }
+
+    public void setExpertise(String expertise) {
+        this.expertise = expertise;
+    }
+
+    public void addYearsWithExpertise() {
         YearsWithExpertiseDTO yearsWithExpertise = new YearsWithExpertiseDTO(years, expertise);
         application.addExpertises(yearsWithExpertise);
     }
-    
-   
+
+    public void sendApplication() {
+        //controller.
+    }
+
+    public String[] getExpertises() {
+        return expertises;
+    }
+
+    public se.kth.id1212.globalapps.dtos.TimePeriodDTO[] getAvailiabilityPeriods() {
+        return this.application.getAvailabilityPeriods();
+    }
+
+    public se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO[] getYearswithExpertises() {
+        return this.application.getExpertises();
+    }
+
 }
