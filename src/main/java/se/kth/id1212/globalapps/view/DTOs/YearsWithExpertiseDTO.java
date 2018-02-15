@@ -1,4 +1,4 @@
-package se.kth.id1212.globalapps.view;
+package se.kth.id1212.globalapps.view.DTOs;
 
 /**
  *
@@ -14,7 +14,7 @@ public class YearsWithExpertiseDTO implements se.kth.id1212.globalapps.dtos.Year
     }
     
     @Override
-    public String getExpertises() {
+    public String getExpertise() {
         return expertise;
     }
 

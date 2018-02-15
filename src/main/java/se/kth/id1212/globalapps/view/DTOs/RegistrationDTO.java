@@ -1,4 +1,4 @@
-package se.kth.id1212.globalapps.view;
+package se.kth.id1212.globalapps.view.DTOs;
 
 /**
  *
