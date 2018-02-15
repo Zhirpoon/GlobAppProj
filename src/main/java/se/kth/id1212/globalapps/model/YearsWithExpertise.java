@@ -11,7 +11,7 @@ public class YearsWithExpertise {
     private final int yearsOfExperience;
     
     public YearsWithExpertise(YearsWithExpertiseDTO expertisesDTO) {
-        this.expertise = new ExpertiseEntity(expertisesDTO.getExpertises());
+        this.expertise = new ExpertiseEntity(expertisesDTO.getExpertise());
         this.yearsOfExperience = expertisesDTO.getYears();
     }
 

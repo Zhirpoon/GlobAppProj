@@ -13,7 +13,6 @@ public interface ApplicationDTO {
     public YearsWithExpertiseDTO[] getExpertises();
     public TimePeriodDTO[] getAvailabilityPeriods();
     public String getUsername();
-    public UserDTO getUserDTO();
     // status is either accepted or rejected
     public boolean getStatus();
 }
