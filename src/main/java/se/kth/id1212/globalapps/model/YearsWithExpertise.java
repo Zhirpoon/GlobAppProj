@@ -6,7 +6,7 @@ import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
  *
  * @author Johan Rosengren <jrosengr@kth.se>
  */
-public class YearsWithExpertise {
+public class YearsWithExpertise implements YearsWithExpertiseDTO{
     private final ExpertiseEntity expertise;
     private final int yearsOfExperience;
     
@@ -14,12 +14,14 @@ public class YearsWithExpertise {
         this.expertise = new ExpertiseEntity(expertisesDTO.getExpertises());
         this.yearsOfExperience = expertisesDTO.getYears();
     }
-
+    
+    @Override
     public String getExpertise() {
         return expertise.getExpertiseName();
     }
-
-    public int getYearsOfExperience() {
+    
+    @Override
+    public int getYears() {
         return yearsOfExperience;
     }    
 }

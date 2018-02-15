@@ -1,14 +1,17 @@
 package se.kth.id1212.globalapps.integration;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
+import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 
 /**
@@ -27,6 +30,11 @@ public class DBAO {
     
     public AccountTypeEntity getAccountTypeApplicant(){
         return em.find(AccountTypeEntity.class,"APPLICANT");
+    }
+    
+    public Collection<ExpertiseEntity> getAllExpertises() {
+        Query query = em.createQuery("SELECT * FROM EXPERTISEENTITY");
+        return (Collection<ExpertiseEntity>) query.getResultList();
     }
     
 //    private final EntityManagerFactory emFactory;
