@@ -8,9 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
-import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 
 /**
  *
@@ -24,19 +22,13 @@ public class ApplicationEntity implements Serializable {
     private Long applicationId;
     
     @ManyToOne
-    @JoinColumn(name= "OWNER", nullable= false)
+    @JoinColumn(name= "OWNER", nullable= true)
     private UserEntity userEntity;
-    
-    @Column(name = "PERIODSOFAVAILABILITY", nullable = false)
-    private TimePeriod[] periodsOfAvailability;
-    
-    @Column(name = "YEARSWITHEXPERTISE", nullable = false)
-    private YearsWithExpertise[] expertises;
-    
-    @Column(name = "STATUS", nullable = false)
+  
+    @Column(name = "STATUS", nullable = true)
     private boolean status;
     
-    @Column(name = "VERSION", nullable = false)
+    @Column(name = "VERSION", nullable = true)
     private int versionNumber;
     
     public ApplicationEntity() {
@@ -44,14 +36,6 @@ public class ApplicationEntity implements Serializable {
     
     public ApplicationEntity(ApplicationDTO applicationDTO , UserEntity userEntity) {
             this.userEntity = userEntity;
-            this.expertises = new YearsWithExpertise[applicationDTO.getExpertises().length];
-            this.periodsOfAvailability = new TimePeriod[applicationDTO.getAvailabilityPeriods().length];
-            for(int i=0;i<this.expertises.length;i++) {
-                this.expertises[i] = new YearsWithExpertise(applicationDTO.getExpertises()[i]);
-            }
-            for(int i=0;i<this.periodsOfAvailability.length;i++) {
-                this.periodsOfAvailability[i] = new TimePeriod(applicationDTO.getAvailabilityPeriods()[i]);
-            }
             this.status = applicationDTO.getStatus();
             this.versionNumber = 1;
     }
@@ -80,14 +64,6 @@ public class ApplicationEntity implements Serializable {
         return userEntity;
     }
 
-    public TimePeriod[] getPeriodsOfAvailability() {
-        return periodsOfAvailability;
-    }
-
-    public YearsWithExpertise[] getExpertises() {
-        return expertises;
-    }
-
     public boolean isStatus() {
         return status;
     }
@@ -98,7 +74,7 @@ public class ApplicationEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.ApplicationEntity[ id=" + applicationId + " ]";
+        return "se.kth.id1212.globalapps.model.ApplicationEntity[ applicationId=" + applicationId + " ]";
     }
     
 }

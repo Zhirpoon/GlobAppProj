@@ -24,27 +24,27 @@ import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 public class UserEntity implements Serializable {
     
     @Id
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "USERNAME", nullable = true)
     private String username;
 
-    @Column(name = "REGISTRATIONDATE", nullable = false)
+    @Column(name = "REGISTRATIONDATE", nullable = true)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date registrationDate;
     
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "EMAIL", nullable = true)
     private String email;
     
-    @Column(name = "FIRSTNAME", nullable = false)
+    @Column(name = "FIRSTNAME", nullable = true)
     private String firstName;
     
-    @Column(name = "LASTNAME", nullable = false)
+    @Column(name = "LASTNAME", nullable = true)
     private String lastName;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD", nullable = true)
     private String hashedPassword;
     
-    @ManyToOne
-    @JoinColumn(name = "ACCOUNTTYPE", nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "ACCOUNTTYPE")
     private AccountTypeEntity accountType;
     
     public UserEntity() {        
