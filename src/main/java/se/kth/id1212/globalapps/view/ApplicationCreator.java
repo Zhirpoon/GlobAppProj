@@ -3,7 +3,8 @@ package se.kth.id1212.globalapps.view;
 import java.io.Serializable;
 import java.util.Date;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -24,7 +25,7 @@ public class ApplicationCreator implements Serializable {
     private Controller controller;
     private String[] expertises;
     private String expertise;
-    private int years;
+    private int years = 0;
     private Application application;
     private Date startDate;
     private Date endDate;
@@ -33,8 +34,13 @@ public class ApplicationCreator implements Serializable {
      * Creates a new instance of ApplicationCreator
      */
     public ApplicationCreator() {
+        
         expertises = controller.getAllExpertises();
         application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+        System.out.println("Hej!");
+        for(String exp : expertises){
+            System.out.println(exp);
+        }
     }
 
     public void setStartDate(Date startDate) {
@@ -56,6 +62,8 @@ public class ApplicationCreator implements Serializable {
     public void addAvailabilityPeriod() {
         TimePeriodDTO availabilityPeriod = new TimePeriodDTO(startDate, endDate);
         this.application.addAvailabilityPeriod(availabilityPeriod);
+        startDate=null;
+        endDate=null;
     }
 
     public void setYears(int years) {
@@ -77,13 +85,16 @@ public class ApplicationCreator implements Serializable {
     public void addYearsWithExpertise() {
         YearsWithExpertiseDTO yearsWithExpertise = new YearsWithExpertiseDTO(years, expertise);
         application.addExpertises(yearsWithExpertise);
+        expertise="";
+        years = 0;
     }
 
     public void sendApplication() {
-        //controller.
+        controller.saveApplication(application);
     }
 
     public String[] getExpertises() {
+        System.out.println("HEEEEEEEEEEEEEEEEEJ!!!");
         return expertises;
     }
 

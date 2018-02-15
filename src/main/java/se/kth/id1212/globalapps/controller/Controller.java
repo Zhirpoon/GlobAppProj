@@ -48,5 +48,10 @@ public class Controller {
         dbao.saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
         dbao.saveApplicationExpertises(applicationId, application.getExpertises());
     }
+
+    public String getUsergroup(String username) {
+       //dummycode
+        return "APPLICANT";
+    }
     
 }
