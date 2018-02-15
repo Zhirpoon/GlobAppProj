@@ -4,8 +4,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import se.kth.id1212.globalapps.integration.DBAO;
 import se.kth.id1212.globalapps.model.UserEntity;
-import se.kth.id1212.globalapps.view.LoginCredentialsDTO;
-import se.kth.id1212.globalapps.view.RegistrationDTO;
+import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
+import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
 /**
  *
@@ -22,6 +22,10 @@ public class Controller {
     }
 
     public void login(LoginCredentialsDTO loginCredentialsDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String[] getAllExpertises() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

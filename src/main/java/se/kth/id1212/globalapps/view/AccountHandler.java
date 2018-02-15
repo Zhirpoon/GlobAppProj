@@ -1,6 +1,8 @@
 package se.kth.id1212.globalapps.view;
 
 
+import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
+import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;

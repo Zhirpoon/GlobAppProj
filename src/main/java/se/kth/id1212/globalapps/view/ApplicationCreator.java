@@ -14,6 +14,7 @@ public class ApplicationCreator {
 
     @EJB
     private Controller controller;
+    String[] expertises;
     
     
     /**
@@ -21,7 +22,12 @@ public class ApplicationCreator {
              */
 
     public ApplicationCreator() {
+        expertises = controller.getAllExpertises();
+    } 
 
+    public String[] getExpertises(){
+        return expertises;
     }
-
+    
+    
 }
