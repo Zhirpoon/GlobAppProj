@@ -93,6 +93,10 @@ public class UserEntity implements Serializable {
     public String getHashedPassword() {
         return hashedPassword;
     }
+
+    public AccountTypeEntity getAccountType() {
+        return accountType;
+    }
     
     
 

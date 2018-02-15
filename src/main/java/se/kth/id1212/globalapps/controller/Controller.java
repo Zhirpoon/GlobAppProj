@@ -50,8 +50,8 @@ public class Controller {
     }
 
     public String getUsergroup(String username) {
-       //dummycode
-        return "APPLICANT";
+        UserEntity user = dbao.findUserByUsername(username);
+        return user.getAccountType().getName();
     }
     
 }
