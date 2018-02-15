@@ -48,11 +48,27 @@ public class DBAO {
     }
     
     public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
-        
+        for(YearsWithExpertiseDTO expertise : expertises) {
+            Query query = em.createNativeQuery(
+                    "INSERT INTO PERIODSOFAVAILABILITY VALUES (?,?,?)"
+            );
+            query.setParameter(1, applicationId);
+            query.setParameter(2, expertise.getExpertise());
+            query.setParameter(3, expertise.getYears());
+            query.getSingleResult();
+        }
     }
     
     public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
-        
+        for(TimePeriodDTO timePeriod : timePeriods) {
+            Query query = em.createNamedQuery(
+                    "INSERT INTO YEARSWITHEXPERTISE VALUES (?,?,?)"
+            );
+            query.setParameter(1, applicationId);
+            query.setParameter(2, timePeriod.getStartdate());
+            query.setParameter(3, timePeriod.getEnddate());
+            query.getSingleResult();
+        }
     }
     
 //    private final EntityManagerFactory emFactory;
