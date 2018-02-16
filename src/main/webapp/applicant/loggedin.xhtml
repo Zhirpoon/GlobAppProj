@@ -10,17 +10,52 @@
     </h:head>
     <h:body>
 
-        <h3>Add expertise and years with experience #{applicationCreator.atext} och #{testingBean.text}</h3>
-        
-       <h:form>
-            <h:selectOneMenu value="#{applicationCreator.expertise}">
+        <h3>Add expertise and years with experience </h3>
 
+        <h:form>
+            <h:selectOneMenu value="#{applicationCreator.expertise}">
+                Expertise:
                 <c:forEach items="#{applicationCreator.expertises}" var="expertise">
                     <f:selectItem  itemValue="#{expertise}" itemLabel="#{expertise}"/>
                 </c:forEach>
 
             </h:selectOneMenu>
-        </h:form>      
+            Years:
+            <h:inputText id="inputAmount"  value="#{applicationCreator.years}"/>
+            <h:commandButton value="Add" action="#{applicationCreator.addYearsWithExpertise()}"/>
+        </h:form>    
+      
+        
+        
+        
+        
+                <h3>Add availability period </h3>
+		<h:form>
+			Start date (d-M-yyyy):
+                        <h:inputText value="#{applicationCreator.startDate}">
+	          <f:convertDateTime pattern="d-M-yyyy" />
+	        </h:inputText>
+			End date (d-M-yyyy):
+                        <h:inputText value="#{applicationCreator.endDate}">
+	          <f:convertDateTime pattern="d-M-yyyy" />
+	        </h:inputText>
+                        <h:commandButton value="Add" action="#{applicationCreator.addAvailabilityPeriod()}" />
+		</h:form>   
+        <hr></hr>
+        <h3>Added expertises</h3>
+        <c:forEach items="#{applicationCreator.yearswithExpertises}" var="yearsWiEx">
+            <p>Expertise: #{yearsWiEx.expertise} Years: #{yearsWiEx.years}</p>
+        </c:forEach>
+        
+              <hr></hr>
+        <h3>Added availability periods</h3>
+        <c:forEach items="#{applicationCreator.availiabilityPeriods}" var="availabilityPeriod">
+            <p>Start date: #{availabilityPeriod.startdate} End date: #{availabilityPeriod.enddate}</p>
+        </c:forEach>
+        
+        <h:form>
+            <h:commandButton value="Send application" action="#{applicationCreator.sendApplication()}"/>
+        </h:form>
         <!--        <h:form>
                     
                     <p>

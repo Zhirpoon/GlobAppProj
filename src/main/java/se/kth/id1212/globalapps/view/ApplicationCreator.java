@@ -1,9 +1,11 @@
 package se.kth.id1212.globalapps.view;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import javax.inject.Named;
@@ -17,8 +19,8 @@ import se.kth.id1212.globalapps.view.DTOs.YearsWithExpertiseDTO;
  * @author Anders Klasson <aklasson@kth.se>
  */
 @Named(value = "applicationCreator")
-@RequestScoped
-public class ApplicationCreator {
+@SessionScoped
+public class ApplicationCreator implements Serializable{
 
     @EJB
     private Controller controller;
@@ -39,15 +41,8 @@ public class ApplicationCreator {
     public void init(){
                 expertises = controller.getAllExpertises();
         application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-        System.out.println("Hej!");
-        for(String exp : expertises){
-            System.out.println(exp);
-        }
     }
     
-    public String getAtext(){
-        return "atext";
-    }
     
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
@@ -100,15 +95,14 @@ public class ApplicationCreator {
     }
 
     public String[] getExpertises() {
-        System.out.println("HEEEEEEEEEEEEEEEEEJ!!!");
         return expertises;
     }
 
-    public se.kth.id1212.globalapps.dtos.TimePeriodDTO[] getAvailiabilityPeriods() {
+    public TimePeriodDTO[] getAvailiabilityPeriods() {
         return this.application.getAvailabilityPeriods();
     }
 
-    public se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO[] getYearswithExpertises() {
+    public YearsWithExpertiseDTO[] getYearswithExpertises() {
         return this.application.getExpertises();
     }
 
