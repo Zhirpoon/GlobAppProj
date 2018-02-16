@@ -8,6 +8,7 @@ import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
+import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
@@ -52,6 +53,10 @@ public class Controller {
     public String getUsergroup(String username) {
         UserEntity user = dbao.findUserByUsername(username);
         return user.getAccountType().getName();
+    }
+    
+    public void searchApplications(ApplicationSearchDTO searchCriteria) {
+        dbao.searchApplications(searchCriteria);
     }
     
 }
