@@ -10,9 +10,9 @@
     </h:head>
     <h:body>
 
-        <h3>Add expertise and years with experience</h3>
-
-<!--        <h:form>
+        <h3>Add expertise and years with experience #{applicationCreator.atext} och #{testingBean.text}</h3>
+        
+       <h:form>
             <h:selectOneMenu value="#{applicationCreator.expertise}">
 
                 <c:forEach items="#{applicationCreator.expertises}" var="expertise">
@@ -20,19 +20,19 @@
                 </c:forEach>
 
             </h:selectOneMenu>
-        </h:form>-->
+        </h:form>      
         <!--        <h:form>
                     
                     <p>
                         <h:outputLabel for="inputAmount" value="Amount to convert "/>
-                        <h:inputText id="inputAmount"  value="#{conversionManager.amountToConvert}"  required="true"/>
+                        <h:inputText id="inputAmount"  value="{conversionManager.amountToConvert}"  required="true"/>
                     </p>
                     <p>
                         From
-                        <h:selectOneMenu value="#{conversionManager.fromCurrName}">
+                        <h:selectOneMenu value="{conversionManager.fromCurrName}">
         
-                            <c:forEach items="#{conversionManager.currencyList}" var="currency">
-                                <f:selectItem  itemValue="#{currency.currencyname}" itemLabel="#{currency.currencyname}"/>
+                            <c:forEach items="{conversionManager.currencyList}" var="currency">
+                                <f:selectItem  itemValue="#currency.currencyname}" itemLabel="{currency.currencyname}"/>
                             </c:forEach>
         
                         </h:selectOneMenu>
@@ -40,10 +40,10 @@
                     <p>
                         To
         
-                        <h:selectOneMenu value="#{conversionManager.toCurrName}">
+                        <h:selectOneMenu value="#conversionManager.toCurrName}">
         
-                            <c:forEach items="#{conversionManager.currencyList}" var="currency">
-                                <f:selectItem  itemValue="#{currency.currencyname}" itemLabel="#{currency.currencyname}"/>
+                            <c:forEach items="#conversionManager.currencyList}" var="currency">
+                                <f:selectItem  itemValue="#currency.currencyname}" itemLabel="#currency.currencyname}"/>
                             </c:forEach>
         
                         </h:selectOneMenu>       
@@ -51,11 +51,11 @@
         
                     </p>
                     <p>
-                        <h:commandButton value="Convert" action="#{conversionManager.convert()}"/>
+                        <h:commandButton value="Convert" action="#conversionManager.convert()}"/>
                     </p>   
                     <p>
                         <h:outputLabel for="convertedAmount" value="Converted amount "/>
-                        <h:outputText  id="convertedAmount" value="${conversionManager.convertedAmount}"/>
+                        <h:outputText  id="convertedAmount" value="$conversionManager.convertedAmount}"/>
                     </p>
                 </h:form>-->
 

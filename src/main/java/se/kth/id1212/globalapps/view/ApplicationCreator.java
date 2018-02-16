@@ -1,13 +1,12 @@
 package se.kth.id1212.globalapps.view;
 
-import java.io.Serializable;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
-import javax.inject.Named;
-import javax.faces.context.ExternalContext;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+
+import javax.inject.Named;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.view.DTOs.Application;
 import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
@@ -18,8 +17,8 @@ import se.kth.id1212.globalapps.view.DTOs.YearsWithExpertiseDTO;
  * @author Anders Klasson <aklasson@kth.se>
  */
 @Named(value = "applicationCreator")
-@SessionScoped
-public class ApplicationCreator implements Serializable {
+@RequestScoped
+public class ApplicationCreator {
 
     @EJB
     private Controller controller;
@@ -32,17 +31,24 @@ public class ApplicationCreator implements Serializable {
 
     /**
      * Creates a new instance of ApplicationCreator
+     * @return 
      */
-    public ApplicationCreator() {
-        
-        expertises = controller.getAllExpertises();
+
+    
+    @PostConstruct
+    public void init(){
+                expertises = controller.getAllExpertises();
         application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
         System.out.println("Hej!");
         for(String exp : expertises){
             System.out.println(exp);
         }
     }
-
+    
+    public String getAtext(){
+        return "atext";
+    }
+    
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
