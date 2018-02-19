@@ -73,7 +73,7 @@ public class DBAO {
     }
     
     public void searchApplications(ApplicationSearchDTO searchCriteria) {
-        // create query creator for searching applications!
+        
     }
     
 //    private final EntityManagerFactory emFactory;
