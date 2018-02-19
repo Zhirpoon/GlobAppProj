@@ -36,8 +36,8 @@ public class DBAO {
     }
     
     public Collection<ExpertiseEntity> getAllExpertises() {
-        Query query = em.createQuery("SELECT entities FROM EXPERTISEENTITY entities");
-        return (Collection<ExpertiseEntity>) query.getResultList();
+        Query query = em.createQuery("SELECT entities FROM ExpertiseEntity entities", ExpertiseEntity.class);
+        return query.getResultList();
     }
     
     public UserEntity findUserByUsername(String username) {

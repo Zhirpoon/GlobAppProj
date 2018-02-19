@@ -2,9 +2,7 @@ package se.kth.id1212.globalapps.view.DTOs;
 
 import java.util.Collection;
 import java.util.HashSet;
-import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
-import se.kth.id1212.globalapps.dtos.UserDTO;
-import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
+import se.kth.id1212.globalapps.model.YearsWithExpertise;
 
 /**
  *
@@ -30,12 +28,12 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     
     @Override
     public YearsWithExpertiseDTO[] getExpertises() {
-        return (YearsWithExpertiseDTO[]) expertises.toArray();
+        return (YearsWithExpertiseDTO[]) expertises.toArray(new YearsWithExpertiseDTO[expertises.size()]);
     }
 
     @Override
     public TimePeriodDTO[] getAvailabilityPeriods() {
-        return (TimePeriodDTO[]) availabilityPeriods.toArray();
+        return (TimePeriodDTO[]) availabilityPeriods.toArray(new TimePeriodDTO[availabilityPeriods.size()]);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
 
     @Override
     public boolean getStatus() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
     
 }

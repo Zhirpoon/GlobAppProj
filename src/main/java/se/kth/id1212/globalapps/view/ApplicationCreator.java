@@ -2,12 +2,13 @@ package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
-import javax.inject.Named;
-import javax.faces.context.ExternalContext;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+
+import javax.inject.Named;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.view.DTOs.Application;
 import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
@@ -19,7 +20,7 @@ import se.kth.id1212.globalapps.view.DTOs.YearsWithExpertiseDTO;
  */
 @Named(value = "applicationCreator")
 @SessionScoped
-public class ApplicationCreator implements Serializable {
+public class ApplicationCreator implements Serializable{
 
     @EJB
     private Controller controller;
@@ -32,17 +33,17 @@ public class ApplicationCreator implements Serializable {
 
     /**
      * Creates a new instance of ApplicationCreator
+     * @return 
      */
-    public ApplicationCreator() {
-        
-        expertises = controller.getAllExpertises();
-        application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-        System.out.println("Hej!");
-        for(String exp : expertises){
-            System.out.println(exp);
-        }
-    }
 
+    
+    @PostConstruct
+    public void init(){
+                expertises = controller.getAllExpertises();
+        application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+    }
+    
+    
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
@@ -94,15 +95,14 @@ public class ApplicationCreator implements Serializable {
     }
 
     public String[] getExpertises() {
-        System.out.println("HEEEEEEEEEEEEEEEEEJ!!!");
         return expertises;
     }
 
-    public se.kth.id1212.globalapps.dtos.TimePeriodDTO[] getAvailiabilityPeriods() {
+    public TimePeriodDTO[] getAvailiabilityPeriods() {
         return this.application.getAvailabilityPeriods();
     }
 
-    public se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO[] getYearswithExpertises() {
+    public YearsWithExpertiseDTO[] getYearswithExpertises() {
         return this.application.getExpertises();
     }
 
