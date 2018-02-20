@@ -1,6 +1,5 @@
 package se.kth.id1212.globalapps.view;
 
-
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 import javax.ejb.EJB;
@@ -8,7 +7,6 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import se.kth.id1212.globalapps.controller.Controller;
-
 
 /**
  *
@@ -18,33 +16,37 @@ import se.kth.id1212.globalapps.controller.Controller;
 @RequestScoped
 public class AccountHandler {
 
-      @EJB
-      Controller controller;
+    @EJB
+    Controller controller;
     /**
      * Creates a new instance of AccountHandler
      */
-      private String username;
-      private String password;
-      private String firstName;
-      private String lastName;
-      private String email;
-      private Exception failure;
-      private String userGroup;
+    private String username;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private Exception failure;
+    private String userGroup;
 
-      
-   public String getUserGroup(){
-       return controller.getUsergroup(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-   }
-      
-      
-    public void register(){
-        try{
-        controller.register(new RegistrationDTO(firstName, lastName, email, username, password));
-        System.out.println(firstName + lastName + email + username + password);
-        }
-        catch(Exception e){
+    public String getUserGroup() {
+        return controller.getUsergroup(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+    }
+
+    public void register() {
+        try {
+            controller.register(new RegistrationDTO(firstName, lastName, email, username, password));
+        } catch (Exception e) {
             handleException(e);
         }
+    }
+
+    public String getFailureReason() {
+        return failure.getMessage();
+    }
+
+    private void handleException(Exception e) {
+        failure = e;
     }
 
     public String getUsername() {
@@ -66,21 +68,9 @@ public class AccountHandler {
     public String getEmail() {
         return email;
     }
-      
-    public void login(){
-        try{
-        controller.login(new LoginCredentialsDTO(username, password));
-        }
-        catch(Exception e){
-            handleException(e);
-        }
-    }
-
- 
 
     public void setUsername(String username) {
         this.username = username;
-        System.out.println("Username: " + username);
     }
 
     public void setPassword(String password) {
@@ -99,16 +89,8 @@ public class AccountHandler {
         this.email = email;
     }
 
-    private void handleException(Exception e) {
-       failure = e;
+    public boolean getSuccess() {
+        return failure == null;
     }
-          
-   public boolean getSuccess(){
-       return failure == null;
-   }   
-   
-   public String getFailureReason(){
-       return failure.getMessage();
-   }
-   
+
 }

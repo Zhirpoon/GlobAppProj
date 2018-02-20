@@ -14,7 +14,7 @@ import se.kth.id1212.globalapps.controller.Controller;
 @Named(value = "accountType")
 @SessionScoped
 public class AccountType implements Serializable {
-    
+
     @EJB
     Controller contr;
     /**
@@ -22,23 +22,28 @@ public class AccountType implements Serializable {
      */
     private String accounttype;
     private String username;
-    
+
     public AccountType() {
         username = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
-        if (isLoggedIn()) accounttype = contr.getAccounttype(username);
+        if (isLoggedIn()) {
+            accounttype = contr.getAccounttype(username);
+        }
     }
-    
-    public boolean getIsApplicant(){
+
+    public boolean getIsApplicant() {
         return "APPLICANT".equals(accounttype);
     }
-    public boolean getIsRecruiter(){
+
+    public boolean getIsRecruiter() {
         return "RECRUITER".equals(accounttype);
     }
-    public boolean isLoggedIn(){
+
+    public boolean isLoggedIn() {
         return username != null;
     }
-    public String getUsername(){
+
+    public String getUsername() {
         return username;
     }
-    
+
 }
