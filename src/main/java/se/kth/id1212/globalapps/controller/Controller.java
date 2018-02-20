@@ -58,5 +58,9 @@ public class Controller {
     public void searchApplications(ApplicationSearchDTO searchCriteria) {
         dbao.searchApplications(searchCriteria);
     }
+
+    public String getAccounttype(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
