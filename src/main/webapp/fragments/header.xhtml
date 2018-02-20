@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <head>
+        <title> </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h:panelGroup layout="block" >
+            <nav class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item">
+                        <p class="subtitle is-5">
+                            <strong>OUR</strong> Application
+                        </p>
+                    </div>
+                    <div class="level-item">
+                        <h:panelGrid columns="6" class="field has-addons" rendered="#{request.remoteUser == null}">
+                            <form method="POST" action="j_security_check">
+                                <h:panelGroup layout="block" class="control">
+                                    <input class="input" type="text" name="j_username" placeholder="Username"/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="control">
+                                    <input class="input" type="text" name="j_password" placeholder="Password"/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="control">
+                                    <input class="button" type="submit" value="Login"/>
+                                </h:panelGroup>
+                            </form>
+                            <h:form>
+                                <h:commandButton class="button" action="register?faces-redirect=true" value="Register" />
+                            </h:form>
+                        </h:panelGrid>
+                    </div>
+                </div>
+                <!-- Right side -->
+                <h:panelGroup layout="block" rendered="#{accountType.isApplicant}">
+                    <div class="level-right">
+                        <p class="level-item"><strong>Logged in as #{request.remoteUser}</strong></p>
+                        <p class="level-item"><a>Shoo</a></p>
+                        <p class="level-item"><a>All</a></p>
+                        <p class="level-item"><a class="button is-success">New</a></p>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{accountType.isRecruiter}">
+                    <div class="level-right">
+                        <p class="level-item"><strong>Logged in as #{request.remoteUser}</strong></p>
+                        <p class="level-item"><a>Search For Applications</a></p>
+                        <p class="level-item"><a>All</a></p>
+                        <h:commandButton action="#{accountType.logOut()}" class="level-item"><a class="button is-success">Log Out</a></h:commandButton>
+                    </div>
+                </h:panelGroup>
+            </nav>
+        </h:panelGroup>
+    </body>
+</html>

@@ -23,18 +23,25 @@ public class AccountType implements Serializable {
     private String accounttype;
     private String username;
 
-    public AccountType() {
+    private void setUsername(){
         username = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
-        if (isLoggedIn()) {
-            accounttype = contr.getAccounttype(username);
+    }
+
+    private void setAccountType() {
+        if (isLoggedIn() &&(accounttype == null)) {
+            accounttype = contr.getUsergroup(username);
         }
     }
 
     public boolean getIsApplicant() {
+        setUsername();
+        setAccountType();
         return "APPLICANT".equals(accounttype);
     }
 
     public boolean getIsRecruiter() {
+        setUsername();
+        setAccountType();
         return "RECRUITER".equals(accounttype);
     }
 
