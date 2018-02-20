@@ -41,10 +41,14 @@
                 <h:panelGroup layout="block" rendered="#{accountType.isApplicant}">
                     <div class="level-right">
                         <p class="level-item"><strong>Logged in as #{request.remoteUser}</strong></p>
-                        <p class="level-item"><a>Shoo</a></p>
-                        <p class="level-item"><a>All</a></p>
                         <h:form>
-                            <h:commandButton action="#{accountType.logOut()}" class="level-item"><a class="button is-success">Log Out</a></h:commandButton>
+                            <h:commandButton class="button" action="applicant/apply?faces-redirect=true" value="New Application" />
+                        </h:form>
+                        <h:form>
+                            <h:commandButton class="button" action="welcome" value="First Page" />
+                        </h:form>
+                        <h:form>
+                            <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
                         </h:form>
                     </div>
                 </h:panelGroup>
@@ -54,7 +58,7 @@
                         <p class="level-item"><a>Search For Applications</a></p>
                         <p class="level-item"><a>All</a></p>
                         <h:form>
-                            <h:commandButton action="#{accountType.logOut()}" class="level-item"><a class="button is-success">Log Out</a></h:commandButton>
+                            <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
                         </h:form>
                         
                     </div>
