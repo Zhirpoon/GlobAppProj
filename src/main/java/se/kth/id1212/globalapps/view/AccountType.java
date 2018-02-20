@@ -54,15 +54,15 @@ public class AccountType implements Serializable {
     public String getUsername() {
         return username;
     }
-     @PreDestroy
-    private void destruction(){
-        System.out.println("DESTRUCTION OF ACCOUNTYPEBEAN");
-    }
-    
+//     @PreDestroy
+//    private void destruction(){
+//        System.out.println("DESTRUCTION OF ACCOUNTYPEBEAN");
+//    }
+//    
     public String logout() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         session.invalidate();
-        System.out.println("Line 65");
+       // System.out.println("Line 65");
         return "Success";
     }
 }
