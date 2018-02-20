@@ -3,8 +3,10 @@ package se.kth.id1212.globalapps.view;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import se.kth.id1212.globalapps.controller.Controller;
 
 /**
@@ -23,12 +25,12 @@ public class AccountType implements Serializable {
     private String accounttype;
     private String username;
 
-    private void setUsername(){
+    private void setUsername() {
         username = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
     }
 
     private void setAccountType() {
-        if (isLoggedIn() &&(accounttype == null)) {
+        if (isLoggedIn() && (accounttype == null)) {
             accounttype = contr.getUsergroup(username);
         }
     }
@@ -52,5 +54,15 @@ public class AccountType implements Serializable {
     public String getUsername() {
         return username;
     }
-
+     @PreDestroy
+    private void destruction(){
+        System.out.println("DESTRUCTION OF ACCOUNTYPEBEAN");
+    }
+    
+    public String logout() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        session.invalidate();
+        System.out.println("Line 65");
+        return "Success";
+    }
 }
