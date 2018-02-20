@@ -43,7 +43,9 @@
                         <p class="level-item"><strong>Logged in as #{request.remoteUser}</strong></p>
                         <p class="level-item"><a>Shoo</a></p>
                         <p class="level-item"><a>All</a></p>
-                        <p class="level-item"><a class="button is-success">New</a></p>
+                        <h:form>
+                            <h:commandButton action="#{accountType.logOut()}" class="level-item"><a class="button is-success">Log Out</a></h:commandButton>
+                        </h:form>
                     </div>
                 </h:panelGroup>
                 <h:panelGroup layout="block" rendered="#{accountType.isRecruiter}">
