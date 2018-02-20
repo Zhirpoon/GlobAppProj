@@ -1,7 +1,12 @@
 package se.kth.id1212.globalapps.integration;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +21,9 @@ import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.QueryBuilder;
+import se.kth.id1212.globalapps.model.TimePeriod;
 import se.kth.id1212.globalapps.model.UserEntity;
+import se.kth.id1212.globalapps.model.YearsWithExpertise;
 
 /**
  *
@@ -89,6 +96,38 @@ public class DBAO {
         return query.getResultList();
     }
     
+    public Collection<TimePeriod> getPeriodsOfAvailabilityById(long applicationId) {
+        List<TimePeriod> timePeriods = new ArrayList<TimePeriod>();
+        Query query = em.createNativeQuery("SELECT period. startdate, period.enddate"
+                + "FROM periodofavailability period "
+                + "WHERE years.applicationid = " + applicationId);
+        List<Object[]> result = query.getResultList();
+        DateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {   
+            for(Object[] obj : result) {
+                TimePeriod timePeriod = new TimePeriod(sourceFormat.parse(obj[0].toString()), sourceFormat.parse(obj[1].toString()));
+                timePeriods.add(timePeriod);
+                return timePeriods;
+            }
+        } catch (ParseException e) {
+            System.err.println(e);
+        }
+        return timePeriods;
+    }
+    
+    public Collection<YearsWithExpertise> getYearsWithExpertiseByApplicationId(long applicationId) {
+        List<YearsWithExpertise> competences = new ArrayList<YearsWithExpertise>();
+        Query query = em.createNativeQuery("SELECT years.expertise, years.yearsofexperience "
+                + "FROM YearsWithExpertise years "
+                + "WHERE years.applicationid = " + applicationId);
+        List<Object[]> result = query.getResultList();
+        for(Object[] obj : result) {
+            YearsWithExpertise competence = new YearsWithExpertise(obj[0].toString(), 
+                    Integer.parseInt(obj[1].toString()));
+            competences.add(competence);
+        }
+        return competences;
+    }
 //    private final EntityManagerFactory emFactory;
     // private final ThreadLocal<EntityManager> threadEM = new ThreadLocal<>();
 

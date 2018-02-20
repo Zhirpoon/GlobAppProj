@@ -9,6 +9,9 @@ import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
+import se.kth.id1212.globalapps.model.DTOs.Application;
+import se.kth.id1212.globalapps.model.TimePeriod;
+import se.kth.id1212.globalapps.model.YearsWithExpertise;
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
@@ -55,8 +58,17 @@ public class Controller {
         return user.getAccountType().getName();
     }
     
-    public void searchApplications(ApplicationSearchDTO searchCriteria) {
-        dbao.searchApplications(searchCriteria);
+    public ApplicationDTO[] searchApplications(ApplicationSearchDTO searchCriteria) {
+        Collection<ApplicationEntity> retrievedApplications = dbao.searchApplications(searchCriteria);
+        ApplicationDTO[] applications = new ApplicationDTO[retrievedApplications.size()];
+        int position = 0;
+        for (ApplicationEntity appl : retrievedApplications) {
+            Collection<YearsWithExpertise> competences = dbao.getYearsWithExpertiseByApplicationId(appl.getApplicationId());
+            Collection<TimePeriod> timePeriods = dbao.getPeriodsOfAvailabilityById(appl.getApplicationId());
+            applications[position] = new Application(appl, timePeriods, competences);
+            position++;
+        }
+        return applications;
     }
 
     public String getAccounttype(String username) {

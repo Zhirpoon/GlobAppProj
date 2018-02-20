@@ -15,6 +15,11 @@ public class YearsWithExpertise implements YearsWithExpertiseDTO{
         this.yearsOfExperience = expertisesDTO.getYears();
     }
     
+    public YearsWithExpertise(String expertise, int yearsOfExperience) {
+        this.expertise = new ExpertiseEntity(expertise);
+        this.yearsOfExperience = yearsOfExperience;
+    }
+    
     @Override
     public String getExpertise() {
         return expertise.getExpertiseName();
