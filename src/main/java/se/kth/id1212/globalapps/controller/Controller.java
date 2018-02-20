@@ -43,7 +43,7 @@ public class Controller {
     
     public void saveApplication(ApplicationDTO application) {
         UserEntity user = dbao.findUserByUsername(application.getUsername());
-        ApplicationEntity applicationEntity = new ApplicationEntity(application, user);
+        ApplicationEntity applicationEntity = new ApplicationEntity(user);
         dbao.saveApplication(applicationEntity);
         long applicationId = applicationEntity.getApplicationId();
         dbao.saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
