@@ -78,11 +78,15 @@ public class DBAO {
         }
     }
     
-    public void searchApplications(ApplicationSearchDTO searchCriteria) {
+    public Collection<ApplicationEntity> searchApplications(ApplicationSearchDTO searchCriteria) {
         QueryBuilder queryBuilder =  new QueryBuilder("application");
         queryBuilder.addNameCriteria(searchCriteria.getApplicantFirstname(), searchCriteria.getApplicantLastname());
         queryBuilder.addRegistrationDateCriteria(searchCriteria.getRegistrationDate());
-        String[] competences = searchCriteria.getCompetences();
+        queryBuilder.addExpertiseCriteria(searchCriteria.getCompetences());
+        queryBuilder.addAvailabilityCriteria(searchCriteria.getTimePeriod());
+        
+        Query query = em.createNativeQuery(queryBuilder.getQuery(), ApplicationEntity.class);
+        return query.getResultList();
     }
     
 //    private final EntityManagerFactory emFactory;

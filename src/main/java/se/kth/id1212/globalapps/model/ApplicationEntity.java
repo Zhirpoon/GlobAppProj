@@ -34,9 +34,9 @@ public class ApplicationEntity implements Serializable {
     public ApplicationEntity() {
     }
     
-    public ApplicationEntity(ApplicationDTO applicationDTO , UserEntity userEntity) {
+    public ApplicationEntity(UserEntity userEntity) {
             this.userEntity = userEntity;
-            this.status = applicationDTO.getStatus();
+            this.status = false;
             this.versionNumber = 1;
     }
     
