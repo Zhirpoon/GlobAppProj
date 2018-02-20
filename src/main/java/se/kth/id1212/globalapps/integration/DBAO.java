@@ -15,6 +15,7 @@ import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
+import se.kth.id1212.globalapps.model.QueryBuilder;
 import se.kth.id1212.globalapps.model.UserEntity;
 
 /**
@@ -51,29 +52,37 @@ public class DBAO {
     public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
         for(YearsWithExpertiseDTO expertise : expertises) {
             Query query = em.createNativeQuery(
-                    "INSERT INTO PERIODSOFAVAILABILITY VALUES (?,?,?)"
+                    "INSERT INTO YearsWithExpertise (expertise, applicationid, yearsofexperience) VALUES ("
+                            + "(SELECT exp.EXPERTISENAME FROM ExpertiseEntity exp WHERE exp.EXPERTISENAME LIKE ?),"
+                            + "(SELECT appl.APPLICATIONID FROM ApplicationEntity appl WHERE appl.APPLICATIONID = ?),"
+                            + "?)"
             );
-            query.setParameter(1, applicationId);
-            query.setParameter(2, expertise.getExpertise());
+            query.setParameter(1, expertise.getExpertise());
+            query.setParameter(2, applicationId);
             query.setParameter(3, expertise.getYears());
-            query.getSingleResult();
+            query.executeUpdate();
         }
     }
     
     public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
         for(TimePeriodDTO timePeriod : timePeriods) {
-            Query query = em.createNamedQuery(
-                    "INSERT INTO YEARSWITHEXPERTISE VALUES (?,?,?)"
+            Query query = em.createNativeQuery(
+                    "INSERT INTO periodofavailability (applicationid, startdate, enddate) VALUES ("
+                            + "(SELECT appl.APPLICATIONID FROM ApplicationEntity appl WHERE appl.APPLICATIONID = ?),"
+                            + "?,?)"
             );
             query.setParameter(1, applicationId);
             query.setParameter(2, timePeriod.getStartdate());
             query.setParameter(3, timePeriod.getEnddate());
-            query.getSingleResult();
+            query.executeUpdate();
         }
     }
     
     public void searchApplications(ApplicationSearchDTO searchCriteria) {
-        // create query creator for searching applications!
+        QueryBuilder queryBuilder =  new QueryBuilder("application");
+        queryBuilder.addNameCriteria(searchCriteria.getApplicantFirstname(), searchCriteria.getApplicantLastname());
+        queryBuilder.addRegistrationDateCriteria(searchCriteria.getRegistrationDate());
+        String[] competences = searchCriteria.getCompetences();
     }
     
 //    private final EntityManagerFactory emFactory;
