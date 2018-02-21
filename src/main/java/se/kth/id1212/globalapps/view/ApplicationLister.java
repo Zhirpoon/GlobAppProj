@@ -37,7 +37,7 @@ public class ApplicationLister implements Serializable{
     }
     
     public void search(){
-        //applications = contr.searchApplications(search);
+        applications = contr.searchApplications(search);
         search = null;
     }
 
