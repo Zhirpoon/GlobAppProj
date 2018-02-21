@@ -5,8 +5,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <head>
-        <title> </title>
+        <title />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"/>
+        <script defer="defer" src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
     </head>
     <body>
         <h:panelGroup layout="block" >
@@ -63,6 +65,13 @@
                         </h:form>
                         <h:form>
                             <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
+                        </h:form>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{!accountType.loggedIn}">
+                    <div class="level-right">
+                        <h:form>
+                            <h:commandButton class="button" action="welcome" value="First Page" />
                         </h:form>
                     </div>
                 </h:panelGroup>

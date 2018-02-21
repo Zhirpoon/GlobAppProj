@@ -3,18 +3,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Make an application</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
+        <ui:include src="../fragments/header.xhtml"/>
 
-        <h3>Add expertise and years with experience </h3>
-
+        <h:panelGroup layout="block" class="is-normal">
+            <label class="label">Add expertise and years with experience</label>
+        </h:panelGroup>
         <h:form>
-            <h:selectOneMenu value="#{applicationCreator.expertise}">
-                Expertise:
+            <h:selectOneMenu class="field is-narrow" value="#{applicationCreator.expertise}">
+                <label >Expertise:</label>
                 <c:forEach items="#{applicationCreator.expertises}" var="expertise">
                     <f:selectItem  itemValue="#{expertise}" itemLabel="#{expertise}"/>
                 </c:forEach>
@@ -24,35 +27,35 @@
             <h:inputText id="inputAmount"  value="#{applicationCreator.years}"/>
             <h:commandButton value="Add" action="#{applicationCreator.addYearsWithExpertise()}"/>
         </h:form>    
-      
-        
-        
-        
-        
-                <h3>Add availability period </h3>
-		<h:form>
-			Start date (d-M-yyyy):
-                        <h:inputText value="#{applicationCreator.startDate}">
-	          <f:convertDateTime pattern="d-M-yyyy" />
-	        </h:inputText>
-			End date (d-M-yyyy):
-                        <h:inputText value="#{applicationCreator.endDate}">
-	          <f:convertDateTime pattern="d-M-yyyy" />
-	        </h:inputText>
-                        <h:commandButton value="Add" action="#{applicationCreator.addAvailabilityPeriod()}" />
-		</h:form>   
+
+
+
+
+
+        <h3>Add availability period </h3>
+        <h:form>
+            Start date (d-M-yyyy):
+            <h:inputText value="#{applicationCreator.startDate}">
+                <f:convertDateTime pattern="d-M-yyyy" />
+            </h:inputText>
+            End date (d-M-yyyy):
+            <h:inputText value="#{applicationCreator.endDate}">
+                <f:convertDateTime pattern="d-M-yyyy" />
+            </h:inputText>
+            <h:commandButton value="Add" action="#{applicationCreator.addAvailabilityPeriod()}" />
+        </h:form>   
         <hr></hr>
         <h3>Added expertises</h3>
         <c:forEach items="#{applicationCreator.yearswithExpertises}" var="yearsWiEx">
             <p>Expertise: #{yearsWiEx.expertise} Years: #{yearsWiEx.years}</p>
         </c:forEach>
-        
-              <hr></hr>
+
+        <hr></hr>
         <h3>Added availability periods</h3>
         <c:forEach items="#{applicationCreator.availiabilityPeriods}" var="availabilityPeriod">
             <p>Start date: #{availabilityPeriod.startdate} End date: #{availabilityPeriod.enddate}</p>
         </c:forEach>
-        
+
         <h:form>
             <h:commandButton value="Send application" action="#{applicationCreator.sendApplication()}"/>
         </h:form>
