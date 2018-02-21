@@ -1,5 +1,6 @@
 package se.kth.id1212.globalapps.view;
 
+import java.util.Date;
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 import javax.ejb.EJB;
@@ -28,6 +29,7 @@ public class AccountHandler {
     private String email;
     private Exception failure;
     private String userGroup;
+    private Date dateOfBirth;
 
     public String getUserGroup() {
         return controller.getUsergroup(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
@@ -35,10 +37,18 @@ public class AccountHandler {
 
     public void register() {
         try {
-            controller.register(new RegistrationDTO(firstName, lastName, email, username, password));
+            controller.register(new RegistrationDTO(firstName, lastName, email, username, password, dateOfBirth));
         } catch (Exception e) {
             handleException(e);
         }
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getFailureReason() {

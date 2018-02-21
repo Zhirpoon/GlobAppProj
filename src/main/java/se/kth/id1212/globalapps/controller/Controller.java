@@ -74,5 +74,11 @@ public class Controller {
     public String getAccounttype(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public void johansDummyFunction() {
+        System.out.println("-----------------------------------");
+        System.out.println("Johans funktion");
+        System.out.println("-----------------------------------");
+    }
     
 }

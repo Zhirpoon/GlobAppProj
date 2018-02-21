@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
@@ -34,9 +32,12 @@ public class ApplicationLister implements Serializable{
         search = new ApplicationSearch();
     }
     
+    public void johansDummyFunction(){
+        contr.johansDummyFunction();
+    }
     
     public void search(){
-        //applications = contr.searchApplications(search);
+        applications = contr.searchApplications(search);
         search = null;
     }
 
