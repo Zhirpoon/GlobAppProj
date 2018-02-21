@@ -13,44 +13,46 @@ public class QueryBuilder {
     
     public QueryBuilder(String queryType) {
         if(queryType.equalsIgnoreCase("application")) {
-            query += "SELECT application FROM ApplicationEntity application WHERE ";
+            query += "SELECT * FROM ApplicationEntity application WHERE ";
         }
     }
     
     public void addNameCriteria(String firstName, String lastName) {  
-        if(!(firstName.equalsIgnoreCase(lastName) && firstName.equalsIgnoreCase(""))) {
-            String nameQueryPart = "application.OWNER LIKE "
+        String nameQueryPart = "application.OWNER IN "
                     + "(SELECT userEntity.USERNAME "
                     + "FROM UserEntity userEntity "
                     + "WHERE userEntity.FIRSTNAME LIKE ";
-            if(firstName.equalsIgnoreCase("")) {
-                nameQueryPart += "% ";
+        if(lastName == null && firstName == null) {
+            nameQueryPart += "'%' AND userEntity.LASTNAME LIKE '%')";
+        } else {    
+            if(firstName == null) {
+                nameQueryPart += "'%' ";
             } else {
-                nameQueryPart += firstName + " ";
+                nameQueryPart += "'" + firstName + "' ";
             }
             nameQueryPart += "AND userEntity.LASTNAME LIKE ";
-            if(lastName.equalsIgnoreCase("")) {
-                nameQueryPart += "% ";
+            if(lastName == null) {
+                nameQueryPart += "'%')";
             } else {
-                nameQueryPart += lastName + ")";
+                nameQueryPart += "'" + lastName + "')";
             }
-            query += nameQueryPart;
         }
+        query += nameQueryPart;
     }
     
     public void addRegistrationDateCriteria(Date registrationDate) {
-        String dateQueryPart = " AND OWNER LIKE "
+        String dateQueryPart = " AND application.OWNER IN "
                 + "(SELECT us.USERNAME "
                 + "FROM UserEntity us "
                 + "WHERE us.REGISTRATIONDATE = ";
         if(registrationDate != null) {
-            dateQueryPart +=  formatDateToQuery(registrationDate) + ")";
+            dateQueryPart +=  "'" + formatDateToQuery(registrationDate) + "')";
             query += dateQueryPart;
         }
     }
     
     private String formatDateToQuery(Date date) {
-        SimpleDateFormat dayMonthYearFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dayMonthYearFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dayMonthYearFormat.format(date);
     }
     
@@ -59,11 +61,11 @@ public class QueryBuilder {
         int position = 1;
         if(amountOfExpertises != 0) { 
             String expertiseQueryPart = " AND " + amountOfExpertises + 
-                " = (SELECT COUNT(exp) FROM YearsWithExpertise exp "
+                " = (SELECT COUNT(*) FROM YearsWithExpertise exp "
                 + "WHERE application.APPLICATIONID = exp.applicationid "
                 + "AND exp.expertise IN (";
             for(String expertise : expertises) {
-                expertiseQueryPart += expertise;
+                expertiseQueryPart += "'" + expertise + "'";
                 expertiseQueryPart = addQueryComma(position, amountOfExpertises, expertiseQueryPart);
                 position++;
             }
@@ -81,15 +83,15 @@ public class QueryBuilder {
     }
     
     public void addAvailabilityCriteria(TimePeriodDTO timeperiod) {
-        String availabilityPeriodQueryPart = " AND application.APPLICATIONID = "
+        String availabilityPeriodQueryPart = " AND application.APPLICATIONID IN "
                 + "(SELECT avail.applicationid "
                 + "FROM periodofavailability avail "
                 + "WHERE ";
         if(timeperiod != null) {            
-            availabilityPeriodQueryPart += formatDateToQuery(timeperiod.getStartdate()) + 
-                " BETWEEN (avail.startdate,avail.enddate) AND " +
-                formatDateToQuery(timeperiod.getEnddate()) +
-                " BETWEEN (avail.startdate, avail.enddate))";
+            availabilityPeriodQueryPart += "'" + formatDateToQuery(timeperiod.getStartdate()) + "' " + 
+                "< avail.enddate AND " +
+                "'" + formatDateToQuery(timeperiod.getEnddate()) + "' " +
+                "BETWEEN avail.startdate AND avail.enddate)";
             query += availabilityPeriodQueryPart;
         }
     }
