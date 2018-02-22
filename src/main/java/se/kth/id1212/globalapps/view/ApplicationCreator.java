@@ -26,7 +26,7 @@ public class ApplicationCreator implements Serializable{
     private Controller controller;
     private String[] expertises;
     private String expertise;
-    private int years=0;
+    private int years;
     private Application application;
     private Date startDate;
     private Date endDate;

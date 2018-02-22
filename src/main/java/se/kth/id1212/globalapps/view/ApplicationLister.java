@@ -2,7 +2,9 @@ package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import se.kth.id1212.globalapps.controller.Controller;
@@ -16,35 +18,62 @@ import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
  */
 @Named(value = "applicationLister")
 @SessionScoped
-public class ApplicationLister implements Serializable{
+//@RequestScoped
+public class ApplicationLister implements Serializable {
 
-    @EJB 
+    @EJB
     Controller contr;
     ApplicationSearch search;
     Date startDate;
     Date endDate;
     ApplicationDTO[] applications;
+    String[] expertises;
+    String expertise;
+
+    public ApplicationDTO[] getApplications(){
+        return applications;
+    }
+    
+    public String[] getExpertises() {
+        return expertises;
+    }
+
+    public String getExpertise() {
+        return this.expertise;
+    }
+
+    public void setExpertise(String expertise) {
+        this.expertise = expertise;
+    }
+
+    public String[] getCompetences() {
+        return this.search.getCompetences();
+    }
 
     /**
      * Creates a new instance of ApplicationLister
      */
-    public ApplicationLister() {
+
+
+    @PostConstruct
+    public void init() {
+        this.expertises = contr.getAllExpertises();
         search = new ApplicationSearch();
     }
-    
-    public void johansDummyFunction(){
+
+    public void johansDummyFunction() {
         contr.johansDummyFunction();
     }
-    
-    public void search(){
+
+    public void search() {
         applications = contr.searchApplications(search);
-        search = null;
+        
     }
 
-    public void addTimePeriod(){
+    public void addTimePeriod() {
         this.search.setAvailabiltyPeriod(new TimePeriodDTO(startDate, endDate));
     }
-    
+
     public Date getStartDate() {
         return startDate;
     }
@@ -61,8 +90,8 @@ public class ApplicationLister implements Serializable{
         this.endDate = endDate;
     }
 
-    public void setCompetence(String competence) {
-        this.search.addCompentece(competence);
+    public void addCompetence() {
+        this.search.addCompentece(expertise);
     }
 
     public void setFirstname(String firstname) {
