@@ -83,7 +83,7 @@ public class ApplicationCreator implements Serializable {
      * @param years The amount of years for an expertise to be added to
      * <code>YearsWithExpertiseDTO</code>.
      */
-    public void setYears(int years) {
+    public void setYears(Integer years) {
         this.years = years;
     }
 
