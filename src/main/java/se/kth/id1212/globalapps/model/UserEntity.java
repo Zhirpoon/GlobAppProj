@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Size;
 import org.apache.commons.codec.binary.Hex;
 import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 
@@ -48,6 +49,7 @@ public class UserEntity implements Serializable {
     private AccountTypeEntity accountType;
     
     @Column(name="SSN", nullable = true)
+    @Size(min = 13, max = 13)
     private String ssn;
     
     @Column(name="DATEOFBIRTH", nullable = true)
