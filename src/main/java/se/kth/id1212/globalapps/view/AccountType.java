@@ -3,7 +3,6 @@ package se.kth.id1212.globalapps.view;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -35,22 +34,36 @@ public class AccountType implements Serializable {
         }
     }
 
+    /**
+     * Checks if the logged in user has the <code>AccountTypeEntity</code> name "APPLICANT".
+     * @return If the user is an applicant or not.
+     */
     public boolean getIsApplicant() {
         setUsername();
         setAccountType();
         return "APPLICANT".equals(accounttype);
     }
 
+    /**
+     * Checks if the logged in user has the <code>AccountTypeEntity</code> name "RECRUITER".
+     * @return If the user is an recruiter or not.
+     */
     public boolean getIsRecruiter() {
         setUsername();
         setAccountType();
         return "RECRUITER".equals(accounttype);
     }
 
+    /**
+     * @return If the user is logged in or not.
+     */
     public boolean isLoggedIn() {
         return username != null;
     }
 
+    /**
+     * @return The username of the logged in user.
+     */
     public String getUsername() {
         return username;
     }
@@ -59,6 +72,10 @@ public class AccountType implements Serializable {
 //        System.out.println("DESTRUCTION OF ACCOUNTYPEBEAN");
 //    }
 //    
+    /**
+     * Logs out a logged out user.
+     * @return A message saying that logging out was successful.
+     */
     public String logout() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         session.invalidate();

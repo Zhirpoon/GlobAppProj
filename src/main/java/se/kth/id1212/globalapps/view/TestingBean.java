@@ -18,6 +18,9 @@ public class TestingBean {
     public TestingBean() {
     }
     
+    /**
+     * @return A test String.
+     */
     public String getText(){
         return "TextfromTestBean";
     }
