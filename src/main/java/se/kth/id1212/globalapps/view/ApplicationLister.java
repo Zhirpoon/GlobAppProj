@@ -61,9 +61,6 @@ public class ApplicationLister implements Serializable {
         search = new ApplicationSearch();
     }
 
-    public void johansDummyFunction() {
-        contr.johansDummyFunction();
-    }
 
     public void search() {
         applications = contr.searchApplications(search);

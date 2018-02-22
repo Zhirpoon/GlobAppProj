@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -27,6 +29,8 @@ import se.kth.id1212.globalapps.model.YearsWithExpertise;
  * The database access object which retrieves data from the database and also stores data to the database.
  */
 @Stateless
+//This class should only be called with an active transation
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class DBAO {
 
     @PersistenceContext(unitName = "GlobalAppPU")

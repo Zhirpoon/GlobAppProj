@@ -3,6 +3,8 @@ package se.kth.id1212.globalapps.controller;
 import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import se.kth.id1212.globalapps.integration.DBAO;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
@@ -23,6 +25,9 @@ import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
  * The controller that handles all conversations and conversions between the view and the model layers.
  */
 @Stateless
+//There should be no pre-existing transaction when this bean is called, 
+//and a new transation must be started and a new transation must be started
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class Controller {
     
     @EJB
@@ -104,12 +109,4 @@ public class Controller {
         return applications;
     }
 
-    /**
-     * Doesn't need a javadoc really.
-     */
-    public void johansDummyFunction() {
-        System.out.println("-----------------------------------");
-        System.out.println("Johans funktion");
-        System.out.println("-----------------------------------");
-    }
 }
