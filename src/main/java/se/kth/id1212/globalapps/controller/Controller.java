@@ -1,5 +1,6 @@
 package se.kth.id1212.globalapps.controller;
 
+import java.sql.Date;
 import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -9,9 +10,12 @@ import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.UserEntity;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
+import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
+import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 import se.kth.id1212.globalapps.model.DTOs.Application;
 import se.kth.id1212.globalapps.model.TimePeriod;
 import se.kth.id1212.globalapps.model.YearsWithExpertise;
+import se.kth.id1212.globalapps.view.DTOs.ApplicationSearch;
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
@@ -71,14 +75,9 @@ public class Controller {
         return applications;
     }
 
-    public String getAccounttype(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void johansDummyFunction() {
         System.out.println("-----------------------------------");
         System.out.println("Johans funktion");
         System.out.println("-----------------------------------");
     }
-    
 }

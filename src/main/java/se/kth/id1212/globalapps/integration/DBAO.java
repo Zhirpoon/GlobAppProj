@@ -98,9 +98,9 @@ public class DBAO {
     
     public Collection<TimePeriod> getPeriodsOfAvailabilityById(long applicationId) {
         List<TimePeriod> timePeriods = new ArrayList<TimePeriod>();
-        Query query = em.createNativeQuery("SELECT period. startdate, period.enddate"
+        Query query = em.createNativeQuery("SELECT period.startdate, period.enddate "
                 + "FROM periodofavailability period "
-                + "WHERE years.applicationid = " + applicationId);
+                + "WHERE period.applicationid = " + applicationId);
         List<Object[]> result = query.getResultList();
         DateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {   

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Size;
 import org.apache.commons.codec.binary.Hex;
 import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 
@@ -47,6 +48,14 @@ public class UserEntity implements Serializable {
     @JoinColumn(name = "ACCOUNTTYPE")
     private AccountTypeEntity accountType;
     
+    @Column(name="SSN", nullable = true)
+    @Size(min = 13, max = 13)
+    private String ssn;
+    
+    @Column(name="DATEOFBIRTH", nullable = true)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateOfBirth;
+    
     public UserEntity() {        
     }
     
@@ -55,6 +64,7 @@ public class UserEntity implements Serializable {
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
         this.email = registrationInformation.getMail();
+        this.dateOfBirth = registrationInformation.getDateOfBirth();
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -68,6 +78,14 @@ public class UserEntity implements Serializable {
         
         this.registrationDate = new Date();
         this.accountType = accountType;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
     public String getUsername() {
