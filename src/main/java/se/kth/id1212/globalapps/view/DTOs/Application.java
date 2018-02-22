@@ -8,6 +8,7 @@ import se.kth.id1212.globalapps.model.YearsWithExpertise;
 /**
  *
  * @author Anders Klasson <aklasson@kth.se>
+ * Application is a DTO to be sent down to the model without model needing to know anything about the view.
  */
 public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO {
 
@@ -15,14 +16,26 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     private Collection <TimePeriodDTO> availabilityPeriods = new HashSet<>();
     private String username;
     
+    /**
+     * Constructor of <code>Application</code> with a specified username of the owner.
+     * @param username The <code>Application</code>'s owners username
+     */
     public Application(String username){
         this.username = username;
     }
     
+    /**
+     *  Adds the user's periods of availability to the <code>Application</code>, it adds it to a list of availability periods.
+     * @param availabilityPeriod The <code>Application</code>'s owner's periods of availability.
+     */
     public void addAvailabilityPeriod(TimePeriodDTO availabilityPeriod){
         availabilityPeriods.add(availabilityPeriod);
     }
     
+    /**
+     * Adds the user's expertise to the <code>Application</code>, it adds it to a list of expertises.
+     * @param expertise The <code>Application</code>'s owner's expertise.
+     */
     public void addExpertises(YearsWithExpertiseDTO expertise){
         expertises.add(expertise);
     }

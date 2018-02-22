@@ -1,6 +1,5 @@
 package se.kth.id1212.globalapps.integration;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,9 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
@@ -28,6 +24,7 @@ import se.kth.id1212.globalapps.model.YearsWithExpertise;
 /**
  *
  * @author Anders Klasson <aklasson@kth.se>
+ * The database access object which retrieves data from the database and also stores data to the database.
  */
 @Stateless
 public class DBAO {
@@ -35,27 +32,53 @@ public class DBAO {
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
     
+    /**
+     * Adds a <code>UserEntity</code> to the database.
+     * @param user The <code>UserEntity</code> to be stored.
+     */
     public void addUser(UserEntity user){
         em.persist(user);
     }
     
+    /**
+     * Gets the <code>AccountTypeEntity</code> with the primary key APPLICANT, if it exists.
+     * @return The <code>AccountTypeEntity</code> which has the primary key APPLICANT.
+     */
     public AccountTypeEntity getAccountTypeApplicant(){
         return em.find(AccountTypeEntity.class,"APPLICANT");
     }
     
+    /**
+     * Gets all <code>ExpertiseEntity</code> that exists in the database.
+     * @return A collection of <code>ExpertiseEntity</code>. 
+     */
     public Collection<ExpertiseEntity> getAllExpertises() {
         Query query = em.createQuery("SELECT entities FROM ExpertiseEntity entities", ExpertiseEntity.class);
         return query.getResultList();
     }
     
+    /**
+     * Find a <code>UserEntity</code> based on its primary key.
+     * @param username The username that is used to search for a specific <code>UserEntity</code>.
+     * @return The <code>UserEntity</code> with the specified username.
+     */
     public UserEntity findUserByUsername(String username) {
         return em.find(UserEntity.class, username);
     }
 
+    /**
+     * Save an <code>ApplicationEntity</code> to the database.
+     * @param application The <code>ApplicationEntity</code> that is to be stored.
+     */
     public void saveApplication(ApplicationEntity application) {
         em.persist(application);
     }
     
+    /**
+     * Saves an <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to the database.
+     * @param applicationId The <code>ApplicationEntity</code>'s application ID.
+     * @param expertises The <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to be stored.
+     */
     public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
         for(YearsWithExpertiseDTO expertise : expertises) {
             Query query = em.createNativeQuery(
@@ -71,6 +94,11 @@ public class DBAO {
         }
     }
     
+    /**
+     * Saves an <code>ApplicationEntity</code>'s <code>TimePeriod</code>s to the database.
+     * @param applicationId The <code>ApplicationEntity</code>'s application ID.
+     * @param timePeriods The <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to be stored, this represents the periods of availability.
+     */
     public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
         for(TimePeriodDTO timePeriod : timePeriods) {
             Query query = em.createNativeQuery(
@@ -85,6 +113,12 @@ public class DBAO {
         }
     }
     
+    /**
+     * Searches and retrieves <code>ApplicationEntity</code> based on <code>ApplicationSearchDTO</code>.
+     * These criteria are then appended to a query with the help of <code>QueryBuilder</code>.
+     * @param searchCriteria The search criteria stored in the <code>ApplicationSearchDTO</code>.
+     * @return A collection <code>ApplicationEntity</code> based on the query built.
+     */
     public Collection<ApplicationEntity> searchApplications(ApplicationSearchDTO searchCriteria) {
         QueryBuilder queryBuilder =  new QueryBuilder("application");
         queryBuilder.addNameCriteria(searchCriteria.getApplicantFirstname(), searchCriteria.getApplicantLastname());
@@ -96,6 +130,11 @@ public class DBAO {
         return query.getResultList();
     }
     
+    /**
+     * Retrieves all <code>TimePeriod</code>s associated with a specific <code>ApplicationEntity</code>.
+     * @param applicationId The <code>ApplicationEntity</code>'s application ID.
+     * @return A collection of <code>TimePeriod</code>s that corresponded to the applicationId.
+     */
     public Collection<TimePeriod> getPeriodsOfAvailabilityById(long applicationId) {
         List<TimePeriod> timePeriods = new ArrayList<TimePeriod>();
         Query query = em.createNativeQuery("SELECT period.startdate, period.enddate "
@@ -115,6 +154,11 @@ public class DBAO {
         return timePeriods;
     }
     
+    /**
+     * Retrieves all <code>YearsWithExpertise</code>s associated with a specific <code>ApplicationEntity</code>.
+     * @param applicationId The <code>ApplicationEntity</code>'s application ID.
+     * @return A collection of <code>YearsWithExpertise</code>s that corresponded to the applicationId.
+     */
     public Collection<YearsWithExpertise> getYearsWithExpertiseByApplicationId(long applicationId) {
         List<YearsWithExpertise> competences = new ArrayList<YearsWithExpertise>();
         Query query = em.createNativeQuery("SELECT years.expertise, years.yearsofexperience "

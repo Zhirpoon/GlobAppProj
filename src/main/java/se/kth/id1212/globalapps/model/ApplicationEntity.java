@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 
 /**
  *
@@ -31,15 +30,27 @@ public class ApplicationEntity implements Serializable {
     @Column(name = "VERSION", nullable = true)
     private int versionNumber;
     
+    /**
+     * The null constructor for ApplicationEntity.
+     */
     public ApplicationEntity() {
     }
     
+    /**
+     * The constructor for <code>ApplicationEntity</code>, it is the entity in which applications are saved to the database.
+     * It automatically initiates the version number to 1 and sets the accepted status to false.
+     * UserEntity in this case is a foreign key in the ApplicationEntity.
+     * @param userEntity The <code>ApplicationEntity</code>'s owner.
+     */
     public ApplicationEntity(UserEntity userEntity) {
             this.userEntity = userEntity;
             this.status = false;
             this.versionNumber = 1;
     }
     
+    /**
+     * @return The <code>ApplicationEntity</code>'s generated ID.
+     */
     public Long getApplicationId() {
         return applicationId;
     }
@@ -60,21 +71,30 @@ public class ApplicationEntity implements Serializable {
         return !((this.applicationId == null && other.applicationId != null) || (this.applicationId != null && !this.applicationId.equals(other.applicationId)));
     }
 
+    /**
+     * @return The <code>ApplicationEntity</code>'s owner.
+     */
     public UserEntity getUserEntity() {
         return userEntity;
     }
 
+    /**
+     * @return Says if the <code>ApplicationEntity</code> is accepted or not.
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     * @return The <code>ApplicationEntity</code>'s version number.
+     */
     public int getVersionNumber() {
         return versionNumber;
     }
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.ApplicationEntity[ applicationId=" + applicationId + " ]";
+        return "se.kth.id1212.globalapps.model.ApplicationEntity[ ApplicationEntity id= " + applicationId + " ]";
     }
     
 }

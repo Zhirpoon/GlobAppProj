@@ -56,10 +56,18 @@ public class UserEntity implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateOfBirth;
     
+    /**
+     * Null constructor for USerEntity
+     */
     public UserEntity() {        
     }
     
-    public UserEntity(RegistrationDTO registrationInformation, int hashedPassword, AccountTypeEntity accountType) {
+    /**
+     * Constructor for the <code>UserEntity</code> which is used to store and retrieve data in the database. It also hashes the password it is not stored in plain text.
+     * @param registrationInformation The <code>UserEntity</code>'s registration information, such as username, first name, date of birth, etc.
+     * @param accountType The <code>UserEntity</code>'s <code>AccountTypeEntity</code>. 
+     */
+    public UserEntity(RegistrationDTO registrationInformation, AccountTypeEntity accountType) {
         this.username = registrationInformation.getUsername();
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
@@ -80,38 +88,65 @@ public class UserEntity implements Serializable {
         this.accountType = accountType;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s social security number. 
+     */
     public String getSsn() {
         return ssn;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s date of birth.
+     */
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s username.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s date of creation..
+     */
     public Date getRegistrationDate() {
         return registrationDate;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s email.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s first name.
+     */
     public String getFirstName() {
         return firstName;
     }
-
+    
+    /**
+     * @return The <code>UserEntity</code>'s last name.
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s hashed password.
+     */
     public String getHashedPassword() {
         return hashedPassword;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s <code>AccountTypeEntity</code>, is either Recruiter or Applicant.
+     */
     public AccountTypeEntity getAccountType() {
         return accountType;
     }
@@ -127,7 +162,6 @@ public class UserEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof UserEntity)) {
             return false;
         }
@@ -137,7 +171,7 @@ public class UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.UserEntity[ id=" + username + " ]";
+        return "se.kth.id1212.globalapps.model.UserEntity[ UserEntity username= " + username + " ]";
     }
     
 }

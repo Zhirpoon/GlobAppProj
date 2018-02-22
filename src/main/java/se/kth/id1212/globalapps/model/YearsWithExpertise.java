@@ -10,11 +10,11 @@ public class YearsWithExpertise implements YearsWithExpertiseDTO{
     private final ExpertiseEntity expertise;
     private final int yearsOfExperience;
     
-    public YearsWithExpertise(YearsWithExpertiseDTO expertisesDTO) {
-        this.expertise = new ExpertiseEntity(expertisesDTO.getExpertise());
-        this.yearsOfExperience = expertisesDTO.getYears();
-    }
-    
+    /**
+     * Constructor of <code>YearsWithExpertise</code> for the specific expertise with a certain amount of experience.
+     * @param expertise The newly created <code>YearsWithExpertise</code>'s expertise.
+     * @param yearsOfExperience The newly created <code>YearsWithExpertise</code>'s experience in years for the specific expertise.
+     */
     public YearsWithExpertise(String expertise, int yearsOfExperience) {
         this.expertise = new ExpertiseEntity(expertise);
         this.yearsOfExperience = yearsOfExperience;

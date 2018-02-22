@@ -1,6 +1,5 @@
 package se.kth.id1212.globalapps.controller;
 
-import java.sql.Date;
 import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,13 +14,13 @@ import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 import se.kth.id1212.globalapps.model.DTOs.Application;
 import se.kth.id1212.globalapps.model.TimePeriod;
 import se.kth.id1212.globalapps.model.YearsWithExpertise;
-import se.kth.id1212.globalapps.view.DTOs.ApplicationSearch;
 import se.kth.id1212.globalapps.view.DTOs.LoginCredentialsDTO;
 import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
 /**
  *
  * @author Anders Klasson <aklasson@kth.se>
+ * The controller that handles all conversations and conversions between the view and the model layers.
  */
 @Stateless
 public class Controller {
@@ -29,14 +28,18 @@ public class Controller {
     @EJB
     DBAO dbao;
     
+    /**
+     * Creates a new <code>UserEntity</code> to be stored on the database.
+     * @param registrationDTO The <code>RegistrationDTO</code> to be converted into a UserEntity, contains data such as password, username, etc.
+     */
     public void register(RegistrationDTO registrationDTO) {
-        dbao.addUser(new UserEntity(registrationDTO, 1, dbao.getAccountTypeApplicant()));
+        dbao.addUser(new UserEntity(registrationDTO, dbao.getAccountTypeApplicant()));
     }
 
-    public void login(LoginCredentialsDTO loginCredentialsDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    /**
+     * Gets all <code>ExpertiseEntity</code> stored on the database and sends back their names to the view.
+     * @return An array of <code>ExpertiseEntity</code> names.
+     */
     public String[] getAllExpertises() {
         Collection<ExpertiseEntity> expertiseEntities = dbao.getAllExpertises();
         String[] expertises = new String[expertiseEntities.size()];
@@ -48,20 +51,46 @@ public class Controller {
         return expertises;
     }
     
+    /**
+     * Calls the <code>DBAO</code> to save an <code>ApplicationEntity</code> as well as the corresponding <code>YearsWithExpertise</code>s and the <code>TimePeriod</code>s to the database.
+     * All this data is retrieved from the <code>ApplicationDTO</code>. It must also find a <code>UserEntity</code> to bind the application to, this is gotten from the <code>ApplicationDTO</code>'s username.
+     * This will rollback the server if any of the save methods fail.
+     * @param application The <code>ApplicationDTO</code> where all the data is stored.
+     */
     public void saveApplication(ApplicationDTO application) {
         UserEntity user = dbao.findUserByUsername(application.getUsername());
         ApplicationEntity applicationEntity = new ApplicationEntity(user);
         dbao.saveApplication(applicationEntity);
         long applicationId = applicationEntity.getApplicationId();
-        dbao.saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
-        dbao.saveApplicationExpertises(applicationId, application.getExpertises());
+        saveApplicationExpertises(applicationId, application.getExpertises());
+        saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
+    }
+    
+    private void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
+        dbao.saveApplicationTimePeriods(applicationId, timePeriods);
+    }
+    
+    private void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
+        dbao.saveApplicationExpertises(applicationId, expertises);
     }
 
+    /**
+     * Retrieves the <code>AccountType</code> of a specified <code>UserEntity</code> found by searching on the username.
+     * @param username The username of a possible <code>UserEntity</code>.
+     * @return The name of the <code>UserEntity</code>'s <code>AccountType</code>.
+     */
     public String getUsergroup(String username) {
         UserEntity user = dbao.findUserByUsername(username);
         return user.getAccountType().getName();
     }
     
+    /**
+     * Retrieves a collection of <code>ApplicationEntity</code> based of the criterias defined by <code>ApplicationSearchDTO</code>.
+     * For every <code>ApplicationEntity</code> found, the corresponding <code>TimePeriod</code>s and <code>YearsWithExpertise</code>s are retrieved.
+     * The collections are then wrapped to an array of <code>ApplicationDTO</code>s to be sent to the view.
+     * @param searchCriteria The <code>ApplicationSearchDTO</code> sent from the view, contains such things as expertise names</code, dates, etc.
+     * @return An array <code>ApplicationDTO</code> which contains all of the data needed from each <code>ApplicationEntity</code> and its corresponding <code>TimePeriod</code>s and <code>YearsWithExpertise</code>s. 
+     */
     public ApplicationDTO[] searchApplications(ApplicationSearchDTO searchCriteria) {
         Collection<ApplicationEntity> retrievedApplications = dbao.searchApplications(searchCriteria);
         ApplicationDTO[] applications = new ApplicationDTO[retrievedApplications.size()];
@@ -75,6 +104,9 @@ public class Controller {
         return applications;
     }
 
+    /**
+     * Doesn't need a javadoc really.
+     */
     public void johansDummyFunction() {
         System.out.println("-----------------------------------");
         System.out.println("Johans funktion");
