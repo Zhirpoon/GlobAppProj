@@ -13,6 +13,15 @@ public class RegistrationDTO extends LoginCredentialsDTO implements se.kth.id121
     private final String mail;
     private final Date dateOfBirth;
 
+    /**
+     * Constructor of <code>RegistrationDTO</code> with specified first name, last name, email, username, password, and date of birth.
+     * @param firstname The first name of the user to be registered.
+     * @param Lastname The last name of the user to be registered.
+     * @param mail The email of the user to be registered.
+     * @param username The username of the user to be registered.
+     * @param password The password of the user to be registered.
+     * @param dateOfBirth The date of birth of the user to be registered.
+     */
     public RegistrationDTO(String firstname, String Lastname, String mail, String username, String password, Date dateOfBirth) {
         super(username, password);
         this.firstname = firstname;

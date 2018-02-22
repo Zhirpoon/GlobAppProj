@@ -8,6 +8,11 @@ public class YearsWithExpertiseDTO implements se.kth.id1212.globalapps.dtos.Year
     private final String expertise;
     private final int years;
 
+    /**
+     * Constructor of <code>YearsWithExpertiseDTO</code> with specified years of experience and expertise name.
+     * @param expertise An <code>ExpertiseEntity</code>'s name taken from the database.
+     * @param years The amount of years of experience for said expertise.
+     */
     public YearsWithExpertiseDTO(int years, String expertise) {
         this.expertise = expertise;
         this.years = years;
