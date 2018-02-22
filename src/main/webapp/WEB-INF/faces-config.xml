@@ -25,5 +25,15 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <!-- RULE WHEN SENDING APPLICATION -->
+    <navigation-rule>
+        <from-view-id>/applicant/newapplication.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{applicationCreator.sendApplication()}</from-action>
+            <to-view-id>/applicant/confirmSendApplication.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 </faces-config>
 

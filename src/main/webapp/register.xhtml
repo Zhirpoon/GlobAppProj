@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <title>Register New User</title>
@@ -45,28 +46,19 @@
                     <h:panelGroup class="control">
                         <h:inputSecret class="input" autocomplete="off" value="#{accountHandler.password}"/>
                     </h:panelGroup>
-                    <h:outputLabel class="label" value="Date of Birth: "/>
-                    <h:panelGroup id="dateMenu" class="section">
-                        <h:panelGrid columns="3">
-                            <h:selectOneMenu class="subtitle" onselect="#{accountHandler.dateOfBirth.year}">
-                                <f:selectItem itemLabel="Year" itemValue=""/>
-                                <c:forEach varStatus="year" begin="0" end="100" step="1">
-                                    <f:selectItem itemLabel="#{2018 - year.index}" itemValue="#{2018 - year.index}"/>                    
-                                </c:forEach>
-                            </h:selectOneMenu>
-                            <h:selectOneMenu class="subtitle" onselect="#{accountHandler.dateOfBirth.month}">
-                                <f:selectItem itemLabel="Month" itemValue=""/>
-                                <c:forEach var="month" begin="1" end="12" step="1">
-                                    <f:selectItem itemLabel="#{month}" itemValue="#{month}"/>
-                                </c:forEach>
-                            </h:selectOneMenu>
-                            <h:selectOneMenu class="subtitle" onselect="#{accountHandler.dateOfBirth.day}">
-                                <f:selectItem itemLabel="Day" itemValue=""/>
-                                <c:forEach var="day" begin="1" end="31" step="1">
-                                    <f:selectItem itemLabel="#{day}" itemValue="#{day}"/>
-                                </c:forEach>
-                            </h:selectOneMenu>
-                        </h:panelGrid>
+                    <h:panelGroup layout="block" class="field is-horizontal">
+                        <h:panelGroup layout="block" class="field-label">
+                            <h:outputLabel class="label" value="Date of Birth (d-M-yyyy):"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="field-body">
+                            <h:panelGroup layout="block" class="field">
+                                <h:panelGroup class="control is-expanded has-icons-left">
+                                    <h:inputText class="input" p:placeholder="Enter Date of Birth" autocomplete="off" value="#{accountHandler.dateOfBirth}">
+                                        <f:convertDateTime pattern="d-M-yyyy" />
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup id="registerButton" layout="block">
                         <h:commandButton class="button" action="#{accountHandler.register()}" value="Register new user"/>

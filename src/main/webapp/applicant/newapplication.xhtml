@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <head>
+        <title>New Application</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <ui:include src="../fragments/header.xhtml"/>
+        <h:panelGroup layout="block" class="section level-item">
+            <h:outputLabel class="title" value="Generating a new application"></h:outputLabel>
+        </h:panelGroup>
+        <h:panelGroup layout="block" class="section">
+            <h:outputLabel class="subtitle">Add expertise and years with experience</h:outputLabel>
+            <h:panelGroup layout="block" class="section level-item">
+                <h:form>
+                    <h:panelGroup layout="block" class="field is-horizontal">
+                        <h:panelGroup layout="block" class="field-label is-normal">
+                            <h:outputLabel class="label" value="Expertise:"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="field-body">
+                            <h:panelGroup layout="block" class="field is-narrow">
+                                <h:panelGroup layout="block" class="control">
+                                    <h:panelGroup layout="block" class="select is-fullwidth">
+                                        <h:selectOneMenu value="#{applicationCreator.expertise}">    
+                                            <c:forEach var="expertise" items="#{applicationCreator.expertises}">
+                                                <f:selectItem itemValue="#{expertise}" itemLabel="#{expertise}"/>
+                                            </c:forEach>
+                                        </h:selectOneMenu>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field">
+                                <h:panelGroup class="control is-expanded has-icons-left">
+                                    <h:inputText class="input" p:placeholder="Years with expertise" maxlength="2" autocomplete="off" value="#{applicationCreator.years}"/> 
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-narrow">
+                                <h:commandButton class="button" action="#{applicationCreator.addYearsWithExpertise()}" value="Add"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
+        <h:panelGroup layout="block" class="section">
+            <h:outputLabel class="subtitle">Add availability periods</h:outputLabel>
+            <h:panelGroup layout="block" class="section">
+                <h:form>
+                    <h:panelGroup layout="block" class="field is-horizontal">
+                        <h:panelGroup layout="block" class="field-label is-normal">
+                            <h:outputLabel class="label" value="Start Date (d-M-yyyy):"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="field-body">
+                            <h:panelGroup layout="block" class="field">
+                                <h:panelGroup class="control is-expanded has-icons-left">
+                                    <h:inputText class="input" p:placeholder="Start Date" autocomplete="off" value="#{applicationCreator.startDate}">
+                                        <f:convertDateTime pattern="d-M-yyyy" />
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="field is-horizontal">
+                        <h:panelGroup layout="block" class="field-label">
+                            <h:outputLabel class="label" value="End Date (d-M-yyyy):"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="field-body">
+                            <h:panelGroup layout="block" class="field">
+                                <h:panelGroup class="control is-expanded has-icons-left">
+                                    <h:inputText class="input" p:placeholder="End Date" autocomplete="off" value="#{applicationCreator.endDate}">
+                                        <f:convertDateTime pattern="d-M-yyyy" />
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="field is-horizontal level-item">
+                        <h:panelGroup layout="block" class="field is-narrow">
+                            <h:commandButton class="button" action="#{applicationCreator.addAvailabilityPeriod()}" value="Add"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" class="section">
+            <h:outputLabel class="subtitle">Added Expertises</h:outputLabel>
+            <h:panelGroup layout="block" class="section level-left">
+                <c:forEach items="#{applicationCreator.yearswithExpertises}" var="yearsWithExpertise">
+                    <h:panelGrid class="section" columns="4">
+                        <h:panelGroup>
+                            <h:outputText class="label is-size-5" value="Expertise:"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText class="is-size-5" value="#{yearsWithExpertise.expertise}"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText class="label is-size-5" value="Year:"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText class="is-size-5" value="#{yearsWithExpertise.years}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </c:forEach>
+            </h:panelGroup>
+            <h:outputLabel class="subtitle">Added availability periods</h:outputLabel>
+            <h:panelGroup layout="block" class="section level-left">
+                <c:forEach items="#{applicationCreator.availiabilityPeriods}" var="periods">
+                    <h:panelGrid columns="4">
+                        <h:panelGroup layout="block">
+                            <h:outputText class="label is-size-5" value="Start Date:"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">
+                            <h:outputText class="is-size-5" value="#{periods.startdate}">
+                                <f:convertDateTime pattern="d-M-yyyy" />
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">
+                            <h:outputText class="label is-size-5" value="End Date:"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">
+                            <h:outputText class="is-size-5" value="#{periods.enddate}">
+                                <f:convertDateTime pattern="d-M-yyyy" />
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </c:forEach>
+            </h:panelGroup>
+            <h:panelGroup layout="block" class="section">
+                <h:form>
+                    <h:panelGroup layout="block" class="field is-horizontal level-item">
+                        <h:panelGroup layout="block" class="field is-narrow">
+                            <h:commandButton class="button" action="#{applicationCreator.sendApplication()}" value="Send Application"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
+    </body>
+</html>
