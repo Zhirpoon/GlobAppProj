@@ -1,6 +1,7 @@
 package se.kth.id1212.globalapps.view.DTOs;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import se.kth.id1212.globalapps.model.YearsWithExpertise;
 
@@ -45,6 +46,26 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     @Override
     public boolean getStatus() {
         return false;
+    }
+
+    @Override
+    public String getFirstName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getLastName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Date getDateOfBirth() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getVersionNumber() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
