@@ -26,7 +26,7 @@ public class ApplicationCreator implements Serializable{
     private Controller controller;
     private String[] expertises;
     private String expertise;
-    private int years;
+    private Integer years;
     private Application application;
     private Date startDate;
     private Date endDate;
@@ -71,7 +71,7 @@ public class ApplicationCreator implements Serializable{
         this.years = years;
     }
 
-    public int getYears() {
+    public Integer getYears() {
         return years;
     }
 
@@ -86,12 +86,8 @@ public class ApplicationCreator implements Serializable{
     public void addYearsWithExpertise() {
         YearsWithExpertiseDTO yearsWithExpertise = new YearsWithExpertiseDTO(years, expertise);
         application.addExpertises(yearsWithExpertise);
-        expertise="";
-        years = 0;
-        System.out.println("-----------------------------");
-        System.out.println("Year: " + yearsWithExpertise.getYears() + ", Expertise: " + yearsWithExpertise.getExpertise());
-        System.out.println("Length of yearsofexArr: " + this.application.getExpertises().length);
-                System.out.println("-----------------------------");
+        expertise= null;
+        years = null;
     }
 
     public void sendApplication() {
