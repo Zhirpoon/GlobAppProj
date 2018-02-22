@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -32,8 +31,7 @@ public class ApplicationCreator implements Serializable{
     private Date endDate;
 
     /**
-     * Creates a new instance of ApplicationCreator
-     * @return 
+     * Creates a new instance of ApplicationCreator 
      */
 
     
@@ -43,23 +41,37 @@ public class ApplicationCreator implements Serializable{
         application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
     }
     
-    
+    /**
+     * @param startDate The start date of an availability period.
+     */
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-
+    
+    /**
+     * @param endDate The end date of an availability period. 
+     */
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
+    /**
+     * @return The start date of an availability period. 
+     */
     public Date getStartDate() {
         return startDate;
     }
 
+    /**
+     * @return The end date of an availability period.
+     */
     public Date getEndDate() {
         return endDate;
     }
 
+    /**
+     * Creates an availability period, <code>TimePeriodDTO</code>, by getting the set start and end dates and adding them to the  <code>Application</code>.
+     */
     public void addAvailabilityPeriod() {
         TimePeriodDTO availabilityPeriod = new TimePeriodDTO(startDate, endDate);
         this.application.addAvailabilityPeriod(availabilityPeriod);
@@ -67,22 +79,37 @@ public class ApplicationCreator implements Serializable{
         endDate=null;
     }
 
+    /**
+     * @param years The amount of years for an expertise to be added to <code>YearsWithExpertiseDTO</code>.
+     */
     public void setYears(int years) {
         this.years = years;
     }
 
+    /**
+     * @return The amount of years for an expertise to be added to <code>YearsWithExpertiseDTO</code>.
+     */
     public int getYears() {
         return years;
     }
 
+    /**
+     * @return An expertise to be added to <code>YearsWithExpertiseDTO</code>.
+     */
     public String getExpertise() {
         return expertise;
     }
 
+    /**
+     * @param expertise An expertise to be added to <code>YearsWithExpertiseDTO</code>.
+     */
     public void setExpertise(String expertise) {
         this.expertise = expertise;
     }
 
+    /**
+     * Creates <code>YearsWithExpertiseDTO</code> by getting the set expertise and the set years of experience and adding them to the  <code>Application</code>.
+     */
     public void addYearsWithExpertise() {
         YearsWithExpertiseDTO yearsWithExpertise = new YearsWithExpertiseDTO(years, expertise);
         application.addExpertises(yearsWithExpertise);
@@ -94,18 +121,30 @@ public class ApplicationCreator implements Serializable{
                 System.out.println("-----------------------------");
     }
 
+    /**
+     * Sends the <code>ApplicationDTO</code> to the controller to  be saved in the database.
+     */
     public void sendApplication() {
         controller.saveApplication(application);
     }
 
+    /**
+     * @return An array of all <code>ExpertiseEntity</code> names stored in the database.
+     */
     public String[] getExpertises() {
         return expertises;
     }
 
+    /**
+     * @return An array of all the added <code>TimePeriod</code>s, ie all periods of availability, to the application to save.. 
+     */
     public TimePeriodDTO[] getAvailiabilityPeriods() {
         return this.application.getAvailabilityPeriods();
     }
 
+    /**
+     * @return An array of all the added <code>YearsWithExpertiseDTO</code> to the application to save.
+     */
     public YearsWithExpertiseDTO[] getYearswithExpertises() {
         return this.application.getExpertises();
     }
