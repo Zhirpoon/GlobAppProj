@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"/>
         <script defer="defer" src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+        <link rel="stylesheet" href="../resources/common.css"/>
     </head>
     <body>
         <h:panelGroup layout="block" >
@@ -24,17 +25,17 @@
                         <h:panelGrid columns="6" class="field has-addons" rendered="#{request.remoteUser == null}">
                             <form method="POST" action="j_security_check">
                                 <h:panelGroup layout="block" class="control">
-                                    <input class="input" type="text" name="j_username" placeholder="Username"/>
+                                    <input class="input" autocomplete="off" type="text" name="j_username" placeholder="Username"/>
                                 </h:panelGroup>
                                 <h:panelGroup layout="block" class="control">
-                                    <input class="input" type="text" name="j_password" placeholder="Password"/>
+                                    <input class="input" autocomplete="off" type="password" name="j_password" placeholder="Password"/>
                                 </h:panelGroup>
                                 <h:panelGroup layout="block" class="control">
                                     <input class="button" type="submit" value="Login"/>
                                 </h:panelGroup>
                             </form>
                             <h:form>
-                                <h:commandButton class="button" action="register?faces-redirect=true" value="Register" />
+                                <h:commandButton class="button" action="/register?faces-redirect=true" value="Register" />
                             </h:form>
                         </h:panelGrid>
                     </div>
@@ -44,10 +45,10 @@
                     <div class="level-right">
                         <p class="level-item"><strong>Logged in as #{request.remoteUser}</strong></p>
                         <h:form>
-                            <h:commandButton class="button" action="applicant/apply?faces-redirect=true" value="New Application" />
+                            <h:commandButton class="button" action="/applicant/apply?faces-redirect=true" value="New Application" />
                         </h:form>
                         <h:form>
-                            <h:commandButton class="button" action="welcome" value="First Page" />
+                            <h:commandButton class="button" action="/welcome" value="First Page" />
                         </h:form>
                         <h:form>
                             <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
@@ -58,10 +59,10 @@
                     <div class="level-right">
                         <p class="level-item"><strong>Logged in as #{request.remoteUser}</strong></p>
                         <h:form>
-                            <h:commandButton class="button" action="recruiter/listapplications?faces-redirect=true" value="List Applications" />
+                            <h:commandButton class="button" action="/recruiter/listapplications?faces-redirect=true" value="List Applications" />
                         </h:form>
                         <h:form>
-                            <h:commandButton class="button" action="welcome" value="First Page" />
+                            <h:commandButton class="button" action="/welcome" value="First Page" />
                         </h:form>
                         <h:form>
                             <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
@@ -71,7 +72,7 @@
                 <h:panelGroup layout="block" rendered="#{!accountType.loggedIn}">
                     <div class="level-right">
                         <h:form>
-                            <h:commandButton class="button" action="welcome" value="First Page" />
+                            <h:commandButton class="button" action="/welcome" value="First Page" />
                         </h:form>
                     </div>
                 </h:panelGroup>

@@ -4,61 +4,101 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <title>Make an application</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
         <ui:include src="../fragments/header.xhtml"/>
-
-        <h:panelGroup layout="block" class="is-normal">
-            <label class="label">Add expertise and years with experience</label>
+        <h:panelGroup layout="block" class="section level-item">
+            <h:outputLabel class="title">Generating a new application</h:outputLabel>
         </h:panelGroup>
-        <h:form>
-            <h:selectOneMenu class="field is-narrow" value="#{applicationCreator.expertise}">
-                <label >Expertise:</label>
-                <c:forEach items="#{applicationCreator.expertises}" var="expertise">
-                    <f:selectItem  itemValue="#{expertise}" itemLabel="#{expertise}"/>
+        <h:panelGrid columns="2" class="control">
+        <h:panelGroup class="section">
+            <h:outputLabel class="subtitle">Add expertise and years with experience</h:outputLabel>
+            <h:panelGroup class="section">
+                <h:form>
+                    <h:panelGrid class="section control level-item" columns="2">
+                        <h:outputLabel class="label is-size-3" value="Expertise:"/>
+                        <h:panelGroup class="select is-primary is-medium">
+                            <h:selectOneMenu value="#{applicationCreator.expertise}">    
+                                <c:forEach var="expertise" items="#{applicationCreator.expertises}">
+                                    <f:selectItem itemValue="#{expertise}" itemLabel="#{expertise}"/>
+                                </c:forEach>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        <h:outputLabel class="label is-size-3" value="Years:"/>
+                        <h:inputText class="input is-primary is-medium" autocomplete="off"  maxlength="2" value="#{applicationCreator.years}"/>
+                    </h:panelGrid>
+                    <h:panelGroup class="level-item">
+                        <h:commandButton class="button is-medium" value="Add" action="#{applicationCreator.addYearsWithExpertise()}"/>
+                    </h:panelGroup>
+
+                </h:form>
+            </h:panelGroup>
+            <h:outputLabel class="subtitle">Add availability periods</h:outputLabel>
+            <h:panelGroup class="section" layout="block">
+                <h:form>
+                    <h:panelGrid columns="4" class="section control level-item">
+                        <h:outputLabel class="label is-large">Start date (d-M-yyyy):</h:outputLabel>
+                        <h:selectOneMenu class="select is-medium" onselect="#{applicationCreator.startDate.year}">
+                            <f:selectItem itemLabel="Year" itemValue=""/>
+                            <c:forEach varStatus="year" begin="0" end="100" step="1">
+                                <f:selectItem itemLabel="#{2018 - year.index}" itemValue="#{2018 - year.index}"/>                    
+                            </c:forEach>
+                        </h:selectOneMenu>
+                        <h:selectOneMenu class="select is-medium" onselect="#{applicationCreator.startDate.month}">
+                            <f:selectItem itemLabel="Month" itemValue=""/>
+                            <c:forEach var="month" begin="1" end="12" step="1">
+                                <f:selectItem itemLabel="#{month}" itemValue="#{month}"/>
+                            </c:forEach>
+                        </h:selectOneMenu>
+                        <h:selectOneMenu class="select is-medium" onselect="#{applicationCreator.startDate.day}">
+                            <f:selectItem itemLabel="Day" itemValue=""/>
+                            <c:forEach var="day" begin="1" end="31" step="1">
+                                <f:selectItem itemLabel="#{day}" itemValue="#{day}"/>
+                            </c:forEach>
+                        </h:selectOneMenu>
+                        <h:outputLabel class="label is-large">End date (d-M-yyyy):</h:outputLabel>
+                        <h:selectOneMenu class="select is-medium" onselect="#{applicationCreator.endDate.year}">
+                            <f:selectItem itemLabel="Year" itemValue=""/>
+                            <c:forEach varStatus="year" begin="0" end="100" step="1">
+                                <f:selectItem itemLabel="#{2018 - year.index}" itemValue="#{2018 - year.index}"/>                    
+                            </c:forEach>
+                        </h:selectOneMenu>
+                        <h:selectOneMenu class="select is-medium" onselect="#{applicationCreator.endDate.month}">
+                            <f:selectItem itemLabel="Month" itemValue=""/>
+                            <c:forEach var="month" begin="1" end="12" step="1">
+                                <f:selectItem itemLabel="#{month}" itemValue="#{month}"/>
+                            </c:forEach>
+                        </h:selectOneMenu>
+                        <h:selectOneMenu class="select is-medium" onselect="#{applicationCreator.endDate.day}">
+                            <f:selectItem itemLabel="Day" itemValue=""/>
+                            <c:forEach var="day" begin="1" end="31" step="1">
+                                <f:selectItem itemLabel="#{day}" itemValue="#{day}"/>
+                            </c:forEach>
+                        </h:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGroup class="level-item">
+                        <h:commandButton value="Add" class="button is-medium" action="#{applicationCreator.addAvailabilityPeriod()}"/>
+                    </h:panelGroup>
+                </h:form>
+            </h:panelGroup>
+            <h:outputLabel value= "Added expertises" class="subtitle"/>
+            <h:panelGroup class="section field">
+                <c:forEach items="#{applicationCreator.yearswithExpertises}" var="yearsWithExpertise">
+                    <h:panelGrid columns="4">
+                        <h:outputText class="label is-size-5" value="Expertise:"/>
+                        <h:outputText class="is-size-5" value="#{yearsWithExpertise.expertise}"/>
+                        <h:outputText class="label is-size-5" value="Years: "/>
+                        <h:outputText class="is-size-5" value="#{yearsWithExpertise.years}"/>
+                    </h:panelGrid>
                 </c:forEach>
-
-            </h:selectOneMenu>
-            Years:
-            <h:inputText id="inputAmount"  value="#{applicationCreator.years}"/>
-            <h:commandButton value="Add" action="#{applicationCreator.addYearsWithExpertise()}"/>
-        </h:form>    
-
-
-
-
-
-        <h3>Add availability period </h3>
-        <h:form>
-            Start date (d-M-yyyy):
-            <h:inputText value="#{applicationCreator.startDate}">
-                <f:convertDateTime pattern="d-M-yyyy" />
-            </h:inputText>
-            End date (d-M-yyyy):
-            <h:inputText value="#{applicationCreator.endDate}">
-                <f:convertDateTime pattern="d-M-yyyy" />
-            </h:inputText>
-            <h:commandButton value="Add" action="#{applicationCreator.addAvailabilityPeriod()}" />
-        </h:form>   
-        <hr></hr>
-        <h3>Added expertises</h3>
-        <c:forEach items="#{applicationCreator.yearswithExpertises}" var="yearsWiEx">
-            <p>Expertise: #{yearsWiEx.expertise} Years: #{yearsWiEx.years}</p>
-        </c:forEach>
-
-        <hr></hr>
-        <h3>Added availability periods</h3>
-        <c:forEach items="#{applicationCreator.availiabilityPeriods}" var="availabilityPeriod">
-            <p>Start date: #{availabilityPeriod.startdate} End date: #{availabilityPeriod.enddate}</p>
-        </c:forEach>
-
-        <h:form>
-            <h:commandButton value="Send application" action="#{applicationCreator.sendApplication()}"/>
-        </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
+        </h:panelGrid>
         <!--        <h:form>
                     
                     <p>

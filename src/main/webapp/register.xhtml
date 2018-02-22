@@ -23,31 +23,56 @@
                     The following form will register a new user to this page.
                 </p>
             </div>
-            <h:panelGrid class="field" columns="3">
+            <h:panelGroup class="section">
                 <h:form>
                     <h:outputLabel class="label" value="First Name: "/>
-                    <h:panelGroup class="control">
-                        <h:inputText class="input" value="#{accountHandler.firstName}"/>
+                    <h:panelGroup layout="block" class="control">
+                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.firstName}"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Last Name: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" value="#{accountHandler.lastName}"/>
+                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.lastName}"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Email: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" value="#{accountHandler.email}"/>
+                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.email}"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Username: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" value="#{accountHandler.username}"/>
+                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.username}"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Password: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" value="#{accountHandler.password}"/>
+                        <h:inputSecret class="input" autocomplete="off" value="#{accountHandler.password}"/>
                     </h:panelGroup>
-                    <h:commandButton class="button" action="#{accountHandler.register()}" value="Register new user"/>
+                    <h:outputLabel class="label" value="Date of Birth: "/>
+                    <h:panelGroup id="dateMenu" class="section">
+                        <h:panelGrid columns="3">
+                            <h:selectOneMenu class="subtitle" onselect="#{accountHandler.dateOfBirth.year}">
+                                <f:selectItem itemLabel="Year" itemValue=""/>
+                                <c:forEach varStatus="year" begin="0" end="100" step="1">
+                                    <f:selectItem itemLabel="#{2018 - year.index}" itemValue="#{2018 - year.index}"/>                    
+                                </c:forEach>
+                            </h:selectOneMenu>
+                            <h:selectOneMenu class="subtitle" onselect="#{accountHandler.dateOfBirth.month}">
+                                <f:selectItem itemLabel="Month" itemValue=""/>
+                                <c:forEach var="month" begin="1" end="12" step="1">
+                                    <f:selectItem itemLabel="#{month}" itemValue="#{month}"/>
+                                </c:forEach>
+                            </h:selectOneMenu>
+                            <h:selectOneMenu class="subtitle" onselect="#{accountHandler.dateOfBirth.day}">
+                                <f:selectItem itemLabel="Day" itemValue=""/>
+                                <c:forEach var="day" begin="1" end="31" step="1">
+                                    <f:selectItem itemLabel="#{day}" itemValue="#{day}"/>
+                                </c:forEach>
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    <h:panelGroup id="registerButton" layout="block">
+                        <h:commandButton class="button" action="#{accountHandler.register()}" value="Register new user"/>
+                    </h:panelGroup>
                 </h:form>
-            </h:panelGrid>
+            </h:panelGroup>
         </section>
     </body>
 </html>
