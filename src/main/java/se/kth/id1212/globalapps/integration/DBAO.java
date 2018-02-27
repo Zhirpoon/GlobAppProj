@@ -17,6 +17,7 @@ import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
 import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
+import se.kth.id1212.globalapps.model.Constants.DbConstants;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.QueryBuilder;
 import se.kth.id1212.globalapps.model.TimePeriod;
@@ -32,6 +33,7 @@ import se.kth.id1212.globalapps.model.YearsWithExpertise;
 //This class should only be called with an active transation
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class DBAO {
+    DbConstants dbConstants = new DbConstants();
 
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
@@ -57,7 +59,9 @@ public class DBAO {
      * @return A collection of <code>ExpertiseEntity</code>. 
      */
     public Collection<ExpertiseEntity> getAllExpertises() {
-        Query query = em.createQuery("SELECT entities FROM ExpertiseEntity entities", ExpertiseEntity.class);
+        Query query = em.createQuery("SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME
+                + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
+                , ExpertiseEntity.class);
         return query.getResultList();
     }
     
@@ -86,10 +90,17 @@ public class DBAO {
     public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
         for(YearsWithExpertiseDTO expertise : expertises) {
             Query query = em.createNativeQuery(
-                    "INSERT INTO YearsWithExpertise (expertise, applicationid, yearsofexperience) VALUES ("
-                            + "(SELECT exp.EXPERTISENAME FROM ExpertiseEntity exp WHERE exp.EXPERTISENAME LIKE ?),"
-                            + "(SELECT appl.APPLICATIONID FROM ApplicationEntity appl WHERE appl.APPLICATIONID = ?),"
-                            + "?)"
+                    "INSERT INTO " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME
+                        + " (" + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + "," 
+                        + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + ","
+                        + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE + ") VALUES ("
+                    + "(SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME
+                            + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
+                            + " WHERE "+ dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME + " LIKE ?),"
+                    + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
+                            + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
+                            + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
+                    + "?)"
             );
             query.setParameter(1, expertise.getExpertise());
             query.setParameter(2, applicationId);
@@ -106,9 +117,14 @@ public class DBAO {
     public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
         for(TimePeriodDTO timePeriod : timePeriods) {
             Query query = em.createNativeQuery(
-                    "INSERT INTO periodofavailability (applicationid, startdate, enddate) VALUES ("
-                            + "(SELECT appl.APPLICATIONID FROM ApplicationEntity appl WHERE appl.APPLICATIONID = ?),"
-                            + "?,?)"
+                    "INSERT INTO " + dbConstants.TIMEPERIOD_TABLE_NAME
+                        + " (" + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + "," 
+                        + dbConstants.TIMEPERIOD_COLUMN_STARTDATE + ","
+                        + dbConstants.TIMEPERIOD_COLUMN_ENDDATE + ") VALUES ("
+                        + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
+                            + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
+                            + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
+                        + "?,?)"
             );
             query.setParameter(1, applicationId);
             query.setParameter(2, timePeriod.getStartdate());
@@ -124,7 +140,7 @@ public class DBAO {
      * @return A collection <code>ApplicationEntity</code> based on the query built.
      */
     public Collection<ApplicationEntity> searchApplications(ApplicationSearchDTO searchCriteria) {
-        QueryBuilder queryBuilder =  new QueryBuilder("application");
+        QueryBuilder queryBuilder =  new QueryBuilder(dbConstants.APPLICATIONENTITY_QUERY_NAME);
         queryBuilder.addNameCriteria(searchCriteria.getApplicantFirstname(), searchCriteria.getApplicantLastname());
         queryBuilder.addRegistrationDateCriteria(searchCriteria.getRegistrationDate());
         queryBuilder.addExpertiseCriteria(searchCriteria.getCompetences());
@@ -141,9 +157,10 @@ public class DBAO {
      */
     public Collection<TimePeriod> getPeriodsOfAvailabilityById(long applicationId) {
         List<TimePeriod> timePeriods = new ArrayList<TimePeriod>();
-        Query query = em.createNativeQuery("SELECT period.startdate, period.enddate "
-                + "FROM periodofavailability period "
-                + "WHERE period.applicationid = " + applicationId);
+        Query query = em.createNativeQuery("SELECT " + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_STARTDATE + ","
+                + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_ENDDATE
+                + " FROM " + dbConstants.TIMEPERIOD_TABLE_NAME + " " + dbConstants.TIMEPERIOD_QUERY_NAME
+                + " WHERE " + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + " = " + applicationId);
         List<Object[]> result = query.getResultList();
         DateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {   
@@ -165,9 +182,10 @@ public class DBAO {
      */
     public Collection<YearsWithExpertise> getYearsWithExpertiseByApplicationId(long applicationId) {
         List<YearsWithExpertise> competences = new ArrayList<YearsWithExpertise>();
-        Query query = em.createNativeQuery("SELECT years.expertise, years.yearsofexperience "
-                + "FROM YearsWithExpertise years "
-                + "WHERE years.applicationid = " + applicationId);
+        Query query = em.createNativeQuery("SELECT " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + ","
+                + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE
+                + " FROM " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME + " " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME
+                + " WHERE " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + " = " + applicationId);
         List<Object[]> result = query.getResultList();
         for(Object[] obj : result) {
             YearsWithExpertise competence = new YearsWithExpertise(obj[0].toString(), 

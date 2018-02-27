@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -15,6 +16,7 @@ public class AccountTypeEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "NAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String name;
     
     /**

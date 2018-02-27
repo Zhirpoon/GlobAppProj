@@ -3,12 +3,14 @@ package se.kth.id1212.globalapps.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
+import se.kth.id1212.globalapps.model.Constants.DbConstants;
 
 /**
  *
  * @author Johan Rosengren <jrosengr@kth.se>
  */
 public class QueryBuilder {
+    DbConstants dbConstants = new DbConstants();
     private String query = "";
     
     /**
@@ -17,8 +19,11 @@ public class QueryBuilder {
      * @param queryType The <code>QueryBuilder</code>'s query type.
      */
     public QueryBuilder(String queryType) {
-        if(queryType.equalsIgnoreCase("application")) {
-            query += "SELECT * FROM ApplicationEntity application WHERE ";
+        if(queryType.equalsIgnoreCase(dbConstants.APPLICATIONENTITY_QUERY_NAME)) {
+            query += "SELECT * "
+                    + "FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME
+                    + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME 
+                    + " WHERE ";
         }
     }
     
@@ -28,19 +33,20 @@ public class QueryBuilder {
      * @param lastName This is the search criteria for the application's owner's last name.
      */
     public void addNameCriteria(String firstName, String lastName) {  
-        String nameQueryPart = "application.OWNER IN "
-                    + "(SELECT userEntity.USERNAME "
-                    + "FROM UserEntity userEntity "
-                    + "WHERE userEntity.FIRSTNAME LIKE ";
+        String nameQueryPart = dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_OWNER + " IN "
+                + "(SELECT " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_USERNAME 
+                + " FROM " + dbConstants.USERENTITY_TABLE_NAME + " " + dbConstants.USERENTITY_QUERY_NAME 
+                + " WHERE " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_FIRSTNAME + " LIKE ";
         if(lastName == null && firstName == null) {
-            nameQueryPart += "'%' AND userEntity.LASTNAME LIKE '%')";
+            nameQueryPart += "'%' "
+                    + "AND " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_LASTNAME + " LIKE '%')";
         } else {    
             if(firstName == null) {
                 nameQueryPart += "'%' ";
             } else {
                 nameQueryPart += "'" + firstName + "' ";
             }
-            nameQueryPart += "AND userEntity.LASTNAME LIKE ";
+            nameQueryPart += "AND " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_LASTNAME +  " LIKE ";
             if(lastName == null) {
                 nameQueryPart += "'%')";
             } else {
@@ -55,10 +61,10 @@ public class QueryBuilder {
      * @param registrationDate This is the registration date of the user who owns the application.
      */
     public void addRegistrationDateCriteria(Date registrationDate) {
-        String dateQueryPart = " AND application.OWNER IN "
-                + "(SELECT us.USERNAME "
-                + "FROM UserEntity us "
-                + "WHERE us.REGISTRATIONDATE = ";
+        String dateQueryPart = " AND " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_OWNER + " IN "
+                + "(SELECT " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_USERNAME
+                + " FROM " + dbConstants.USERENTITY_TABLE_NAME + " " + dbConstants.USERENTITY_QUERY_NAME
+                + "WHERE " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_REGISTRATIONDATE + " = ";
         if(registrationDate != null) {
             dateQueryPart +=  "'" + formatDateToQuery(registrationDate) + "')";
             query += dateQueryPart;
@@ -84,9 +90,11 @@ public class QueryBuilder {
         int position = 1;
         if(amountOfExpertises != 0) { 
             String expertiseQueryPart = " AND " + amountOfExpertises + 
-                " = (SELECT COUNT(*) FROM YearsWithExpertise exp "
-                + "WHERE application.APPLICATIONID = exp.applicationid "
-                + "AND exp.expertise IN (";
+                " = (SELECT COUNT(*) "
+                + "FROM " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME + " " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME
+                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID 
+                + " = " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID
+                + " AND " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + " IN (";
             for(String expertise : expertises) {
                 expertiseQueryPart += "'" + expertise + "'";
                 expertiseQueryPart = addQueryComma(position, amountOfExpertises, expertiseQueryPart);
@@ -118,15 +126,17 @@ public class QueryBuilder {
      * @param timeperiod This is an object which consists of a start date and an end date which will be compared to the database to find acceptable application id's.
      */
     public void addAvailabilityCriteria(TimePeriodDTO timeperiod) {
-        String availabilityPeriodQueryPart = " AND application.APPLICATIONID IN "
-                + "(SELECT avail.applicationid "
-                + "FROM periodofavailability avail "
-                + "WHERE ";
+        String availabilityPeriodQueryPart = " AND " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " IN "
+                + "(SELECT " + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID
+                + " FROM " + dbConstants.TIMEPERIOD_TABLE_NAME + " " + dbConstants.TIMEPERIOD_QUERY_NAME
+                + " WHERE ";
         if(timeperiod != null) {            
             availabilityPeriodQueryPart += "'" + formatDateToQuery(timeperiod.getStartdate()) + "' " + 
-                "< avail.enddate AND " +
-                "'" + formatDateToQuery(timeperiod.getEnddate()) + "' " +
-                "BETWEEN avail.startdate AND avail.enddate)";
+                "< " + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_ENDDATE
+                + " AND "
+                + "'" + formatDateToQuery(timeperiod.getEnddate()) + "' "
+                + "BETWEEN " + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_STARTDATE
+                + " AND "+ dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_ENDDATE + ")";
             query += availabilityPeriodQueryPart;
         }
     }

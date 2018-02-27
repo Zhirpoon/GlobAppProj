@@ -26,6 +26,7 @@ public class UserEntity implements Serializable {
     
     @Id
     @Column(name = "USERNAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String username;
 
     @Column(name = "REGISTRATIONDATE", nullable = true)
@@ -33,15 +34,19 @@ public class UserEntity implements Serializable {
     private Date registrationDate;
     
     @Column(name = "EMAIL", nullable = true)
+    @Size(min = 1, max = 255)
     private String email;
     
     @Column(name = "FIRSTNAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String firstName;
     
     @Column(name = "LASTNAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String lastName;
 
     @Column(name = "PASSWORD", nullable = true)
+    @Size(min = 1, max = 255)
     private String hashedPassword;
     
     @ManyToOne(optional = true)
