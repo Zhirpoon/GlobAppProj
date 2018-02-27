@@ -41,9 +41,17 @@ public class DBAO {
     /**
      * Adds a <code>UserEntity</code> to the database.
      * @param user The <code>UserEntity</code> to be stored.
+     * @throws java.lang.Exception
      */
-    public void addUser(UserEntity user){
-        em.persist(user);
+    public void addUser(UserEntity user) throws Exception {
+        try {
+            em.persist(user);
+            em.flush();
+        } catch(Exception e) {
+            System.out.println("[DBAO:addUser] Something went wrong. \n" + e.getMessage());
+            throw new Exception("Caught exception in [DBAO:addUser]! \n" + e.getMessage());
+        } 
+            
     }
     
     /**
@@ -77,35 +85,42 @@ public class DBAO {
     /**
      * Save an <code>ApplicationEntity</code> to the database.
      * @param application The <code>ApplicationEntity</code> that is to be stored.
+     * @throws java.lang.Exception
      */
-    public void saveApplication(ApplicationEntity application) {
+    public void saveApplication(ApplicationEntity application) throws Exception {
         em.persist(application);
+        em.flush();
     }
     
     /**
      * Saves an <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to the database.
      * @param applicationId The <code>ApplicationEntity</code>'s application ID.
      * @param expertises The <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to be stored.
+     * @throws java.lang.Exception
      */
-    public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
-        for(YearsWithExpertiseDTO expertise : expertises) {
-            Query query = em.createNativeQuery(
-                    "INSERT INTO " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME
-                        + " (" + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + "," 
-                        + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + ","
-                        + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE + ") VALUES ("
-                    + "(SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME
-                            + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
-                            + " WHERE "+ dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME + " LIKE ?),"
-                    + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
-                            + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
-                            + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
-                    + "?)"
-            );
-            query.setParameter(1, expertise.getExpertise());
-            query.setParameter(2, applicationId);
-            query.setParameter(3, expertise.getYears());
-            query.executeUpdate();
+    public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) throws Exception {
+        try {
+            for(YearsWithExpertiseDTO expertise : expertises) {
+                Query query = em.createNativeQuery(
+                        "INSERT INTO " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME
+                            + " (" + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + "," 
+                            + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + ","
+                            + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE + ") VALUES ("
+                        + "(SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME
+                                + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
+                                + " WHERE "+ dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME + " LIKE ?),"
+                        + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
+                                + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
+                                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
+                        + "?)"
+                );
+                query.setParameter(1, expertise.getExpertise());
+                query.setParameter(2, applicationId);
+                query.setParameter(3, expertise.getYears());
+                query.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new Exception("Could not save ApplicationExpertises.\n" + e.getMessage());
         }
     }
     
@@ -113,23 +128,28 @@ public class DBAO {
      * Saves an <code>ApplicationEntity</code>'s <code>TimePeriod</code>s to the database.
      * @param applicationId The <code>ApplicationEntity</code>'s application ID.
      * @param timePeriods The <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to be stored, this represents the periods of availability.
+     * @throws java.lang.Exception
      */
-    public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
-        for(TimePeriodDTO timePeriod : timePeriods) {
-            Query query = em.createNativeQuery(
-                    "INSERT INTO " + dbConstants.TIMEPERIOD_TABLE_NAME
-                        + " (" + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + "," 
-                        + dbConstants.TIMEPERIOD_COLUMN_STARTDATE + ","
-                        + dbConstants.TIMEPERIOD_COLUMN_ENDDATE + ") VALUES ("
-                        + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
-                            + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
-                            + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
-                        + "?,?)"
-            );
-            query.setParameter(1, applicationId);
-            query.setParameter(2, timePeriod.getStartdate());
-            query.setParameter(3, timePeriod.getEnddate());
-            query.executeUpdate();
+    public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) throws Exception {
+        try {
+            for(TimePeriodDTO timePeriod : timePeriods) {
+                Query query = em.createNativeQuery(
+                        "INSERT INTO " + dbConstants.TIMEPERIOD_TABLE_NAME
+                            + " (" + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + "," 
+                            + dbConstants.TIMEPERIOD_COLUMN_STARTDATE + ","
+                            + dbConstants.TIMEPERIOD_COLUMN_ENDDATE + ") VALUES ("
+                            + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
+                                + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
+                                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
+                            + "?,?)"
+                );
+                query.setParameter(1, applicationId);
+                query.setParameter(2, timePeriod.getStartdate());
+                query.setParameter(3, timePeriod.getEnddate());
+                query.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new Exception("Could not save ApplicationTimePeriods.\n" + e.getMessage());
         }
     }
     

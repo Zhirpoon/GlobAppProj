@@ -26,7 +26,7 @@ public class UserEntity implements Serializable {
     
     @Id
     @Column(name = "USERNAME", nullable = true)
-    @Size(min = 1, max = 255)
+    @Size(min = 5, max = 255)
     private String username;
 
     @Column(name = "REGISTRATIONDATE", nullable = true)
