@@ -37,8 +37,13 @@ public class Controller {
      * Creates a new <code>UserEntity</code> to be stored on the database.
      * @param registrationDTO The <code>RegistrationDTO</code> to be converted into a UserEntity, contains data such as password, username, etc.
      */
-    public void register(RegistrationDTO registrationDTO) {
-        dbao.addUser(new UserEntity(registrationDTO, dbao.getAccountTypeApplicant()));
+    public void register(RegistrationDTO registrationDTO) throws Exception {
+        try {
+            dbao.addUser(new UserEntity(registrationDTO, dbao.getAccountTypeApplicant()));
+        } catch (Exception e) {
+            System.out.println("[Controller:register] Something went wrong " + e.getLocalizedMessage());
+            throw new Exception("This got caught in [Controller:register] with message: " + e.getLocalizedMessage());
+        }
     }
 
     /**
@@ -62,20 +67,24 @@ public class Controller {
      * This will rollback the server if any of the save methods fail.
      * @param application The <code>ApplicationDTO</code> where all the data is stored.
      */
-    public void saveApplication(ApplicationDTO application) {
+    public void saveApplication(ApplicationDTO application) throws Exception {
         UserEntity user = dbao.findUserByUsername(application.getUsername());
         ApplicationEntity applicationEntity = new ApplicationEntity(user);
-        dbao.saveApplication(applicationEntity);
-        long applicationId = applicationEntity.getApplicationId();
-        saveApplicationExpertises(applicationId, application.getExpertises());
-        saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
+        try {
+            dbao.saveApplication(applicationEntity);
+            long applicationId = applicationEntity.getApplicationId();
+            saveApplicationExpertises(applicationId, application.getExpertises());
+            saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
+        } catch (Exception saveApplicationException) {
+            throw new Exception(saveApplicationException.getMessage());
+        }
     }
     
-    private void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) {
+    private void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) throws Exception {
         dbao.saveApplicationTimePeriods(applicationId, timePeriods);
     }
     
-    private void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) {
+    private void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) throws Exception {
         dbao.saveApplicationExpertises(applicationId, expertises);
     }
 

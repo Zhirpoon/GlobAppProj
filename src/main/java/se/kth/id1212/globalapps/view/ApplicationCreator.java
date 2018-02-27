@@ -128,7 +128,11 @@ public class ApplicationCreator implements Serializable {
      * the database.
      */
     public void sendApplication() {
-        controller.saveApplication(application);
+        try {
+            controller.saveApplication(application);
+        } catch (Exception sendApplicationException) {
+            System.out.println(sendApplicationException.getMessage());
+        }
     }
 
     /**
