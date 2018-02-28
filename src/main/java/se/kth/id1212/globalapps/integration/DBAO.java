@@ -167,7 +167,12 @@ public class DBAO {
         queryBuilder.addAvailabilityCriteria(searchCriteria.getTimePeriod());
         
         Query query = em.createNativeQuery(queryBuilder.getQuery(), ApplicationEntity.class);
-        return query.getResultList();
+        try {
+            return query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Something went wrong when searching for Applications.\n" + e.getMessage());
+            return null;
+        }   
     }
     
     /**
@@ -181,7 +186,13 @@ public class DBAO {
                 + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_ENDDATE
                 + " FROM " + dbConstants.TIMEPERIOD_TABLE_NAME + " " + dbConstants.TIMEPERIOD_QUERY_NAME
                 + " WHERE " + dbConstants.TIMEPERIOD_QUERY_NAME + "." + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + " = " + applicationId);
-        List<Object[]> result = query.getResultList();
+        List<Object[]> result;
+        try {
+            result = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("SOmething went wrong when finding PeriodsOfAvailabilityById,\n" + e.getMessage());
+            return null;
+        }
         DateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {   
             for(Object[] obj : result) {
@@ -206,7 +217,13 @@ public class DBAO {
                 + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE
                 + " FROM " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME + " " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME
                 + " WHERE " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + " = " + applicationId);
-        List<Object[]> result = query.getResultList();
+        List<Object[]> result; 
+        try {
+            result = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Something went wrong when searching for YearsWithExpertiseByApplicationId.\n" + e.getMessage());
+            return null;
+        }
         for(Object[] obj : result) {
             YearsWithExpertise competence = new YearsWithExpertise(obj[0].toString(), 
                     Integer.parseInt(obj[1].toString()));
