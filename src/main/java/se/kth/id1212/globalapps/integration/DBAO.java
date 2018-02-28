@@ -9,15 +9,19 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.persistence.QueryTimeoutException;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
 import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 import se.kth.id1212.globalapps.model.AccountTypeEntity;
 import se.kth.id1212.globalapps.model.ApplicationEntity;
 import se.kth.id1212.globalapps.model.Constants.DbConstants;
+import se.kth.id1212.globalapps.model.Constants.ErrorConstants;
 import se.kth.id1212.globalapps.model.ExpertiseEntity;
 import se.kth.id1212.globalapps.model.QueryBuilder;
 import se.kth.id1212.globalapps.model.TimePeriod;
@@ -34,6 +38,7 @@ import se.kth.id1212.globalapps.model.YearsWithExpertise;
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class DBAO {
     DbConstants dbConstants = new DbConstants();
+    ErrorConstants errors = new ErrorConstants();
 
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
@@ -43,15 +48,14 @@ public class DBAO {
      * @param user The <code>UserEntity</code> to be stored.
      * @throws java.lang.Exception
      */
-    public void addUser(UserEntity user) throws Exception {
-        try {
+    public void addUser(UserEntity user) throws Exception {    
+        boolean userAlreadyExists = findUserByUsername(user.getUsername()) != null;
+        if(!userAlreadyExists) {
             em.persist(user);
             em.flush();
-        } catch(Exception e) {
-            System.out.println("[DBAO:addUser] Something went wrong. \n" + e.getMessage());
-            throw new Exception("Caught exception in [DBAO:addUser]! \n" + e.getMessage());
-        } 
-            
+        } else {
+            throw new Exception(errors.DUPLICATE_KEY);
+        }
     }
     
     /**
@@ -70,7 +74,12 @@ public class DBAO {
         Query query = em.createQuery("SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME
                 + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
                 , ExpertiseEntity.class);
-        return query.getResultList();
+        try {
+            return query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Something went wrong when retrieving all expertises.\n" + e.getMessage());
+            return null;
+        }
     }
     
     /**
@@ -80,6 +89,10 @@ public class DBAO {
      */
     public UserEntity findUserByUsername(String username) {
         return em.find(UserEntity.class, username);
+    }
+    
+    public ApplicationEntity findApplicationById(long applicationId) {
+        return em.find(ApplicationEntity.class, applicationId);
     }
 
     /**
@@ -99,28 +112,28 @@ public class DBAO {
      * @throws java.lang.Exception
      */
     public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) throws Exception {
-        try {
-            for(YearsWithExpertiseDTO expertise : expertises) {
-                Query query = em.createNativeQuery(
-                        "INSERT INTO " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME
-                            + " (" + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + "," 
-                            + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + ","
-                            + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE + ") VALUES ("
-                        + "(SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME
-                                + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
-                                + " WHERE "+ dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME + " LIKE ?),"
-                        + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
-                                + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
-                                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
-                        + "?)"
-                );
-                query.setParameter(1, expertise.getExpertise());
-                query.setParameter(2, applicationId);
-                query.setParameter(3, expertise.getYears());
+        for(YearsWithExpertiseDTO expertise : expertises) {
+            Query query = em.createNativeQuery(
+                    "INSERT INTO " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME
+                        + " (" + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + "," 
+                        + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID + ","
+                        + dbConstants.YEARSWITHEXPERTISE_COLUMN_YEARS_OF_EXPERIENCE + ") VALUES ("
+                    + "(SELECT " + dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME
+                            + " FROM " + dbConstants.EXPERTISEENTITY_TABLE_NAME + " " + dbConstants.EXPERTISEENTITY_QUERY_NAME
+                            + " WHERE "+ dbConstants.EXPERTISEENTITY_QUERY_NAME + "." + dbConstants.EXPERTISEENTITY_COLUMN_EXPERTISENAME + " LIKE ?),"
+                    + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
+                            + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
+                            + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
+                    + "?)"
+            );
+            query.setParameter(1, expertise.getExpertise());
+            query.setParameter(2, applicationId);
+            query.setParameter(3, expertise.getYears());
+            try {
                 query.executeUpdate();
+            } catch (PersistenceException timeoutException) {
+                throw new Exception(ErrorConstants.TIMEOUT);
             }
-        } catch (Exception e) {
-            throw new Exception("Could not save ApplicationExpertises.\n" + e.getMessage());
         }
     }
     
@@ -131,25 +144,25 @@ public class DBAO {
      * @throws java.lang.Exception
      */
     public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) throws Exception {
-        try {
-            for(TimePeriodDTO timePeriod : timePeriods) {
-                Query query = em.createNativeQuery(
-                        "INSERT INTO " + dbConstants.TIMEPERIOD_TABLE_NAME
-                            + " (" + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + "," 
-                            + dbConstants.TIMEPERIOD_COLUMN_STARTDATE + ","
-                            + dbConstants.TIMEPERIOD_COLUMN_ENDDATE + ") VALUES ("
-                            + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
-                                + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
-                                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
-                            + "?,?)"
-                );
-                query.setParameter(1, applicationId);
-                query.setParameter(2, timePeriod.getStartdate());
-                query.setParameter(3, timePeriod.getEnddate());
+        for(TimePeriodDTO timePeriod : timePeriods) {
+            Query query = em.createNativeQuery(
+                    "INSERT INTO " + dbConstants.TIMEPERIOD_TABLE_NAME
+                        + " (" + dbConstants.TIMEPERIOD_COLUMN_APPLICATIONID + "," 
+                        + dbConstants.TIMEPERIOD_COLUMN_STARTDATE + ","
+                        + dbConstants.TIMEPERIOD_COLUMN_ENDDATE + ") VALUES ("
+                        + "(SELECT " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID
+                            + " FROM " + dbConstants.APPLICATIONENTITY_TABLE_NAME + " " + dbConstants.APPLICATIONENTITY_QUERY_NAME
+                            + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID + " = ?),"
+                        + "?,?)"
+            );
+            query.setParameter(1, applicationId);
+            query.setParameter(2, timePeriod.getStartdate());
+            query.setParameter(3, timePeriod.getEnddate());
+            try {
                 query.executeUpdate();
+            } catch (PersistenceException timeoutException) {
+                throw new Exception(ErrorConstants.TIMEOUT);
             }
-        } catch (Exception e) {
-            throw new Exception("Could not save ApplicationTimePeriods.\n" + e.getMessage());
         }
     }
     
@@ -170,7 +183,6 @@ public class DBAO {
         try {
             return query.getResultList();
         } catch (Exception e) {
-            System.out.println("Something went wrong when searching for Applications.\n" + e.getMessage());
             return null;
         }   
     }
@@ -190,7 +202,7 @@ public class DBAO {
         try {
             result = query.getResultList();
         } catch (Exception e) {
-            System.out.println("SOmething went wrong when finding PeriodsOfAvailabilityById,\n" + e.getMessage());
+            System.out.println("Something went wrong when finding PeriodsOfAvailabilityById,\n" + e.getMessage());
             return null;
         }
         DateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -221,7 +233,6 @@ public class DBAO {
         try {
             result = query.getResultList();
         } catch (Exception e) {
-            System.out.println("Something went wrong when searching for YearsWithExpertiseByApplicationId.\n" + e.getMessage());
             return null;
         }
         for(Object[] obj : result) {

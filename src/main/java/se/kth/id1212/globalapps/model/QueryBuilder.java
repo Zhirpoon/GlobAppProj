@@ -77,8 +77,8 @@ public class QueryBuilder {
      * @return Returns a string representation of the date in proper format.
      */
     private String formatDateToQuery(Date date) {
-        SimpleDateFormat dayMonthYearFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dayMonthYearFormat.format(date);
+        SimpleDateFormat yearMonthDayFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return yearMonthDayFormat.format(date);
     }
     
     /**
