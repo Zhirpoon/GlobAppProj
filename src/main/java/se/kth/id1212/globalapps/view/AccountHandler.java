@@ -1,19 +1,15 @@
 package se.kth.id1212.globalapps.view;
 
-import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import se.kth.id1212.globalapps.common.validation.DateNotSet;
 import se.kth.id1212.globalapps.common.validation.GeneralStringSize;
 import se.kth.id1212.globalapps.common.validation.ValidEmail;
 import se.kth.id1212.globalapps.controller.Controller;
-import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
 /**
  *
@@ -25,66 +21,78 @@ public class AccountHandler {
 
     @EJB
     Controller controller;
-    /**
-     * Creates a new instance of AccountHandler
-     */
-    //not empty
     
+
     @GeneralStringSize(message = "Enter a username")
     private String username;
     @GeneralStringSize(message = "Enter a password")
     private String password;
-    //Not empty no numbers
     @GeneralStringSize(message = "Enter a First Name")
     private String firstName;
-    //Not empty no numbers
+    
     @GeneralStringSize(message = "Enter a Last Name")
     private String lastName;
-    //RFC822 compliant email
     @ValidEmail(message = "Enter a valid email")
     private String email;
     private Exception failure;
+    @DateNotSet(message = "Please enter a birth date")
+    private DateUtil dateOfBirth;
     
 
-    @Past(message = "Enter a birth date that preceeds this day's date")
-    private Date dateOfBirth;
+    @PostConstruct
+    public void init(){
+        this.dateOfBirth = new DateUtil();
+    }
 
     /**
-     * Retrieves the name of the <code>AccountTypeEntity</code> for a logged in user.
-     * @return The name of the <code>AccountTypeEntity</code>'s name for the user.
+     * Retrieves the name of the <code>AccountTypeEntity</code> for a logged in
+     * user.
+     *
+     * @return The name of the <code>AccountTypeEntity</code>'s name for the
+     * user.
      */
     public String getUserGroup() {
         return controller.getUsergroup(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
     }
 
     /**
-     * Creates a <code>RegistrationDTO</code> with data obtained from the web page and sends this to the controller to try and store a new <code>UserEntity</code>.
+     * Creates a <code>RegistrationDTO</code> with data obtained from the web
+     * page and sends this to the controller to try and store a new
+     * <code>UserEntity</code>.
      */
     public void register() {
         try {
             //throw new UnsupportedOperationException("Not supported yet.");
-            controller.register(new RegistrationDTO(firstName, lastName, email, username, password, dateOfBirth));
+            //controller.register(new RegistrationDTO(firstName, lastName, email, username, password, dateOfBirth));
         } catch (Exception e) {
             handleException(e);
         }
     }
 
     /**
-     * @return The date of birth entered by the user. 
+     * @return The date of birth entered by the user.
      */
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDateOfBirth() {
+        
+        
+        return this.dateOfBirth.getDateString();
+        
     }
 
     /**
-     * @param dateOfBirth The user's entered date of birth. 
+     * @param dateOfBirth The user's entered date of birth.
      */
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDateOfBirth(String dateOfBirth) {
+        try {
+            this.dateOfBirth.setDatefromString(dateOfBirth);
+        } catch (DateUtil.DateObjectParsingError ex) {
+            handleException(ex);
+        }
     }
 
     /**
-     * Retrieves the reason for an exception and prints it.
+     * Retrieves the reason for an exception
+     *
      * @return The exception message.
      */
     public String getFailureReason() {
@@ -93,18 +101,19 @@ public class AccountHandler {
 
     /**
      * Sends the exception message to the web browser.
+     *
      * @param e The exception caught.
      */
     private void handleException(Exception e) {
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        FacesMessage msg = new FacesMessage(e.getMessage());
-//        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-//        context.addMessage("form:registerButton", msg);
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage msg = new FacesMessage(e.getMessage());
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage("registerButton", msg);
         failure = e;
     }
 
     /**
-     * @return The username entered by the user. 
+     * @return The username entered by the user.
      */
     public String getUsername() {
         return username;
@@ -125,7 +134,7 @@ public class AccountHandler {
     }
 
     /**
-     * @return The last name entered by the user. 
+     * @return The last name entered by the user.
      */
     public String getLastName() {
 
@@ -133,14 +142,14 @@ public class AccountHandler {
     }
 
     /**
-     * @return The email entered by the user. 
+     * @return The email entered by the user.
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * @param username The username entered by the user. 
+     * @param username The username entered by the user.
      */
     public void setUsername(String username) {
 
@@ -155,7 +164,7 @@ public class AccountHandler {
     }
 
     /**
-     * @param firstName The first name entered by the user. 
+     * @param firstName The first name entered by the user.
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -176,7 +185,8 @@ public class AccountHandler {
     }
 
     /**
-     * @return If no exceptions have been caught, used to check that the program can proceed.  
+     * @return If no exceptions have been caught, used to check that the program
+     * can proceed.
      */
     public boolean getSuccess() {
         return failure == null;
