@@ -2,12 +2,17 @@ package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import javax.inject.Named;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import se.kth.id1212.globalapps.common.validation.PositiveTwoDigitInteger;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.view.DTOs.Application;
 import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
@@ -25,6 +30,8 @@ public class ApplicationCreator implements Serializable {
     private Controller controller;
     private String[] expertises;
     private String expertise;
+
+    @PositiveTwoDigitInteger(message = "Enter years between 1 and 99")
     private Integer years;
     private Application application;
     private Date startDate;
@@ -70,13 +77,19 @@ public class ApplicationCreator implements Serializable {
     /**
      * Creates an availability period, <code>TimePeriodDTO</code>, by getting
      * the set start and end dates and adding them to the
-     *  <code>Application</code>.
+     * <code>Application</code>.
      */
     public void addAvailabilityPeriod() {
-        TimePeriodDTO availabilityPeriod = new TimePeriodDTO(startDate, endDate);
-        this.application.addAvailabilityPeriod(availabilityPeriod);
-        startDate = null;
-        endDate = null;
+        TimePeriodDTO availabilityPeriod;
+        try {
+            availabilityPeriod = new TimePeriodDTO(startDate, endDate);
+            this.application.addAvailabilityPeriod(availabilityPeriod);
+            startDate = null;
+            endDate = null;
+        } catch (TimePeriodDTO.TimePeriodDTOException ex) {
+           
+        }
+
     }
 
     /**
@@ -114,7 +127,7 @@ public class ApplicationCreator implements Serializable {
     /**
      * Creates <code>YearsWithExpertiseDTO</code> by getting the set expertise
      * and the set years of experience and adding them to the
-     *  <code>Application</code>.
+     * <code>Application</code>.
      */
     public void addYearsWithExpertise() {
         YearsWithExpertiseDTO yearsWithExpertise = new YearsWithExpertiseDTO(years, expertise);
