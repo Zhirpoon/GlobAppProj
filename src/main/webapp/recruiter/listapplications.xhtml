@@ -31,11 +31,11 @@
         <h:form>
             Start date (d-M-yyyy):
             <h:inputText value="#{applicationLister.startDate}">
-                <f:convertDateTime pattern="d-M-yyyy" />
+                <!--<f:convertDateTime pattern="d-M-yyyy" />-->
             </h:inputText>
             End date (d-M-yyyy):
             <h:inputText value="#{applicationLister.endDate}">
-                <f:convertDateTime pattern="d-M-yyyy" />
+                <!--<f:convertDateTime pattern="d-M-yyyy" />-->
             </h:inputText>
             <h:commandButton value="Add" action="#{applicationLister.addTimePeriod()}" />
         </h:form>   
