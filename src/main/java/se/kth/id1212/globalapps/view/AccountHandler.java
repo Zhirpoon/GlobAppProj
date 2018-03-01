@@ -1,6 +1,7 @@
 package se.kth.id1212.globalapps.view;
 
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -45,6 +46,7 @@ public class AccountHandler {
     private String email;
     private Exception failure;
     
+  
 
     @Past(message = "Enter a birth date that preceeds this day's date")
     private Date dateOfBirth;
@@ -57,6 +59,8 @@ public class AccountHandler {
         return controller.getUsergroup(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
     }
 
+    
+    
     /**
      * Creates a <code>RegistrationDTO</code> with data obtained from the web page and sends this to the controller to try and store a new <code>UserEntity</code>.
      */
