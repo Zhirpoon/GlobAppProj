@@ -36,11 +36,12 @@
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Email: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.email}"/>
+                        <h:inputText id="email" class="input" autocomplete="off" value="#{accountHandler.email}"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Username: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.username}"/>
+                        <h:inputText id="username" class="input" autocomplete="off" value="#{accountHandler.username}"/>
+                        <h:message for="username"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Password: "/>
                     <h:panelGroup class="control">
@@ -53,8 +54,8 @@
                         <h:panelGroup layout="block" class="field-body">
                             <h:panelGroup layout="block" class="field">
                                 <h:panelGroup class="control is-expanded has-icons-left">
-                                    <h:inputText class="input" p:placeholder="Enter Date of Birth" autocomplete="off" value="#{accountHandler.dateOfBirth}">
-                                        <f:convertDateTime pattern="d-M-yyyy" />
+                                    <h:inputText class="input" p:placeholder="d-b-yyyy" autocomplete="off" value="#{accountHandler.dateOfBirth}">
+                                        <!--<f:convertDateTime pattern="d-M-yyyy" />-->
                                     </h:inputText>
                                 </h:panelGroup>
                             </h:panelGroup>
