@@ -1,5 +1,7 @@
 package se.kth.id1212.globalapps.common.exception;
 
+import se.kth.id1212.globalapps.model.Constants.ErrorConstants;
+
 /**
  *
  * @author Johan Rosengren <jrosengr@kth.se>
@@ -30,5 +32,26 @@ public class CodedException extends Exception {
      */
     public ExceptionEnumerator getErrorCode() {
         return errorCode;
+    }
+    
+    /**
+     * Categorizes the exception given so it can be handled in the right way in the view layer.
+     * @param exception The exception to be categorized.
+     */
+    public void categorizeException(Exception exception) {
+        switch(exception.toString()) {
+            case ErrorConstants.DUPLICATE_KEY:
+                setErrorCode(ExceptionEnumerator.DUPLICATE_KEY);
+                break;
+            case ErrorConstants.CONSTRAINT:
+                setErrorCode(ExceptionEnumerator.CONSTRAINT);
+                break;
+            case ErrorConstants.TIMEOUT:
+                setErrorCode(ExceptionEnumerator.TIMEOUT);
+                break;
+            default:
+                setErrorCode(ExceptionEnumerator.OTHER);
+                break;
+        }
     }
 }

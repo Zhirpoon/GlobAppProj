@@ -47,7 +47,9 @@ public class Controller {
         } catch (SQLIntegrityConstraintViolationException constraintException) {
             throw constraintViolation();
         } catch (Exception registrationException) {
-            throw handleException(registrationException);
+            CodedException codedException = new CodedException(registrationException.getMessage());
+            codedException.categorizeException(registrationException);
+            throw codedException;
         }
     }
 
@@ -88,7 +90,9 @@ public class Controller {
         } catch (SQLIntegrityConstraintViolationException constraintException) {
             throw constraintViolation();
         } catch (Exception saveApplicationException) {
-            throw handleException(saveApplicationException);
+            CodedException codedException = new CodedException(saveApplicationException.getMessage());
+            codedException.categorizeException(saveApplicationException);
+            throw codedException;
         }
     }
     
@@ -158,30 +162,6 @@ public class Controller {
     private CodedException constraintViolation() {
         CodedException codedException = new CodedException(ErrorConstants.CONSTRAINT);
         codedException.setErrorCode(ExceptionEnumerator.CONSTRAINT);
-        return codedException;
-    }
-    
-    /**
-     * Created a <code>CodedException</code> based on the exception variable's message.
-     * @param exception The exception to be handled, includes information needed to create the correct <code>CodedException</code>.
-     * @return <code>CodedException</code> which has an enumerator which tells the view how to handle the exception.
-     */
-    private CodedException handleException(Exception exception) {
-        CodedException codedException = new CodedException(exception.toString());
-        switch(exception.toString()) {
-            case ErrorConstants.DUPLICATE_KEY:
-                codedException.setErrorCode(ExceptionEnumerator.DUPLICATE_KEY);
-                break;
-            case ErrorConstants.CONSTRAINT:
-                codedException.setErrorCode(ExceptionEnumerator.CONSTRAINT);
-                break;
-            case ErrorConstants.TIMEOUT:
-                codedException.setErrorCode(ExceptionEnumerator.TIMEOUT);
-                break;
-            default:
-                codedException.setErrorCode(ExceptionEnumerator.OTHER);
-                break;
-        }
         return codedException;
     }
 }
