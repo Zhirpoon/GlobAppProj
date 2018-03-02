@@ -2,9 +2,10 @@ package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import se.kth.id1212.globalapps.controller.Controller;
@@ -68,7 +69,11 @@ public class ApplicationLister implements Serializable {
     }
 
     public void addTimePeriod() {
-        this.search.setAvailabiltyPeriod(new TimePeriodDTO(startDate, endDate));
+        try {
+            this.search.setAvailabiltyPeriod(new TimePeriodDTO(startDate, endDate));
+        } catch (TimePeriodDTO.TimePeriodDTOException ex) {
+            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Date getStartDate() {
@@ -91,7 +96,7 @@ public class ApplicationLister implements Serializable {
         this.search.addCompentece(expertise);
     }
 
-    public void setFirstname(String firstname) {
+    public void setFirstName(String firstname) {
         this.search.setApplicantFirstName(firstname);
     }
 
