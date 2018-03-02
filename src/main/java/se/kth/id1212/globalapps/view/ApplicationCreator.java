@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.validation.PositiveTwoDigitInteger;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.view.DTOs.Application;
@@ -42,8 +43,12 @@ public class ApplicationCreator implements Serializable {
      */
     @PostConstruct
     public void init() {
-        expertises = controller.getAllExpertises();
-        application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+        try {
+            expertises = controller.getAllExpertises();
+            application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+        } catch (CodedException ex) {
+            Logger.getLogger(ApplicationCreator.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

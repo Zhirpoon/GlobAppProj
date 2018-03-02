@@ -25,44 +25,51 @@
                 </p>
             </div>
             <h:panelGroup class="section">
-                <h:form>
+                <h:form id="form">
                     <h:outputLabel class="label" value="First Name: "/>
-                    <h:panelGroup layout="block" class="control">
-                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.firstName}"/>
+                    <h:panelGroup  layout="block" class="control">
+                        <h:inputText id="firstName" class="input" autocomplete="off" value="#{accountHandler.firstName}"/>
+                        <h:message for="firstName"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Last Name: "/>
                     <h:panelGroup class="control">
-                        <h:inputText class="input" autocomplete="off" value="#{accountHandler.lastName}"/>
+                        <h:inputText id="lastName"  class="input" autocomplete="off" value="#{accountHandler.lastName}"/>
+                        <h:message for="lastName"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Email: "/>
                     <h:panelGroup class="control">
                         <h:inputText id="email" class="input" autocomplete="off" value="#{accountHandler.email}"/>
+                        <h:message for="email"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Username: "/>
-                    <h:panelGroup class="control">
+                    <h:panelGroup  class="control">
                         <h:inputText id="username" class="input" autocomplete="off" value="#{accountHandler.username}"/>
                         <h:message for="username"/>
                     </h:panelGroup>
                     <h:outputLabel class="label" value="Password: "/>
-                    <h:panelGroup class="control">
-                        <h:inputSecret class="input" autocomplete="off" value="#{accountHandler.password}"/>
+                    <h:panelGroup  class="control">
+                        <h:inputSecret id="password" class="input" autocomplete="off" value="#{accountHandler.password}"/>
+                        <h:message for="password"/>
                     </h:panelGroup>
                     <h:panelGroup layout="block" class="field is-horizontal">
-                        <h:panelGroup layout="block" class="field-label">
+                        <h:panelGroup  layout="block" class="field-label">
                             <h:outputLabel class="label" value="Date of Birth (d-M-yyyy):"/>
                         </h:panelGroup>
                         <h:panelGroup layout="block" class="field-body">
                             <h:panelGroup layout="block" class="field">
-                                <h:panelGroup class="control is-expanded has-icons-left">
-                                    <h:inputText class="input" p:placeholder="d-b-yyyy" autocomplete="off" value="#{accountHandler.dateOfBirth}">
+                                <h:panelGroup  class="control is-expanded has-icons-left">
+                                    <h:inputText id="dateOfBirth" class="input" p:placeholder="d-b-yyyy" autocomplete="off" value="#{accountHandler.dateOfBirth}">
                                         <!--<f:convertDateTime pattern="d-M-yyyy" />-->
+                                        
                                     </h:inputText>
+                                    <h:message for="dateOfBirth"/>
                                 </h:panelGroup>
                             </h:panelGroup>
                         </h:panelGroup>
                     </h:panelGroup>
-                    <h:panelGroup id="registerButton" layout="block">
-                        <h:commandButton class="button" action="#{accountHandler.register()}" value="Register new user"/>
+                    <h:panelGroup  layout="block">
+                        <h:commandButton id="base" class="button" action="#{accountHandler.register()}" value="Register new user"/>
+                        <h:message for="base"/>
                     </h:panelGroup>
                 </h:form>
             </h:panelGroup>

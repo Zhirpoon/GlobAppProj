@@ -20,6 +20,8 @@ public class DateUtil {
      * Creates an instance of <code>DateUtil</code>
      */
     public DateUtil() {
+        System.out.println("---------------");
+        System.out.println("DAteutil created");
         dateFormat = new SimpleDateFormat(DATEFORMAT);
         dateFormat.setLenient(false);
     }
@@ -40,11 +42,14 @@ public class DateUtil {
      * object
      * 
      * @param dateString the <code>String</code> to convert
-     * @throws <code>DateObjectParsingError
+     * @throws se.kth.id1212.globalapps.view.DateUtil.DateObjectParsingError
      */
     public void setDatefromString(String dateString) throws DateObjectParsingError {
         try {
+            System.out.println("----------------------------");
+            System.out.println("SetDateCalled");
             parseString(dateString);
+            System.out.println("Date is set to " + getDateString());
         } catch (ParseException ex) {
             throw new DateObjectParsingError();
         }
