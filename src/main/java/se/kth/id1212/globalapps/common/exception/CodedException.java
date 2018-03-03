@@ -39,7 +39,7 @@ public class CodedException extends Exception {
      * @param exception The exception to be categorized.
      */
     public void categorizeException(Exception exception) {
-        switch(exception.toString()) {
+        switch(exception.getMessage()) {
             case ErrorConstants.DUPLICATE_KEY:
                 setErrorCode(ExceptionEnumerator.DUPLICATE_KEY);
                 break;
