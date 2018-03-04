@@ -1,15 +1,22 @@
 package se.kth.id1212.globalapps.view;
 
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.validation.constraints.Null;
+import se.kth.id1212.globalapps.common.exception.CodedException;
+import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.common.validation.DateNotSet;
 import se.kth.id1212.globalapps.common.validation.GeneralStringSize;
 import se.kth.id1212.globalapps.common.validation.ValidEmail;
 import se.kth.id1212.globalapps.controller.Controller;
+import se.kth.id1212.globalapps.view.DTOs.RegistrationDTO;
 
 /**
  *
@@ -21,7 +28,6 @@ public class AccountHandler {
 
     @EJB
     Controller controller;
-    
 
     @GeneralStringSize(message = "Enter a username")
     private String username;
@@ -29,57 +35,50 @@ public class AccountHandler {
     private String password;
     @GeneralStringSize(message = "Enter a First Name")
     private String firstName;
-    
+
     @GeneralStringSize(message = "Enter a Last Name")
     private String lastName;
     @ValidEmail(message = "Enter a valid email")
     private String email;
     private Exception failure;
-    @DateNotSet(message = "Please enter a birth date")
-    private DateUtil dateOfBirth;
-    
-  
+
+    private DateUtil dateOfBirth = new DateUtil();
+    private FailureNotifier failureNotifier;
 
     @PostConstruct
-    public void init(){
-        this.dateOfBirth = new DateUtil();
+    public void init() {
+        //   this.dateUtilOfBirth = new DateUtil();
+        this.failureNotifier = new FailureNotifier();
     }
 
-    /**
-     * Retrieves the name of the <code>AccountTypeEntity</code> for a logged in
-     * user.
-     *
-     * @return The name of the <code>AccountTypeEntity</code>'s name for the
-     * user.
-     */
-    public String getUserGroup() {
-        return controller.getUsergroup(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-    }
-
-    
-    
     /**
      * Creates a <code>RegistrationDTO</code> with data obtained from the web
      * page and sends this to the controller to try and store a new
      * <code>UserEntity</code>.
      */
     public void register() {
+        if(!getSuccess()) return;
         try {
-            //throw new UnsupportedOperationException("Not supported yet.");
-            //controller.register(new RegistrationDTO(firstName, lastName, email, username, password, dateOfBirth));
+            controller.register(new RegistrationDTO(firstName, lastName, email, username, password, dateOfBirth.getDate()));
+        } catch (CodedException e) {
+            System.out.println(e.getErrorCode().toString());
+            if (e.getErrorCode() == ExceptionEnumerator.DUPLICATE_KEY) {
+                failureNotifier.notifyClient("Username already exists", "firstName");
+            } else {
+                failureNotifier.notifyClient();
+            }
         } catch (Exception e) {
-            handleException(e);
+            failureNotifier.notifyClient();
         }
+
     }
 
     /**
      * @return The date of birth entered by the user.
      */
     public String getDateOfBirth() {
-        
-        
         return this.dateOfBirth.getDateString();
-        
+//        return this.dateOfBirth;
     }
 
     /**
@@ -88,8 +87,12 @@ public class AccountHandler {
     public void setDateOfBirth(String dateOfBirth) {
         try {
             this.dateOfBirth.setDatefromString(dateOfBirth);
+            //     this.dateOfBirth = dateUtilOfBirth.getDateString();
         } catch (DateUtil.DateObjectParsingError ex) {
-            handleException(ex);
+            StringBuilder sb = new StringBuilder("Enter a date on the form '");
+            sb.append(this.dateOfBirth.DATEFORMAT.toLowerCase());
+            sb.append("'");
+            failureNotifier.notifyClient(sb.toString(), "dateOfBirth");
         }
     }
 
@@ -100,19 +103,6 @@ public class AccountHandler {
      */
     public String getFailureReason() {
         return failure.getMessage();
-    }
-
-    /**
-     * Sends the exception message to the web browser.
-     *
-     * @param e The exception caught.
-     */
-    private void handleException(Exception e) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage msg = new FacesMessage(e.getMessage());
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        context.addMessage("registerButton", msg);
-        failure = e;
     }
 
     /**
@@ -192,7 +182,7 @@ public class AccountHandler {
      * can proceed.
      */
     public boolean getSuccess() {
-        return failure == null;
+        return failureNotifier.getSuccess();
     }
 
 }

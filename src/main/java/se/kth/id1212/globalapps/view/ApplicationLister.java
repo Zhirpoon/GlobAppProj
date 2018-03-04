@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.view.DTOs.ApplicationSearch;
@@ -58,13 +59,21 @@ public class ApplicationLister implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.expertises = contr.getAllExpertises();
-        search = new ApplicationSearch();
+        try {
+            this.expertises = contr.getAllExpertises();
+            search = new ApplicationSearch();
+        } catch (CodedException ex) {
+            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 
     public void search() {
-        applications = contr.searchApplications(search);
+        try {
+            applications = contr.searchApplications(search);
+        } catch (CodedException ex) {
+            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 

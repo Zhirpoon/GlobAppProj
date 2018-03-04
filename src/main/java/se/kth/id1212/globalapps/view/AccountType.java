@@ -3,9 +3,12 @@ package se.kth.id1212.globalapps.view;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.controller.Controller;
 
 /**
@@ -30,7 +33,11 @@ public class AccountType implements Serializable {
 
     private void setAccountType() {
         if (isLoggedIn() && (accounttype == null)) {
-            accounttype = contr.getUsergroup(username);
+            try {
+                accounttype = contr.getUsergroup(username);
+            } catch (CodedException ex) {
+                Logger.getLogger(AccountType.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

@@ -29,7 +29,7 @@ public @interface DateNotSet {
 
     Class<? extends Payload>[] payload() default {};
     
-    public class DateNotSetValidator implements ConstraintValidator<DateNotSet, DateUtil> {
+    class DateNotSetValidator implements ConstraintValidator<DateNotSet, DateUtil> {
     
     @Override
     public void initialize(DateNotSet constraintAnnotation) {
