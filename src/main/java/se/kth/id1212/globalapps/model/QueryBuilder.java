@@ -37,17 +37,17 @@ public class QueryBuilder {
                 + "(SELECT " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_USERNAME 
                 + " FROM " + dbConstants.USERENTITY_TABLE_NAME + " " + dbConstants.USERENTITY_QUERY_NAME 
                 + " WHERE " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_FIRSTNAME + " LIKE ";
-        if(lastName == null && firstName == null) {
+        if(lastName.trim().equalsIgnoreCase("") && firstName.trim().equalsIgnoreCase("")) {
             nameQueryPart += "'%' "
                     + "AND " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_LASTNAME + " LIKE '%')";
         } else {    
-            if(firstName == null) {
+            if(firstName.trim().equalsIgnoreCase("")) {
                 nameQueryPart += "'%' ";
             } else {
                 nameQueryPart += "'" + firstName + "' ";
             }
             nameQueryPart += "AND " + dbConstants.USERENTITY_QUERY_NAME + "." + dbConstants.USERENTITY_COLUMN_LASTNAME +  " LIKE ";
-            if(lastName == null) {
+            if(lastName.trim().equalsIgnoreCase("")) {
                 nameQueryPart += "'%')";
             } else {
                 nameQueryPart += "'" + lastName + "')";
@@ -92,7 +92,7 @@ public class QueryBuilder {
             String expertiseQueryPart = " AND " + amountOfExpertises + 
                 " = (SELECT COUNT(*) "
                 + "FROM " + dbConstants.YEARSWITHEXPERTISE_TABLE_NAME + " " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME
-                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID 
+                + " WHERE " + dbConstants.APPLICATIONENTITY_QUERY_NAME + "." + dbConstants.APPLICATIONENTITY_ID 
                 + " = " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_APPLICATIONID
                 + " AND " + dbConstants.YEARSWITHEXPERTISE_QUERY_NAME + "." + dbConstants.YEARSWITHEXPERTISE_COLUMN_EXPERTISE + " IN (";
             for(String expertise : expertises) {
