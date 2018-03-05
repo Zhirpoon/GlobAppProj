@@ -10,8 +10,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import javax.inject.Named;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.validation.PositiveTwoDigitInteger;
 import se.kth.id1212.globalapps.controller.Controller;
@@ -35,8 +33,11 @@ public class ApplicationCreator implements Serializable {
     @PositiveTwoDigitInteger(message = "Enter years between 1 and 99")
     private Integer years;
     private Application application;
-    private Date startDate;
-    private Date endDate;
+    private DateUtil startDate = new DateUtil();
+    private DateUtil endDate = new DateUtil();
+    private FailureNotifier failureNotifier;
+//private Date startDate;
+    //private Date endDate;
 
     /**
      * Creates a new instance of ApplicationCreator
@@ -46,6 +47,7 @@ public class ApplicationCreator implements Serializable {
         try {
             expertises = controller.getAllExpertises();
             application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+            failureNotifier = new FailureNotifier();
         } catch (CodedException ex) {
             Logger.getLogger(ApplicationCreator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -54,29 +56,37 @@ public class ApplicationCreator implements Serializable {
     /**
      * @param startDate The start date of an availability period.
      */
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartDate(String startDate) {
+        try {
+            this.startDate.setDatefromString(startDate);
+        } catch (DateUtil.DateObjectParsingError ex) {
+            failureNotifier.notifyClient(ex.getMessage(), "startDate");
+        }
     }
 
     /**
      * @param endDate The end date of an availability period.
      */
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndDate(String endDate) {
+        try {
+            this.startDate.setDatefromString(endDate);
+        } catch (DateUtil.DateObjectParsingError ex) {
+            failureNotifier.notifyClient(ex.getMessage(), "endDate");
+        }
     }
 
     /**
      * @return The start date of an availability period.
      */
-    public Date getStartDate() {
-        return startDate;
+    public String getStartDate() {
+        return startDate.getDateString();
     }
 
     /**
      * @return The end date of an availability period.
      */
-    public Date getEndDate() {
-        return endDate;
+    public String getEndDate() {
+        return endDate.getDateString();
     }
 
     /**
@@ -87,12 +97,12 @@ public class ApplicationCreator implements Serializable {
     public void addAvailabilityPeriod() {
         TimePeriodDTO availabilityPeriod;
         try {
-            availabilityPeriod = new TimePeriodDTO(startDate, endDate);
+            availabilityPeriod = new TimePeriodDTO(startDate.getDate(), endDate.getDate());
             this.application.addAvailabilityPeriod(availabilityPeriod);
             startDate = null;
             endDate = null;
         } catch (TimePeriodDTO.TimePeriodDTOException ex) {
-           
+            failureNotifier.notifyClient(ex.getMessage(), "addAvailabilityPeriod");
         }
 
     }
@@ -149,6 +159,7 @@ public class ApplicationCreator implements Serializable {
         try {
             controller.saveApplication(application);
         } catch (Exception sendApplicationException) {
+            failureNotifier.notifyClient();
             System.out.println(sendApplicationException.getMessage());
         }
     }
@@ -176,5 +187,8 @@ public class ApplicationCreator implements Serializable {
     public YearsWithExpertiseDTO[] getYearswithExpertises() {
         return this.application.getExpertises();
     }
-
+    
+    public boolean getSuccess(){
+        return this.failureNotifier.getSuccess();
+    }
 }

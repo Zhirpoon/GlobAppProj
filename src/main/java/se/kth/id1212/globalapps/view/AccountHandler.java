@@ -1,18 +1,11 @@
 package se.kth.id1212.globalapps.view;
 
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.validation.constraints.Null;
 import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
-import se.kth.id1212.globalapps.common.validation.DateNotSet;
 import se.kth.id1212.globalapps.common.validation.GeneralStringSize;
 import se.kth.id1212.globalapps.common.validation.ValidEmail;
 import se.kth.id1212.globalapps.controller.Controller;

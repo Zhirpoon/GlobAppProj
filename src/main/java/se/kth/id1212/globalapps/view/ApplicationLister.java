@@ -26,16 +26,21 @@ public class ApplicationLister implements Serializable {
     @EJB
     Controller contr;
     ApplicationSearch search;
-    Date startDate;
-    Date endDate;
+    DateUtil startDate = new DateUtil();
+    DateUtil endDate = new DateUtil();
     ApplicationDTO[] applications;
     String[] expertises;
     String expertise;
+    private final FailureNotifier failureNotifier = new FailureNotifier();
 
-    public ApplicationDTO[] getApplications(){
+    public boolean getSuccess() {
+        return this.failureNotifier.getSuccess();
+    }
+
+    public ApplicationDTO[] getApplications() {
         return applications;
     }
-    
+
     public String[] getExpertises() {
         return expertises;
     }
@@ -55,50 +60,63 @@ public class ApplicationLister implements Serializable {
     /**
      * Creates a new instance of ApplicationLister
      */
-
-
     @PostConstruct
     public void init() {
         try {
             this.expertises = contr.getAllExpertises();
             search = new ApplicationSearch();
         } catch (CodedException ex) {
-            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+            failureNotifier.notifyClient();
         }
     }
-
 
     public void search() {
         try {
             applications = contr.searchApplications(search);
+            System.out.println("-------------------------------------");
+            System.out.println("Antal ansökningar: " + applications.length);
         } catch (CodedException ex) {
-            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+            failureNotifier.notifyClient();
         }
-        
+
     }
 
     public void addTimePeriod() {
         try {
-            this.search.setAvailabiltyPeriod(new TimePeriodDTO(startDate, endDate));
+            this.search.setAvailabiltyPeriod(new TimePeriodDTO(startDate.getDate(), endDate.getDate()));
         } catch (TimePeriodDTO.TimePeriodDTOException ex) {
-            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+            failureNotifier.notifyClient(ex.getMessage(), "addTimePeriod");
         }
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public String getStartDate() {
+        return startDate.getDateString();
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartDate(String startDate) {
+        if (startDate.length() < 1) {
+            return;
+        }
+        try {
+            this.startDate.setDatefromString(startDate);
+        } catch (DateUtil.DateObjectParsingError ex) {
+            failureNotifier.notifyClient(ex.getMessage(), "startDate");
+        }
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getEndDate() {
+        return endDate.getDateString();
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndDate(String endDate) {
+        if (endDate.length() < 1) {
+            return;
+        }
+        try {
+            this.endDate.setDatefromString(endDate);
+        } catch (DateUtil.DateObjectParsingError ex) {
+            failureNotifier.notifyClient(ex.getMessage(), "endDate");
+        }
     }
 
     public void addCompetence() {
