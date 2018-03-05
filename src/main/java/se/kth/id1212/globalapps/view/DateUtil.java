@@ -1,6 +1,6 @@
 package se.kth.id1212.globalapps.view;
 
-import java.lang.annotation.Documented;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,9 +18,6 @@ public class DateUtil {
     /**
      * Creates an instance of <code>DateUtil</code>
      */
-    
-    
-    
     public DateUtil() {
         dateFormat = new SimpleDateFormat(DATEFORMAT);
         dateFormat.setLenient(false);
