@@ -1,6 +1,6 @@
 package se.kth.id1212.globalapps.view;
 
-import java.lang.annotation.Documented;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,13 +15,10 @@ public class DateUtil {
     public final String DATEFORMAT = "dd-MM-yyyy";
     private final SimpleDateFormat dateFormat;
     private Date date;
-
     /**
      * Creates an instance of <code>DateUtil</code>
      */
     public DateUtil() {
-        System.out.println("---------------");
-        System.out.println("DAteutil created");
         dateFormat = new SimpleDateFormat(DATEFORMAT);
         dateFormat.setLenient(false);
     }
@@ -46,10 +43,7 @@ public class DateUtil {
      */
     public void setDatefromString(String dateString) throws DateObjectParsingError {
         try {
-            System.out.println("----------------------------");
-            System.out.println("SetDateCalled");
             parseString(dateString);
-            System.out.println("Date is set to " + getDateString());
         } catch (ParseException ex) {
             throw new DateObjectParsingError();
         }

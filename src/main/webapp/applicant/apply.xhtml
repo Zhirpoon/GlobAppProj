@@ -33,7 +33,8 @@
                         <h:inputText class="input is-primary is-medium" autocomplete="off"  maxlength="2" value="#{applicationCreator.years}"/>
                     </h:panelGrid>
                     <h:panelGroup class="level-item">
-                        <h:commandButton class="button is-medium" value="Add" action="#{applicationCreator.addYearsWithExpertise()}"/>
+                        <h:commandButton id="addYearsWithExpertise" class="button is-medium" value="Add" action="#{applicationCreator.addYearsWithExpertise()}"/>
+                        <h:message for="addYearsWithExpertise"/>
                     </h:panelGroup>
 
                 </h:form>

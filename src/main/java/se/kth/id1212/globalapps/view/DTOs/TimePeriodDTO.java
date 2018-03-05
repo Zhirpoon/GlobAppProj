@@ -47,7 +47,7 @@ public class TimePeriodDTO implements se.kth.id1212.globalapps.dtos.TimePeriodDT
     }
     
     private void validArguments() throws TimePeriodDTOException{
-        if(nullArguements()) throw new NullPointerException("argument can not be null");
+        if(nullArguements()) throw new TimePeriodDTOException("argument can not be null");
         if(!startDateBeforeEndate()) throw new TimePeriodDTOException("startDate must preceed or be the same as endDate");
     }
     
