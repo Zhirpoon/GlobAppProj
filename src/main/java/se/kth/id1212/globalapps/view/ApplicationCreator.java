@@ -57,7 +57,10 @@ public class ApplicationCreator implements Serializable {
      * @param startDate The start date of an availability period.
      */
     public void setStartDate(String startDate) {
-        if(startDate.length()< 1) return;
+
+        if (startDate.length() < 1) {
+            return;
+        }
         try {
             this.startDate.setDatefromString(startDate);
         } catch (DateUtil.DateObjectParsingError ex) {
@@ -73,7 +76,9 @@ public class ApplicationCreator implements Serializable {
      * @param endDate The end date of an availability period.
      */
     public void setEndDate(String endDate) {
-        if(endDate.length()< 1) return;
+        if (endDate.length() < 1) {
+            return;
+        }
         try {
             this.endDate.setDatefromString(endDate);
         } catch (DateUtil.DateObjectParsingError ex) {
@@ -186,7 +191,7 @@ public class ApplicationCreator implements Serializable {
      * periods of availability, to the application to save..
      */
     public TimePeriodDTO[] getAvailiabilityPeriods() {
-        for(TimePeriodDTO period : application.getAvailabilityPeriods()){
+        for (TimePeriodDTO period : application.getAvailabilityPeriods()) {
             System.out.println(period.getStartdate().toString());
             System.out.println(period.getStartdate().getDay());
         }
@@ -200,8 +205,8 @@ public class ApplicationCreator implements Serializable {
     public YearsWithExpertiseDTO[] getYearswithExpertises() {
         return this.application.getExpertises();
     }
-    
-    public boolean getSuccess(){
+
+    public boolean getSuccess() {
         return this.failureNotifier.getSuccess();
     }
 }
