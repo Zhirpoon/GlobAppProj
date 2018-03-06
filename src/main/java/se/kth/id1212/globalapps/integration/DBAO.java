@@ -252,7 +252,7 @@ public class DBAO {
     /**
      * Edits/updated an <code>ApplicationEntity</code>'s status if this has now already been changed by someone else.
      * @param application The application to be changed.
-     * @throws Exception Either a timeout or a outdated version.
+     * @throws Exception Either a timeout or an outdated version.
      */
     public void editApplicationStatus(ApplicationDTO application) throws Exception {
         ApplicationEntity applicationEntity = em.find(ApplicationEntity.class, application.getApplicationId());

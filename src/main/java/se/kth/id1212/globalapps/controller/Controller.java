@@ -143,7 +143,6 @@ public class Controller {
     /**
      * Updates an application's status.
      * @param application The application to be updated.
-     * @param status The new status of the application.
      * @throws CodedException Has an enumerator which tells view how to handle the exception.
      */
     public void updateApplicationStatus(ApplicationDTO application) throws CodedException {
@@ -171,7 +170,7 @@ public class Controller {
      */
     private CodedException noResultsFound() {
         CodedException codedException = new CodedException(ErrorConstants.NULL);
-        codedException.setErrorCode(ExceptionEnumerator.DUPLICATE_KEY);
+        codedException.setErrorCode(ExceptionEnumerator.NULL);
         return codedException;
     }
     
