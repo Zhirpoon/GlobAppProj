@@ -15,6 +15,7 @@ import se.kth.id1212.globalapps.model.YearsWithExpertise;
 public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO {
 
     private final boolean status;
+    private final long id;
     private final YearsWithExpertise[] competences;
     private final TimePeriod[] periodsOfAvailability;
     private final String username;
@@ -32,6 +33,7 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
         this.dateOfBirth = application.getUserEntity().getDateOfBirth();
         this.competences = yearsWithExpertise.toArray(new YearsWithExpertise[0]);
         this.periodsOfAvailability = timePeriods.toArray(new TimePeriod[0]);
+        this.id = application.getApplicationId();
     }
     
     @Override
@@ -72,6 +74,11 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     @Override
     public int getVersionNumber() {
         return this.versionNumber;
+    }
+
+    @Override
+    public long getApplicationId() {
+        return this.id;
     }
     
 }

@@ -9,4 +9,5 @@ public class ErrorConstants {
     public static final String CONSTRAINT = "Constraint violation error.";
     public static final String NULL = "No results found.";
     public static final String TIMEOUT = "Timeout error.";
+    public static final String OUTDATED_VERSION = "Outdated version error.";
 }

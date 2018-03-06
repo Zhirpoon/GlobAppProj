@@ -80,5 +80,10 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     public int getVersionNumber() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public long getApplicationId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

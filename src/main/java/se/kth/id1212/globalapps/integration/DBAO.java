@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.QueryTimeoutException;
+import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
 import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
@@ -101,15 +102,20 @@ public class DBAO {
      * @throws java.lang.Exception
      */
     public void saveApplication(ApplicationEntity application) throws Exception {
-        em.persist(application);
-        em.flush();
+        boolean applicationAlreadyExists = em.find(ApplicationEntity.class, application.getApplicationId()) != null;
+        if(!applicationAlreadyExists) {
+            em.persist(application);
+            em.flush();
+        } else {
+            throw new Exception(errors.DUPLICATE_KEY);
+        }
     }
     
     /**
      * Saves an <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to the database.
      * @param applicationId The <code>ApplicationEntity</code>'s application ID.
      * @param expertises The <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to be stored.
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception Most likely a timeout error.
      */
     public void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) throws Exception {
         for(YearsWithExpertiseDTO expertise : expertises) {
@@ -141,7 +147,7 @@ public class DBAO {
      * Saves an <code>ApplicationEntity</code>'s <code>TimePeriod</code>s to the database.
      * @param applicationId The <code>ApplicationEntity</code>'s application ID.
      * @param timePeriods The <code>ApplicationEntity</code>'s <code>YearsWithExpertise</code>s to be stored, this represents the periods of availability.
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception Most likely a timeout error.
      */
     public void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) throws Exception {
         for(TimePeriodDTO timePeriod : timePeriods) {
@@ -241,6 +247,34 @@ public class DBAO {
             competences.add(competence);
         }
         return competences;
+    }
+    
+    /**
+     * Edits/updated an <code>ApplicationEntity</code>'s status if this has now already been changed by someone else.
+     * @param application The application to be changed.
+     * @param status The new status of the <code>ApplicationEntity</code>.
+     * @throws Exception Either a timeout or a outdated version.
+     */
+    public void editApplicationStatus(ApplicationDTO application, boolean status) throws Exception {
+        ApplicationEntity applicationEntity = em.find(ApplicationEntity.class, application.getApplicationId());
+        if(application.getVersionNumber() == applicationEntity.getVersionNumber()) {
+            int newVersionNumber = application.getVersionNumber() + 1;
+            Query query = em.createQuery("UPDATE " + dbConstants.APPLICATIONENTITY_TABLE_NAME +
+                " SET " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_STATUS +
+                " = " + status + ", " +
+                dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_VERSION +
+                " = " + newVersionNumber +
+                " WHERE " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_ID +
+                " = " + application.getApplicationId()
+            );
+            try {
+                query.executeUpdate();
+            } catch (PersistenceException timeoutException) {
+                throw new Exception(ErrorConstants.TIMEOUT);
+            }
+        } else {
+            throw new Exception(ErrorConstants.OUTDATED_VERSION);
+        }
     }
 //    private final EntityManagerFactory emFactory;
     // private final ThreadLocal<EntityManager> threadEM = new ThreadLocal<>();

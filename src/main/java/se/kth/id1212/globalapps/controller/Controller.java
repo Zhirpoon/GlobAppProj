@@ -47,9 +47,7 @@ public class Controller {
         } catch (SQLIntegrityConstraintViolationException constraintException) {
             throw constraintViolation();
         } catch (Exception registrationException) {
-            CodedException codedException = new CodedException(registrationException.getMessage());
-            codedException.categorizeException(registrationException);
-            throw codedException;
+            throw createCodedException(registrationException);
         }
     }
 
@@ -90,9 +88,7 @@ public class Controller {
         } catch (SQLIntegrityConstraintViolationException constraintException) {
             throw constraintViolation();
         } catch (Exception saveApplicationException) {
-            CodedException codedException = new CodedException(saveApplicationException.getMessage());
-            codedException.categorizeException(saveApplicationException);
-            throw codedException;
+            throw createCodedException(saveApplicationException);
         }
     }
     
@@ -116,8 +112,7 @@ public class Controller {
             return user.getAccountType().getName();
         } else {
             throw noResultsFound();
-        }
-        
+        }        
     }
     
     /**
@@ -143,6 +138,31 @@ public class Controller {
         } else {
             throw noResultsFound();
         }
+    }
+    
+    /**
+     * Updates an application's status.
+     * @param application The application to be updated.
+     * @param status The new status of the application.
+     * @throws CodedException Has an enumerator which tells view how to handle the exception.
+     */
+    public void updateApplicationStatus(ApplicationDTO application, boolean status) throws CodedException {
+        try {
+        dbao.editApplicationStatus(application, status);
+        } catch (Exception updateException) {
+            throw createCodedException(updateException);
+        }
+    }
+    
+    /**
+     * Creates a <code>CodedException</code> based on the exception put in.
+     * @param baseException The original exception that was caught.
+     * @return A categorized <code>CodedException</code>.
+     */
+    private CodedException createCodedException(Exception baseException) {
+        CodedException codedException = new CodedException(baseException.getMessage());
+        codedException.categorizeException(baseException);
+        return codedException;
     }
     
     /**

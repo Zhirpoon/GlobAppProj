@@ -51,4 +51,9 @@ public interface ApplicationDTO {
      * @return The <code>ApplicationDTO</code>'s version number.
      */
     public int getVersionNumber();
+    
+    /**
+     * @return The <code>ApplicationDTO</code>'s id. 
+     */
+    public long getApplicationId();
 }

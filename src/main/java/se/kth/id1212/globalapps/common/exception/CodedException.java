@@ -49,6 +49,9 @@ public class CodedException extends Exception {
             case ErrorConstants.TIMEOUT:
                 setErrorCode(ExceptionEnumerator.TIMEOUT);
                 break;
+            case ErrorConstants.OUTDATED_VERSION:
+                setErrorCode(ExceptionEnumerator.OUTDATED_VERSION);
+                break;
             default:
                 setErrorCode(ExceptionEnumerator.OTHER);
                 break;
