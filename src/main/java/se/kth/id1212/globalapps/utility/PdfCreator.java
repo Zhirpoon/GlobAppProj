@@ -13,12 +13,10 @@ import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
-import javax.ejb.Stateless;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import javax.swing.JFileChooser;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
@@ -30,12 +28,7 @@ import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
  * Creates a PDF of an application.
  */
 public class PdfCreator {
-    private String FILE;
-//    private Document document;
-    
-//    public PdfCreator() {
-//        document = new Document();
-//    }
+    private String FILE = "recruiter/";
     
     /**
      * Creates a PDF of an <code>ApplicationDTO</code> and saves it at a chosen location.
@@ -44,7 +37,7 @@ public class PdfCreator {
     public void createPDF(ApplicationDTO application) {
         try {
             Document document = new Document();
-            FILE = chooseFileDirectory() + "\\" + application.getUsername() + "_application.pdf";
+            FILE += application.getUsername() + "_application.pdf";
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
             document.open();
 
@@ -63,7 +56,7 @@ public class PdfCreator {
             Anchor anchor = new Anchor("Qualifications");
             anchor.setName("Qualifications");
             Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-            Paragraph subPara = new Paragraph("Expertises");
+            Paragraph subPara = new Paragraph("Years with expertises");
             Section subCatPart = catPart.addSection(subPara);
             for(YearsWithExpertiseDTO ywe : application.getExpertises()) {
                 subCatPart.add(new Paragraph("\tExpertise: " + ywe.getExpertise() + " \n" +
@@ -80,19 +73,6 @@ public class PdfCreator {
         } catch (DocumentException | FileNotFoundException e) {
             //Do something, maybe throw a CodedException.
         }
-    }
-    
-    /**
-     * Shows a window where the user can choose a directory to store the file in.
-     * @return The directory path where the file will be stored.
-     */
-    private String chooseFileDirectory() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
-        chooser.setDialogTitle("choosertitle");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        return chooser.getSelectedFile().toString();
     }
 }
 
