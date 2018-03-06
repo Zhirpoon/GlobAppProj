@@ -4,7 +4,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 /**
- * Provides error handling for the managed beans and print outs error messages
+ * Provides error handling for the managed beans and prints out error messages
  * to the client
  *
  */
