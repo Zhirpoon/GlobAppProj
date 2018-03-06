@@ -99,16 +99,10 @@ public class DBAO {
     /**
      * Save an <code>ApplicationEntity</code> to the database.
      * @param application The <code>ApplicationEntity</code> that is to be stored.
-     * @throws java.lang.Exception
      */
-    public void saveApplication(ApplicationEntity application) throws Exception {
-        boolean applicationAlreadyExists = em.find(ApplicationEntity.class, application.getApplicationId()) != null;
-        if(!applicationAlreadyExists) {
+    public void saveApplication(ApplicationEntity application) {
             em.persist(application);
             em.flush();
-        } else {
-            throw new Exception(errors.DUPLICATE_KEY);
-        }
     }
     
     /**
