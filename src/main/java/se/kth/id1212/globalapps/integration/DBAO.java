@@ -255,23 +255,27 @@ public class DBAO {
      * @param status The new status of the <code>ApplicationEntity</code>.
      * @throws Exception Either a timeout or a outdated version.
      */
-    public void editApplicationStatus(ApplicationDTO application, boolean status) throws Exception {
+    public void editApplicationStatus(ApplicationDTO application) throws Exception {
         ApplicationEntity applicationEntity = em.find(ApplicationEntity.class, application.getApplicationId());
         if(application.getVersionNumber() == applicationEntity.getVersionNumber()) {
             int newVersionNumber = application.getVersionNumber() + 1;
-            Query query = em.createQuery("UPDATE " + dbConstants.APPLICATIONENTITY_TABLE_NAME +
-                " SET " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_STATUS +
-                " = " + status + ", " +
-                dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_VERSION +
-                " = " + newVersionNumber +
-                " WHERE " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_ID +
-                " = " + application.getApplicationId()
-            );
-            try {
-                query.executeUpdate();
-            } catch (PersistenceException timeoutException) {
-                throw new Exception(ErrorConstants.TIMEOUT);
-            }
+            applicationEntity.setStatus(application.getStatus());
+            applicationEntity.setVersionNumber(newVersionNumber);
+            em.persist(applicationEntity);
+            em.flush();
+//            Query query = em.createQuery("UPDATE " + dbConstants.APPLICATIONENTITY_TABLE_NAME +
+//                " SET " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_STATUS +
+//                " = " + status + ", " +
+//                dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_VERSION +
+//                " = " + newVersionNumber +
+//                " WHERE " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_ID +
+//                " = " + application.getApplicationId()
+//            );
+//            try {
+//                query.executeUpdate();
+//            } catch (PersistenceException timeoutException) {
+//                throw new Exception(ErrorConstants.TIMEOUT);
+//            }
         } else {
             throw new Exception(ErrorConstants.OUTDATED_VERSION);
         }

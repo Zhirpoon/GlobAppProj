@@ -91,6 +91,20 @@ public class ApplicationEntity implements Serializable {
     public int getVersionNumber() {
         return versionNumber;
     }
+    
+    /**
+     * @param versionNumber The <code>ApplicationEntity</code>'s new version number.
+     */
+    public void setVersionNumber(int versionNumber) {
+        this.versionNumber = versionNumber;
+    }
+    
+    /**
+     * @param status The <code>ApplicationEntity</code>'s new status.
+     */
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {

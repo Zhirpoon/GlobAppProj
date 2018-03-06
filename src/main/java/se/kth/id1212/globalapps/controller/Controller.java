@@ -146,9 +146,9 @@ public class Controller {
      * @param status The new status of the application.
      * @throws CodedException Has an enumerator which tells view how to handle the exception.
      */
-    public void updateApplicationStatus(ApplicationDTO application, boolean status) throws CodedException {
+    public void updateApplicationStatus(ApplicationDTO application) throws CodedException {
         try {
-        dbao.editApplicationStatus(application, status);
+        dbao.editApplicationStatus(application);
         } catch (Exception updateException) {
             throw createCodedException(updateException);
         }
