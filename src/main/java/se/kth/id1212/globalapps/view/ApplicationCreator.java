@@ -57,6 +57,7 @@ public class ApplicationCreator implements Serializable {
      * @param startDate The start date of an availability period.
      */
     public void setStartDate(String startDate) {
+        if(startDate.length()< 1) return;
         try {
             this.startDate.setDatefromString(startDate);
         } catch (DateUtil.DateObjectParsingError ex) {
@@ -72,6 +73,7 @@ public class ApplicationCreator implements Serializable {
      * @param endDate The end date of an availability period.
      */
     public void setEndDate(String endDate) {
+        if(endDate.length()< 1) return;
         try {
             this.endDate.setDatefromString(endDate);
         } catch (DateUtil.DateObjectParsingError ex) {
