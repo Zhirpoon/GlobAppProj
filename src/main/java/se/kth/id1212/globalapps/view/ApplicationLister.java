@@ -9,6 +9,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import se.kth.id1212.globalapps.common.exception.CodedException;
+import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.view.DTOs.ApplicationSearch;
@@ -33,6 +34,8 @@ public class ApplicationLister implements Serializable {
     String expertise;
     private final FailureNotifier failureNotifier = new FailureNotifier();
 
+    
+    
     public boolean getSuccess() {
         return this.failureNotifier.getSuccess();
     }
@@ -70,13 +73,16 @@ public class ApplicationLister implements Serializable {
         }
     }
 
+    
+    
     public void search() {
         try {
             applications = contr.searchApplications(search);
-            System.out.println("-------------------------------------");
-            System.out.println("Antal ansökningar: " + applications.length);
         } catch (CodedException ex) {
-            failureNotifier.notifyClient();
+            if(ex.getErrorCode() == ExceptionEnumerator.NULL){
+                failureNotifier.notifyClient("No mathing applications found");
+            }
+            else failureNotifier.notifyClient();
         }
 
     }
