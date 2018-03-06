@@ -3,43 +3,49 @@ package se.kth.id1212.globalapps.view.DTOs;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import se.kth.id1212.globalapps.model.YearsWithExpertise;
 
 /**
  *
- * @author Anders Klasson <aklasson@kth.se>
- * Application is a DTO to be sent down to the model without model needing to know anything about the view.
+ * DTO for a new application
  */
-public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO {
+public class ApplicationNew implements se.kth.id1212.globalapps.dtos.ApplicationDTO {
 
-    private Collection <YearsWithExpertiseDTO> expertises = new HashSet<>();
-    private Collection <TimePeriodDTO> availabilityPeriods = new HashSet<>();
-    private String username;
-    
+    private Collection<YearsWithExpertiseDTO> expertises = new HashSet<>();
+    private Collection<TimePeriodDTO> availabilityPeriods = new HashSet<>();
+    private final String username;
+
     /**
-     * Constructor of <code>Application</code> with a specified username of the owner.
-     * @param username The <code>Application</code>'s owners username
+     * Constructor of <code>ApplicationNew</code> with a specified username of
+     * the owner.
+     *
+     * @param username The <code>ApplicationNew</code>'s owners username
      */
-    public Application(String username){
+    public ApplicationNew(String username) {
         this.username = username;
     }
-    
+
     /**
-     *  Adds the user's periods of availability to the <code>Application</code>, it adds it to a list of availability periods.
-     * @param availabilityPeriod The <code>Application</code>'s owner's periods of availability.
+     * Adds the user's periods of availability to the
+     * <code>ApplicationNew</code>, it adds it to a list of availability
+     * periods.
+     *
+     * @param availabilityPeriod The <code>ApplicationNew</code>'s owner's
+     * periods of availability.
      */
-    public void addAvailabilityPeriod(TimePeriodDTO availabilityPeriod){
+    public void addAvailabilityPeriod(TimePeriodDTO availabilityPeriod) {
         availabilityPeriods.add(availabilityPeriod);
     }
-    
+
     /**
-     * Adds the user's expertise to the <code>Application</code>, it adds it to a list of expertises.
-     * @param expertise The <code>Application</code>'s owner's expertise.
+     * Adds the user's expertise to the <code>ApplicationNew</code>, it adds it
+     * to a list of expertises.
+     *
+     * @param expertise The <code>ApplicationNew</code>'s owner's expertise.
      */
-    public void addExpertises(YearsWithExpertiseDTO expertise){
+    public void addExpertises(YearsWithExpertiseDTO expertise) {
         expertises.add(expertise);
     }
-    
+
     @Override
     public YearsWithExpertiseDTO[] getExpertises() {
         return (YearsWithExpertiseDTO[]) expertises.toArray(new YearsWithExpertiseDTO[expertises.size()]);
@@ -55,10 +61,9 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
         return username;
     }
 
-
     @Override
     public boolean getStatus() {
-        return false;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -85,5 +90,5 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     public long getApplicationId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

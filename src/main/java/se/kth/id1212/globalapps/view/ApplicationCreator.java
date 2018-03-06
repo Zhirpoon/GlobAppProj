@@ -13,7 +13,7 @@ import javax.inject.Named;
 import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.validation.PositiveTwoDigitInteger;
 import se.kth.id1212.globalapps.controller.Controller;
-import se.kth.id1212.globalapps.view.DTOs.Application;
+import se.kth.id1212.globalapps.view.DTOs.ApplicationNew;
 import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
 import se.kth.id1212.globalapps.view.DTOs.YearsWithExpertiseDTO;
 
@@ -32,7 +32,7 @@ public class ApplicationCreator implements Serializable {
 
     @PositiveTwoDigitInteger(message = "Enter years between 1 and 99")
     private Integer years;
-    private Application application;
+    private ApplicationNew application;
     private DateUtil startDate = new DateUtil();
     private DateUtil endDate = new DateUtil();
     private FailureNotifier failureNotifier;
@@ -46,7 +46,7 @@ public class ApplicationCreator implements Serializable {
     public void init() {
         try {
             expertises = controller.getAllExpertises();
-            application = new Application(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+            application = new ApplicationNew(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
             failureNotifier = new FailureNotifier();
         } catch (CodedException ex) {
             Logger.getLogger(ApplicationCreator.class.getName()).log(Level.SEVERE, null, ex);
@@ -62,6 +62,10 @@ public class ApplicationCreator implements Serializable {
         } catch (DateUtil.DateObjectParsingError ex) {
             failureNotifier.notifyClient(ex.getMessage(), "startDate");
         }
+//        System.out.println("----------------------------------------");
+//        System.out.println("----------------------------------------");
+//        System.out.println("----------------------------------------");
+//        System.out.println("StartDate: " + this.startDate.getDateString());
     }
 
     /**
@@ -69,10 +73,11 @@ public class ApplicationCreator implements Serializable {
      */
     public void setEndDate(String endDate) {
         try {
-            this.startDate.setDatefromString(endDate);
+            this.endDate.setDatefromString(endDate);
         } catch (DateUtil.DateObjectParsingError ex) {
             failureNotifier.notifyClient(ex.getMessage(), "endDate");
         }
+//        System.out.println("EndDate: " + this.endDate.getDateString());
     }
 
     /**
@@ -99,8 +104,8 @@ public class ApplicationCreator implements Serializable {
         try {
             availabilityPeriod = new TimePeriodDTO(startDate.getDate(), endDate.getDate());
             this.application.addAvailabilityPeriod(availabilityPeriod);
-            startDate = null;
-            endDate = null;
+            startDate = new DateUtil();
+            endDate = new DateUtil();
         } catch (TimePeriodDTO.TimePeriodDTOException ex) {
             failureNotifier.notifyClient(ex.getMessage(), "addAvailabilityPeriod");
         }
