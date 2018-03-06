@@ -258,19 +258,8 @@ public class DBAO {
         ApplicationEntity applicationEntity = em.find(ApplicationEntity.class, application.getApplicationId());
         if(application.getVersionNumber() == applicationEntity.getVersionNumber()) {
             int newVersionNumber = application.getVersionNumber() + 1;
-            Query query = em.createQuery("UPDATE " + dbConstants.APPLICATIONENTITY_TABLE_NAME +
-                " SET " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_STATUS +
-                " = " + application.getStatus() + ", " +
-                dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_VERSION +
-                " = " + newVersionNumber +
-                " WHERE " + dbConstants.APPLICATIONENTITY_TABLE_NAME + "." + dbConstants.APPLICATIONENTITY_ID +
-                " = " + application.getApplicationId()
-            );
-            try {
-                query.executeUpdate();
-            } catch (PersistenceException timeoutException) {
-                throw new Exception(ErrorConstants.TIMEOUT);
-            }
+            applicationEntity.setStatus(application.getStatus());
+            applicationEntity.setVersionNumber(newVersionNumber);
         } else {
             throw new Exception(ErrorConstants.OUTDATED_VERSION);
         }
