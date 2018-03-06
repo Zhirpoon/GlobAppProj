@@ -104,6 +104,8 @@ public class ApplicationCreator implements Serializable {
         try {
             availabilityPeriod = new TimePeriodDTO(startDate.getDate(), endDate.getDate());
             this.application.addAvailabilityPeriod(availabilityPeriod);
+            System.out.println("StartDate: " + startDate.getDateString());
+            System.out.println("EndDate: " + endDate.getDateString());
             startDate = new DateUtil();
             endDate = new DateUtil();
         } catch (TimePeriodDTO.TimePeriodDTOException ex) {
@@ -182,6 +184,10 @@ public class ApplicationCreator implements Serializable {
      * periods of availability, to the application to save..
      */
     public TimePeriodDTO[] getAvailiabilityPeriods() {
+        for(TimePeriodDTO period : application.getAvailabilityPeriods()){
+            System.out.println(period.getStartdate().toString());
+            System.out.println(period.getStartdate().getDay());
+        }
         return this.application.getAvailabilityPeriods();
     }
 
