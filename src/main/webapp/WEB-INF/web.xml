@@ -40,7 +40,24 @@
             <role-name>APPLICANT</role-name>
         </auth-constraint>
     </security-constraint>
-    
-    
-    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Recruiter resources</web-resource-name>
+            <url-pattern>/recruiter/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>RECRUITER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+    <web-resource-collection>
+        <web-resource-name>whole app</web-resource-name>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
 </web-app>
