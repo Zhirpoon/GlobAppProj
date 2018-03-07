@@ -19,6 +19,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import javax.swing.JFileChooser;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
@@ -30,7 +32,7 @@ import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
  * Creates a PDF of an application.
  */
 public class PdfCreator {
-    private String FILE = "recruiter/";
+    //private String FILE = "recruiter/";
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     /**
      * Creates a PDF of an <code>ApplicationDTO</code> and saves it at a chosen location.
@@ -38,6 +40,8 @@ public class PdfCreator {
      */
     public void createPDF(ApplicationDTO application) {
         try {
+            String FILE = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+            FILE += "recruiter/";
             Document document = new Document();
             FILE += application.getUsername() + "_application.pdf";
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
