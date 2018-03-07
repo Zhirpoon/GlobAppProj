@@ -55,14 +55,14 @@ public class ApplicationCreator implements Serializable {
         }
     }
 
-    public void reset(){
+    public void reset() {
         applicationSent = false;
         startDate = new DateUtil();
         endDate = new DateUtil();
-        years  = null;
+        years = null;
         init();
     }
-    
+
     public boolean getApplicationSent() {
         return applicationSent;
     }
@@ -129,7 +129,7 @@ public class ApplicationCreator implements Serializable {
             System.out.println("EndDate: " + endDate.getDateString());
             startDate = new DateUtil();
             endDate = new DateUtil();
-            applicationSent = true;
+
         } catch (TimePeriodDTO.TimePeriodDTOException ex) {
             failureNotifier.notifyClient(ex.getMessage(), "addAvailabilityPeriod");
         }
@@ -187,6 +187,7 @@ public class ApplicationCreator implements Serializable {
     public void sendApplication() {
         try {
             controller.saveApplication(application);
+            applicationSent = true;
         } catch (CodedException ex) {
             if (ex.getErrorCode() == ExceptionEnumerator.TIMEOUT) {
                 failureNotifier.notifyClient("Database timeout");
