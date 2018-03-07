@@ -1,5 +1,4 @@
 package se.kth.id1212.globalapps.view;
-
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,13 +36,17 @@ public class ApplicationLister implements Serializable {
     private boolean status;
     private final FailureNotifier failureNotifier = new FailureNotifier();
     private long viewedApplicationId;
+    private String pdfName;
     
-    
-    public long getViewedApplicationId(){
+    private String getPdfName() {
+        return pdfName;
+    }
+
+    public long getViewedApplicationId() {
         return this.viewedApplicationId;
     }
-    
-    public void setViewedApplicationId(long viewedApplicationId){
+
+    public void setViewedApplicationId(long viewedApplicationId) {
         this.viewedApplicationId = viewedApplicationId;
         try {
             this.viewedApplication = contr.getApplicationById(viewedApplicationId);
@@ -51,30 +54,29 @@ public class ApplicationLister implements Serializable {
             Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void createPdf(){
+
+    public void createPdf() {
         PdfCreator pdfCreator = new PdfCreator();
         pdfCreator.createPDF(viewedApplication);
-        
+        pdfName = viewedApplication.getUsername()+"_application.pdf";
     }
-            
-    
-    public ApplicationDTO getViewedApplication(){
+
+    public ApplicationDTO getViewedApplication() {
         return viewedApplication;
     }
-    
-    public void updateApplication(){
+
+    public void updateApplication() {
         try {
             contr.updateApplicationStatus(new ApplicationUpdate(viewedApplication.getApplicationId(), viewedApplication.getVersionNumber(), status));
         } catch (CodedException ex) {
-            
+
         }
     }
-    
-    public void setStatus(boolean status){
+
+    public void setStatus(boolean status) {
         this.status = status;
     }
-    
+
     public boolean getSuccess() {
         return this.failureNotifier.getSuccess();
     }
