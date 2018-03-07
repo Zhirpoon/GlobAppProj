@@ -49,7 +49,12 @@ public class DBAO {
      * @throws java.lang.Exception
      */
     public void addUser(UserEntity user) throws Exception {
-        boolean userAlreadyExists = findUserByUsername(user.getUsername()) != null;
+        boolean userAlreadyExists;
+        try {
+            userAlreadyExists = findUserByUsername(user.getUsername()) != null;
+        } catch (Exception e) {
+            throw e;
+        }
         if(!userAlreadyExists) {
             em.persist(user);
             em.flush();
