@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.integration.DBAO;
@@ -53,10 +54,10 @@ public class Controller {
         try {
             dbao.addUser(new UserEntity(registrationDTO, dbao.getAccountTypeApplicant()));
         } catch (SQLIntegrityConstraintViolationException constraintException) {
-            LOGGER.log(Level.SEVERE, "Fan");
+            LOGGER.log(Level.SEVERE, constraintException.toString());
             throw constraintViolation();
         } catch (Exception registrationException) {
-            LOGGER.log(Level.SEVERE, "Fan");
+            LOGGER.log(Level.SEVERE, registrationException.toString());
             throw createCodedException(registrationException);
         }
     }
@@ -67,7 +68,13 @@ public class Controller {
      * @throws se.kth.id1212.globalapps.common.exception.CodedException Has an enumerator which tells view how to handle the exception.
      */
     public String[] getAllExpertises() throws CodedException {
-        Collection<ExpertiseEntity> expertiseEntities = dbao.getAllExpertises();
+        Collection<ExpertiseEntity> expertiseEntities;
+        try {
+            expertiseEntities = dbao.getAllExpertises();
+        } catch (Exception unexpectedException) {
+            LOGGER.log(Level.SEVERE, unexpectedException.toString());
+            throw createCodedException(unexpectedException);
+        }    
         if(expertiseEntities == null) {
             throw noResultsFound();
         }
@@ -88,16 +95,18 @@ public class Controller {
      * @throws se.kth.id1212.globalapps.common.exception.CodedException Has an enumerator which tells view how to handle the exception.
      */
     public void saveApplication(ApplicationDTO application) throws CodedException {
-        UserEntity user = dbao.findUserByUsername(application.getUsername());
-        ApplicationEntity applicationEntity = new ApplicationEntity(user);
         try {
+            UserEntity user = dbao.findUserByUsername(application.getUsername());
+            ApplicationEntity applicationEntity = new ApplicationEntity(user);
             dbao.saveApplication(applicationEntity);
             long applicationId = applicationEntity.getApplicationId();
             saveApplicationExpertises(applicationId, application.getExpertises());
             saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
         } catch (SQLIntegrityConstraintViolationException constraintException) {
+            LOGGER.log(Level.SEVERE, constraintException.toString());
             throw constraintViolation();
         } catch (Exception saveApplicationException) {
+            LOGGER.log(Level.SEVERE, saveApplicationException.toString());
             throw createCodedException(saveApplicationException);
         }
     }
@@ -125,12 +134,19 @@ public class Controller {
      * @throws se.kth.id1212.globalapps.common.exception.CodedException Has an enumerator which tells view how to handle the exception.
      */
     public String getUsergroup(String username) throws CodedException {
-        UserEntity user = dbao.findUserByUsername(username);
+        UserEntity user;
+        try {
+            user = dbao.findUserByUsername(username);
+            
+        } catch (Exception dbException) {
+            LOGGER.log(Level.SEVERE, dbException.toString());
+            throw createCodedException(dbException);
+        }   
         if(user != null) {
             return user.getAccountType().getName();
         } else {
             throw noResultsFound();
-        }        
+        }
     }
     
     /**
@@ -142,7 +158,13 @@ public class Controller {
      * @throws se.kth.id1212.globalapps.common.exception.CodedException Has an enumerator which tells view how to handle the exception.
      */
     public ApplicationDTO[] searchApplications(ApplicationSearchDTO searchCriteria) throws CodedException {
-        Collection<ApplicationEntity> retrievedApplications = dbao.searchApplications(searchCriteria);
+        Collection<ApplicationEntity> retrievedApplications;
+        try {
+            retrievedApplications = dbao.searchApplications(searchCriteria);
+        } catch (Exception unexpectedException) {
+            LOGGER.log(Level.SEVERE, unexpectedException.toString());
+            throw createCodedException(unexpectedException);
+        }
         if(retrievedApplications != null) {
             ApplicationDTO[] applications = new ApplicationDTO[retrievedApplications.size()];
             int position = 0;
@@ -201,16 +223,4 @@ public class Controller {
         codedException.setErrorCode(ExceptionEnumerator.CONSTRAINT);
         return codedException;
     }
-    
-//    private void logger(Exception exception, String method) {
-//        try(FileWriter fw = new FileWriter("logger.txt", true);
-//            BufferedWriter bw = new BufferedWriter(fw);
-//            PrintWriter out = new PrintWriter(bw))
-//        {
-//            out.println("Exception in method [" + method + "]");
-//            out.println(exception.getMessage());
-//        } catch (IOException e) {
-//            System.err.println("Could not create file or write to file.");
-//        }
-//    }
 }
