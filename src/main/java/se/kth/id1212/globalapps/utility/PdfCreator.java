@@ -17,6 +17,8 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import javax.swing.JFileChooser;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
@@ -29,7 +31,7 @@ import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
  */
 public class PdfCreator {
     private String FILE = "recruiter/";
-    
+    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     /**
      * Creates a PDF of an <code>ApplicationDTO</code> and saves it at a chosen location.
      * @param application The <code>ApplicationDTO</code> to be saved as a PDF.
@@ -70,8 +72,8 @@ public class PdfCreator {
             }
             document.add(catPart);
             document.close();
-        } catch (DocumentException | FileNotFoundException e) {
-            //Do something, maybe throw a CodedException.
+        } catch (DocumentException | FileNotFoundException documentException) {
+            LOGGER.log(Level.SEVERE, documentException.toString());
         }
     }
 }

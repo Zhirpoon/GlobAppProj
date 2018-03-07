@@ -54,7 +54,6 @@ public class Controller {
         try {
             dbao.addUser(new UserEntity(registrationDTO, dbao.getAccountTypeApplicant()));
         } catch (SQLIntegrityConstraintViolationException constraintException) {
-            LOGGER.log(Level.SEVERE, constraintException.toString());
             throw constraintViolation();
         } catch (Exception registrationException) {
             LOGGER.log(Level.SEVERE, registrationException.toString());
@@ -121,7 +120,6 @@ public class Controller {
             saveApplicationExpertises(applicationId, application.getExpertises());
             saveApplicationTimePeriods(applicationId, application.getAvailabilityPeriods());
         } catch (SQLIntegrityConstraintViolationException constraintException) {
-            LOGGER.log(Level.SEVERE, constraintException.toString());
             throw constraintViolation();
         } catch (Exception saveApplicationException) {
             LOGGER.log(Level.SEVERE, saveApplicationException.toString());
@@ -207,6 +205,7 @@ public class Controller {
         try {
         dbao.editApplicationStatus(application);
         } catch (Exception updateException) {
+            LOGGER.log(Level.SEVERE, updateException.toString());
             throw createCodedException(updateException);
         }
     }
