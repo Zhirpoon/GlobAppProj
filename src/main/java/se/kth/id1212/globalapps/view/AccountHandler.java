@@ -1,5 +1,7 @@
 package se.kth.id1212.globalapps.view;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -21,7 +23,8 @@ public class AccountHandler {
 
     @EJB
     Controller controller;
-
+    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    
     @GeneralStringSize(message = "Enter a username")
     private String username;
     @GeneralStringSize(message = "Enter a password")
@@ -56,6 +59,7 @@ public class AccountHandler {
         } catch (CodedException e) {
             System.out.println(e.getErrorCode().toString());
             if (e.getErrorCode() == ExceptionEnumerator.DUPLICATE_KEY) {
+                LOGGER.log(Level.SEVERE, "[view] register");
                 failureNotifier.notifyClient("Username already exists", "firstName");
             }else if(e.getErrorCode() == ExceptionEnumerator.TIMEOUT) {
                 failureNotifier.notifyClient("Database timeout");
@@ -64,9 +68,9 @@ public class AccountHandler {
                 failureNotifier.notifyClient();
             }
         } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "[view] register");
             failureNotifier.notifyClient();
         }
-
     }
 
     /**
