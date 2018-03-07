@@ -1,11 +1,17 @@
 package se.kth.id1212.globalapps.controller;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
+import java.util.logging.*;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.integration.DBAO;
@@ -36,6 +42,8 @@ public class Controller {
     @EJB
     DBAO dbao;
     
+    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    
     /**
      * Creates a new <code>UserEntity</code> to be stored on the database.
      * @param registrationDTO The <code>RegistrationDTO</code> to be converted into a UserEntity, contains data such as password, username, etc.
@@ -45,8 +53,10 @@ public class Controller {
         try {
             dbao.addUser(new UserEntity(registrationDTO, dbao.getAccountTypeApplicant()));
         } catch (SQLIntegrityConstraintViolationException constraintException) {
+            LOGGER.log(Level.SEVERE, "Fan");
             throw constraintViolation();
         } catch (Exception registrationException) {
+            LOGGER.log(Level.SEVERE, "Fan");
             throw createCodedException(registrationException);
         }
     }
@@ -93,11 +103,19 @@ public class Controller {
     }
     
     private void saveApplicationTimePeriods(long applicationId, TimePeriodDTO[] timePeriods) throws Exception {
-        dbao.saveApplicationTimePeriods(applicationId, timePeriods);
+        try {
+            dbao.saveApplicationTimePeriods(applicationId, timePeriods);
+        } catch (Exception timeoutException) {
+            throw timeoutException;
+        }
     }
     
     private void saveApplicationExpertises(long applicationId, YearsWithExpertiseDTO[] expertises) throws Exception {
-        dbao.saveApplicationExpertises(applicationId, expertises);
+        try {
+            dbao.saveApplicationExpertises(applicationId, expertises);
+        } catch (Exception timeoutException) {
+            throw timeoutException;
+        }
     }
 
     /**
@@ -183,4 +201,16 @@ public class Controller {
         codedException.setErrorCode(ExceptionEnumerator.CONSTRAINT);
         return codedException;
     }
+    
+//    private void logger(Exception exception, String method) {
+//        try(FileWriter fw = new FileWriter("logger.txt", true);
+//            BufferedWriter bw = new BufferedWriter(fw);
+//            PrintWriter out = new PrintWriter(bw))
+//        {
+//            out.println("Exception in method [" + method + "]");
+//            out.println(exception.getMessage());
+//        } catch (IOException e) {
+//            System.err.println("Could not create file or write to file.");
+//        }
+//    }
 }

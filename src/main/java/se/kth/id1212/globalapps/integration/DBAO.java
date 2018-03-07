@@ -5,16 +5,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.QueryTimeoutException;
+import org.eclipse.persistence.config.QueryHints;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
@@ -43,13 +46,13 @@ public class DBAO {
 
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
-    
+  
     /**
      * Adds a <code>UserEntity</code> to the database.
      * @param user The <code>UserEntity</code> to be stored.
      * @throws java.lang.Exception
      */
-    public void addUser(UserEntity user) throws Exception {    
+    public void addUser(UserEntity user) throws Exception {
         boolean userAlreadyExists = findUserByUsername(user.getUsername()) != null;
         if(!userAlreadyExists) {
             em.persist(user);
