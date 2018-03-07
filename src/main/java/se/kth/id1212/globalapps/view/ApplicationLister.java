@@ -38,7 +38,7 @@ public class ApplicationLister implements Serializable {
     private long viewedApplicationId;
     private String pdfName;
     
-    private String getPdfName() {
+    public String getPdfName() {
         createPdf();
         return pdfName;
     }
