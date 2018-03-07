@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:tp="http://java.sun.com/jsf/composite/components">
+    <h:body>
+        <composite:interface>
+            <composite:attribute name="isLoggedIn"/>
+            <composite:attribute name="isRecruiter"/>
+            <composite:attribute name="isApplicant"/>
+            <composite:attribute name="userName"/>
+        </composite:interface>
+        <composite:implementation>
+            <nav class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item">
+                        <p class="subtitle is-5">
+                            <strong>OUR</strong> Application
+                        </p>
+                    </div>
+                    <h:panelGroup style="margin-top:5px" layout="block" class="level-item" rendered="#{!cc.attrs.isLoggedIn}">
+                        <tp:loginComponent usernameLabel="Username" 
+                                           usernameValue="j_username" 
+                                           passwordLabel="Password" 
+                                           passwordValue="j_password" 
+                                           loginButtonLabel="Log In" 
+                                           loginButtonAction="j_security_check"/>
+                    </h:panelGroup>
+                </div>
+                <!-- Right side -->
+                <h:panelGroup layout="block" rendered="#{cc.attrs.isApplicant}">
+                    <div class="level-right">
+                        <p class="level-item"><strong>Logged in as #{cc.attrs.userName}</strong></p>
+                        <h:form>
+                            <h:commandButton class="button" action="/applicant/newapplication?faces-redirect=true" value="New Application" />
+                        </h:form>
+                        <h:form>
+                            <h:commandButton class="button" action="/welcome" value="First Page" />
+                        </h:form>
+                        <h:form>
+                            <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
+                        </h:form>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{cc.attrs.isRecruiter}">
+                    <div class="level-right">
+                        <p class="level-item"><strong>Logged in as #{cc.attrs.userName}</strong></p>
+                        <h:form>
+                            <h:commandButton class="button" action="/recruiter/listapplications?faces-redirect=true" value="List Applications" />
+                        </h:form>
+                        <h:form>
+                            <h:commandButton class="button" action="/welcome" value="First Page" />
+                        </h:form>
+                        <h:form>
+                            <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
+                        </h:form>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{!cc.attrs.isLoggedIn}">
+                    <div class="level-right">
+                        <h:form>
+                            <h:commandButton class="button is-link" action="/welcome" value="First Page" />
+                        </h:form>
+                    </div>
+                </h:panelGroup>
+            </nav>
+            <h:panelGroup class="section" rendered="#{cc.attrs.isLoggedIn}">
+                <h:outputText style="color:red;" value="The database is currently not working. Please visit this page again later."/>
+            </h:panelGroup>
+        </composite:implementation>
+    </h:body>
+</html>

@@ -48,8 +48,5 @@ public class RegistrationDTO extends LoginCredentialsDTO implements se.kth.id121
     @Override
     public Date getDateOfBirth() {
         return dateOfBirth;
-    }
-    
-
-    
+    }    
 }

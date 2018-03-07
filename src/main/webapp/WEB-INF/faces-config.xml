@@ -13,7 +13,7 @@
             <to-view-id>/welcome.xhtml</to-view-id>
             <redirect />
         </navigation-case>
-    </navigation-rule>
+    </navigation-rule>    
     
     <!-- RULE WHEN LOGGING OUT SUCCESS -->
     <navigation-rule>
@@ -26,12 +26,13 @@
         </navigation-case>
     </navigation-rule>
     
-    <!-- RULE WHEN SENDING APPLICATION -->
+    <!-- RULE WHEN CANCELLING APPLICATION -->
     <navigation-rule>
-        <from-view-id>/applicant/newapplication.xhtml</from-view-id>
+        <from-view-id>/applicant/confirmSendApplication.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{applicationCreator.sendApplication()}</from-action>
-            <to-view-id>/applicant/confirmSendApplication.xhtml</to-view-id>
+            <from-action>#{applicationCreator.reset()}</from-action>
+            <if>#{applicationCreator.success}</if>
+            <to-view-id>/applicant/newapplication.xhtml</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
