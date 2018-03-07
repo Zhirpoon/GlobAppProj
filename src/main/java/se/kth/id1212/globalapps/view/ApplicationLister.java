@@ -1,7 +1,6 @@
 package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -13,6 +12,7 @@ import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.view.DTOs.ApplicationSearch;
+import se.kth.id1212.globalapps.view.DTOs.ApplicationUpdate;
 import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
 
 /**
@@ -25,16 +25,38 @@ import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
 public class ApplicationLister implements Serializable {
 
     @EJB
-    Controller contr;
-    ApplicationSearch search;
-    DateUtil startDate = new DateUtil();
-    DateUtil endDate = new DateUtil();
-    ApplicationDTO[] applications;
-    String[] expertises;
-    String expertise;
+    private Controller contr;
+    private ApplicationSearch search;
+    private DateUtil startDate = new DateUtil();
+    private DateUtil endDate = new DateUtil();
+    private ApplicationDTO[] applications;
+    private String[] expertises;
+    private String expertise;
+    private ApplicationDTO viewedApplication;
+    private boolean status;
     private final FailureNotifier failureNotifier = new FailureNotifier();
 
     
+    
+    public void setViewedApplication(ApplicationDTO viewedApplication){
+        this.viewedApplication = viewedApplication;
+    }
+    
+    public ApplicationDTO getViewedApplication(){
+        return viewedApplication;
+    }
+    
+    public void updateApplication(){
+        try {
+            contr.updateApplicationStatus(new ApplicationUpdate(viewedApplication.getApplicationId(), viewedApplication.getVersionNumber(), status));
+        } catch (CodedException ex) {
+            
+        }
+    }
+    
+    public void setStatus(boolean status){
+        this.status = status;
+    }
     
     public boolean getSuccess() {
         return this.failureNotifier.getSuccess();
@@ -73,16 +95,15 @@ public class ApplicationLister implements Serializable {
         }
     }
 
-    
-    
     public void search() {
         try {
             applications = contr.searchApplications(search);
         } catch (CodedException ex) {
-            if(ex.getErrorCode() == ExceptionEnumerator.NULL){
+            if (ex.getErrorCode() == ExceptionEnumerator.NULL) {
                 failureNotifier.notifyClient("No mathing applications found");
+            } else {
+                failureNotifier.notifyClient();
             }
-            else failureNotifier.notifyClient();
         }
 
     }

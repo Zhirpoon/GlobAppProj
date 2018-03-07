@@ -57,7 +57,10 @@ public class AccountHandler {
             System.out.println(e.getErrorCode().toString());
             if (e.getErrorCode() == ExceptionEnumerator.DUPLICATE_KEY) {
                 failureNotifier.notifyClient("Username already exists", "firstName");
-            } else {
+            }else if(e.getErrorCode() == ExceptionEnumerator.TIMEOUT) {
+                failureNotifier.notifyClient("Database timeout");
+            }
+            else {
                 failureNotifier.notifyClient();
             }
         } catch (Exception e) {

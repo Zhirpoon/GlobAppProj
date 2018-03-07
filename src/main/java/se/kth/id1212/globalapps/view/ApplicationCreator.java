@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 
 import javax.inject.Named;
 import se.kth.id1212.globalapps.common.exception.CodedException;
+import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.common.validation.PositiveTwoDigitInteger;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.view.DTOs.ApplicationNew;
@@ -36,6 +37,7 @@ public class ApplicationCreator implements Serializable {
     private DateUtil startDate = new DateUtil();
     private DateUtil endDate = new DateUtil();
     private FailureNotifier failureNotifier;
+    private boolean applicationSent = false;
 //private Date startDate;
     //private Date endDate;
 
@@ -51,6 +53,18 @@ public class ApplicationCreator implements Serializable {
         } catch (CodedException ex) {
             Logger.getLogger(ApplicationCreator.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void reset(){
+        applicationSent = false;
+        startDate = new DateUtil();
+        endDate = new DateUtil();
+        years  = null;
+        init();
+    }
+    
+    public boolean getApplicationSent() {
+        return applicationSent;
     }
 
     /**
@@ -115,6 +129,7 @@ public class ApplicationCreator implements Serializable {
             System.out.println("EndDate: " + endDate.getDateString());
             startDate = new DateUtil();
             endDate = new DateUtil();
+            applicationSent = true;
         } catch (TimePeriodDTO.TimePeriodDTOException ex) {
             failureNotifier.notifyClient(ex.getMessage(), "addAvailabilityPeriod");
         }
@@ -172,9 +187,14 @@ public class ApplicationCreator implements Serializable {
     public void sendApplication() {
         try {
             controller.saveApplication(application);
-        } catch (Exception sendApplicationException) {
-            failureNotifier.notifyClient();
-            System.out.println(sendApplicationException.getMessage());
+        } catch (CodedException ex) {
+            if (ex.getErrorCode() == ExceptionEnumerator.TIMEOUT) {
+                failureNotifier.notifyClient("Database timeout");
+            } else {
+                failureNotifier.notifyClient();
+            }
+
+            //System.out.println(ex.getMessage());
         }
     }
 
@@ -192,8 +212,8 @@ public class ApplicationCreator implements Serializable {
      */
     public TimePeriodDTO[] getAvailiabilityPeriods() {
         for (TimePeriodDTO period : application.getAvailabilityPeriods()) {
-            System.out.println(period.getStartdate().toString());
-            System.out.println(period.getStartdate().getDay());
+            // System.out.println(period.getStartdate().toString());
+            //System.out.println(period.getStartdate().getDay());
         }
         return this.application.getAvailabilityPeriods();
     }

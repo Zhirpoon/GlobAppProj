@@ -9,6 +9,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import se.kth.id1212.globalapps.common.exception.CodedException;
+import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.controller.Controller;
 
 /**
@@ -26,6 +27,7 @@ public class AccountType implements Serializable {
      */
     private String accounttype;
     private String username;
+    private boolean dbTimeOut = false;
 
     private void setUsername() {
         username = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
@@ -35,12 +37,24 @@ public class AccountType implements Serializable {
         if (isLoggedIn() && (accounttype == null)) {
             try {
                 accounttype = contr.getUsergroup(username);
+                dbTimeOut = false;
             } catch (CodedException ex) {
-                Logger.getLogger(AccountType.class.getName()).log(Level.SEVERE, null, ex);
+                if(ex.getErrorCode() == ExceptionEnumerator.TIMEOUT){
+                    dbTimeOut = true;
+                }
+//Logger.getLogger(AccountType.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-
+    
+    public void setDbTimeOut(boolean dbTimeOut){
+       this.dbTimeOut = dbTimeOut;
+    }
+    
+    public boolean getDbTimeOut(){
+        return dbTimeOut;
+    }
+    
     /**
      * Checks if the logged in user has the <code>AccountTypeEntity</code> name "APPLICANT".
      * @return If the user is an applicant or not.
@@ -74,11 +88,7 @@ public class AccountType implements Serializable {
     public String getUsername() {
         return username;
     }
-//     @PreDestroy
-//    private void destruction(){
-//        System.out.println("DESTRUCTION OF ACCOUNTYPEBEAN");
-//    }
-//    
+
     /**
      * Logs out a logged out user.
      * @return A message saying that logging out was successful.

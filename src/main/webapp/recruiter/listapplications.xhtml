@@ -22,35 +22,45 @@
             <h:commandButton id="addCompetence" value="Add" action="#{applicationLister.addCompetence()}"/>
             <h:message for="addCompetence"/>
 
-<!--        </h:form>     -->
-      
-        set availability period
-<!--        <h:form>-->
+            <!--        </h:form>     -->
+
+            set availability period
+            <!--        <h:form>-->
             Start date (d-M-yyyy):
             <h:inputText id="startDate" value="#{applicationLister.startDate}"/>
             <h:message for="startDate"/>
             <!--<f:convertDateTime pattern="d-M-yyyy" />-->
-            
+
             End date (d-M-yyyy):
             <h:inputText id="endDate" value="#{applicationLister.endDate}"/>
-                <!--<f:convertDateTime pattern="d-M-yyyy" />-->
+            <!--<f:convertDateTime pattern="d-M-yyyy" />-->
             <h:message for="endDate"/>
             <h:commandButton id="addTimePeriod" value="Add" action="#{applicationLister.addTimePeriod()}" />
             <h:message for="addTimePeriod"/>
-<!--        </h:form>   
-        <h:form>-->
+            <!--        </h:form>   
+                    <h:form>-->
             First name
             <h:inputText value="#{applicationLister.firstName}"/>
-            
+
             <h:inputText value="#{applicationLister.lastName}"/>
             <h:commandButton id="base" value="Search" action="#{applicationLister.search()}"/>
             <h:message for="base"/>
-            
+
         </h:form>
-              <hr></hr>
+        <hr></hr>
         added expertises:
         <c:forEach items="#{applicationLister.competences}" var="competence">
             <p>#{competence}</p>
         </c:forEach>
+        <hr></hr>
+        
+            <c:forEach items="#{applicationLister.applications}" var="applic">
+                <!--<h:form>-->
+                <p>#{applic.firstName} #{applic.dateOfBirth}</p>
+               <!--<h:commandButton value="show" action=""/>-->
+                <h:outputText value="hej" rendered="false"/>
+                <!--</h:form>-->
+            </c:forEach>
+        
     </h:body>
 </html>

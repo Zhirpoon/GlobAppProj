@@ -2,7 +2,6 @@ package se.kth.id1212.globalapps.view.DTOs;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
