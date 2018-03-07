@@ -9,12 +9,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import javax.persistence.QueryTimeoutException;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
 import se.kth.id1212.globalapps.dtos.ApplicationSearchDTO;
 import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
@@ -43,13 +42,13 @@ public class DBAO {
 
     @PersistenceContext(unitName = "GlobalAppPU")
     private EntityManager em;
-    
+  
     /**
      * Adds a <code>UserEntity</code> to the database.
      * @param user The <code>UserEntity</code> to be stored.
      * @throws java.lang.Exception
      */
-    public void addUser(UserEntity user) throws Exception {    
+    public void addUser(UserEntity user) throws Exception {
         boolean userAlreadyExists = findUserByUsername(user.getUsername()) != null;
         if(!userAlreadyExists) {
             em.persist(user);
@@ -59,11 +58,15 @@ public class DBAO {
         }
     }
     
+    public ApplicationEntity getApplicationEntityById(long applicationId) {
+        return em.find(ApplicationEntity.class, applicationId);
+    }
+    
     /**
      * Gets the <code>AccountTypeEntity</code> with the primary key APPLICANT, if it exists.
      * @return The <code>AccountTypeEntity</code> which has the primary key APPLICANT.
      */
-    public AccountTypeEntity getAccountTypeApplicant(){
+    public AccountTypeEntity getAccountTypeApplicant() {
         return em.find(AccountTypeEntity.class,"APPLICANT");
     }
     
@@ -100,9 +103,15 @@ public class DBAO {
      * Save an <code>ApplicationEntity</code> to the database.
      * @param application The <code>ApplicationEntity</code> that is to be stored.
      */
-    public void saveApplication(ApplicationEntity application) {
-            em.persist(application);
-            em.flush();
+    public void saveApplication(ApplicationEntity application) throws Exception {
+            try {
+                em.persist(application);
+                em.flush();
+            } catch (PersistenceException | DatabaseException timeoutException) {
+                throw new Exception(ErrorConstants.TIMEOUT);
+            }
+            
+            
     }
     
     /**
@@ -131,7 +140,7 @@ public class DBAO {
             query.setParameter(3, expertise.getYears());
             try {
                 query.executeUpdate();
-            } catch (PersistenceException timeoutException) {
+            } catch (PersistenceException | DatabaseException timeoutException) {
                 throw new Exception(ErrorConstants.TIMEOUT);
             }
         }
@@ -160,7 +169,7 @@ public class DBAO {
             query.setParameter(3, timePeriod.getEnddate());
             try {
                 query.executeUpdate();
-            } catch (PersistenceException timeoutException) {
+            } catch (PersistenceException | DatabaseException timeoutException) {
                 throw new Exception(ErrorConstants.TIMEOUT);
             }
         }
