@@ -92,7 +92,11 @@ public class DBAO {
      * @return The <code>UserEntity</code> with the specified username.
      */
     public UserEntity findUserByUsername(String username) {
-        return em.find(UserEntity.class, username);
+        try {
+            return em.find(UserEntity.class, username);
+        } catch (Exception findException) {
+            throw findException;
+        }
     }
     
     public ApplicationEntity findApplicationById(long applicationId) {
