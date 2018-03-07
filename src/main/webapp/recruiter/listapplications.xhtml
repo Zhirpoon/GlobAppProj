@@ -11,7 +11,7 @@
             <ui:define name="content">
                 <h:panelGroup layout="block" class="section">
                     <h:outputLabel class="title" value="Search for existing applications"/>
-                    <h:panelGroup layout="block" class="section" style="border-bottom:2px solid black;">
+                    <h:panelGroup layout="block" class="section">
                         <h:form id="form">
                             <h:panelGroup layout="block" class="field is-horizontal">
                                 <h:panelGroup  layout="block" class="field-label">
@@ -69,7 +69,7 @@
                                 <h:panelGroup layout="block" class="field-body">
                                     <h:panelGroup layout="block" class="field">
                                         <h:panelGroup  class="control is-expanded has-icons-left">
-                                            <h:inputText id="firstName" class="input" autocomplete="off" value="#{accountHandler.firstName}"/>
+                                            <h:inputText id="firstName" class="input" autocomplete="off" value="#{applicationLister.firstName}"/>
                                             <h:message for="firstName"/>
                                         </h:panelGroup>
                                     </h:panelGroup>
@@ -80,7 +80,7 @@
                                 <h:panelGroup layout="block" class="field-body">
                                     <h:panelGroup layout="block" class="field">
                                         <h:panelGroup  class="control is-expanded has-icons-left">
-                                            <h:inputText id="lastName"  class="input" autocomplete="off" value="#{accountHandler.lastName}"/>
+                                            <h:inputText id="lastName"  class="input" autocomplete="off" value="#{applicationLister.lastName}"/>
                                             <h:message for="lastName"/>
                                         </h:panelGroup>
                                     </h:panelGroup>
@@ -91,41 +91,45 @@
                         </h:form>
                     </h:panelGroup>
                 </h:panelGroup>
-                <h:panelGroup layout="block" class="section">
-                    <h:panelGroup style="margin-left:2%;" layout="block">
-                        <h:outputLabel class="label">Added Expertises</h:outputLabel>
-                        <c:forEach items="#{applicationLister.competences}" var="yearsWithExpertise">
-                            <h:panelGroup layout="block" class="box">
-                                <article class="media">
-                                    <h:panelGroup layout="block" class="media-content">
-                                        <h:panelGroup layout="block" class="content">
-                                            <h:outputLabel class="label" value="Expertise:"/>
-                                            <h:outputText value="#{yearsWithExpertise}"/>
-                                        </h:panelGroup>
+                <h:panelGroup layout="block" class="section" style="border-top:2px solid black">
+                    <h:outputLabel class="label">Added Expertises</h:outputLabel>
+                    <c:forEach items="#{applicationLister.competences}" var="yearsWithExpertise">
+                        <h:panelGroup layout="block" class="box">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:outputLabel class="label" value="Expertise:"/>
+                                        <h:outputText value="#{yearsWithExpertise}"/>
                                     </h:panelGroup>
-                                </article>
-                            </h:panelGroup>
-                        </c:forEach>
-                    </h:panelGroup>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+                    </c:forEach>
                 </h:panelGroup>
                 <h:panelGroup layout="block" class="section" style="border-top:2px solid black">
                     <h:outputLabel class="label">Matching Applications</h:outputLabel>
-                    <c:forEach items="#{applicationLister.applications}" var="applications">
-                            <h:panelGroup layout="block" class="box">
-                                <article class="media">
-                                    <h:panelGroup layout="block" class="media-content">
-                                        <h:panelGroup layout="block" class="content">
+                    <c:forEach items="#{applicationLister.applications}" var="application">
+                        <h:panelGroup layout="block" class="box" style="width:50%;">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:panelGrid columns="4">
                                             <h:outputLabel class="label" value="First Name:"/>
-                                            <h:outputText value="#{applications.firstName}"/>
+                                            <h:outputText value="#{application.firstName}"/>
                                             <h:outputLabel class="label" value="Last Name:"/>
-                                            <h:outputText value="#{applications.lastName}"/>
+                                            <h:outputText value="#{application.lastName}"/>
                                             <h:outputLabel class="label" value="Date Of Registration:"/>
-                                            <!--<h:outputText value="{applications.}"/>-->
-                                        </h:panelGroup>
+                                            <h:outputText value="#{application.dateOfRegistration}"/>
+                                        </h:panelGrid>
+                                        <h:form>
+                                            <h:commandButton class="button" value="Choose Application" action="#{applicationLister.setViewedApplicationId(application.applicationId)}"/>
+                                            <h:commandButton class="button" value="View Application" action="/recruiter/viewapplication.xhtml"/>
+                                        </h:form>
                                     </h:panelGroup>
-                                </article>
-                            </h:panelGroup>
-                        </c:forEach>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+                    </c:forEach>
                 </h:panelGroup>
             </ui:define>
         </ui:composition>
