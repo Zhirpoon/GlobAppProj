@@ -23,6 +23,7 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     private final String lastName;
     private final Date dateOfBirth;
     private final int versionNumber;
+    private final Date dateOfRegistration;
     
     public Application(ApplicationEntity application, Collection<TimePeriod> timePeriods, Collection<YearsWithExpertise> yearsWithExpertise) {
         this.username = application.getUserEntity().getUsername();
@@ -34,6 +35,7 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
         this.competences = yearsWithExpertise.toArray(new YearsWithExpertise[0]);
         this.periodsOfAvailability = timePeriods.toArray(new TimePeriod[0]);
         this.id = application.getApplicationId();
+        this.dateOfRegistration = application.getUserEntity().getRegistrationDate();
     }
     
     @Override
@@ -79,6 +81,11 @@ public class Application implements se.kth.id1212.globalapps.dtos.ApplicationDTO
     @Override
     public long getApplicationId() {
         return this.id;
+    }
+
+    @Override
+    public Date getDateOfRegistration() {
+        return this.dateOfRegistration;
     }
     
 }
