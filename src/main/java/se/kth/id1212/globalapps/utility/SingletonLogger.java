@@ -12,16 +12,16 @@ import javax.ejb.Singleton;
 
 @Startup
 @Singleton
-public class TestLogger {
+public class SingletonLogger {
   
-public static final Logger FingLogging = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+public static final Logger SingletonLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-private static TestLogger instance = null;
+private static SingletonLogger instance = null;
     
-    public static TestLogger getInstance() {
+    public static SingletonLogger getInstance() {
         if(instance == null) {
             prepareLogger();
-            instance = new TestLogger();
+            instance = new SingletonLogger();
         }
         return instance;
     }
@@ -31,11 +31,11 @@ private static TestLogger instance = null;
         try {
             FileHandler myFileHandler = new FileHandler("ettlattarenamnatthitta.txt", true);
             myFileHandler.setFormatter(new SimpleFormatter());
-            FingLogging.addHandler(myFileHandler);
-            FingLogging.setUseParentHandlers(false);
-            FingLogging.setLevel(Level.WARNING);
-        } catch (IOException | SecurityException ex) {
-    //        Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+            SingletonLogger.addHandler(myFileHandler);
+            SingletonLogger.setUseParentHandlers(false);
+            SingletonLogger.setLevel(Level.WARNING);
+        } catch (IOException | SecurityException loggerException) {
+            System.err.println("Could not create fole for logging.\n" + loggerException.toString());
         }  
     }
   
