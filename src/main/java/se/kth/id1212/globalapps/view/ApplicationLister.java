@@ -1,6 +1,8 @@
 package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -43,7 +45,11 @@ public class ApplicationLister implements Serializable {
     
     public void setViewedApplicationId(long viewedApplicationId){
         this.viewedApplicationId = viewedApplicationId;
-        this.viewedApplication = contr.
+        try {
+            this.viewedApplication = contr.getApplicationById(viewedApplicationId);
+        } catch (CodedException ex) {
+            Logger.getLogger(ApplicationLister.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void createPdf(){

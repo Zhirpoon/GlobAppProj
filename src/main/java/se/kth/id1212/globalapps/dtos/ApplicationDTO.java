@@ -56,4 +56,10 @@ public interface ApplicationDTO {
      * @return The <code>ApplicationDTO</code>'s id. 
      */
     public long getApplicationId();
+    
+    /**
+     * 
+     * @return the date of registration
+     */
+    public Date getDateOfRegistration();
 }
