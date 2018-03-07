@@ -1,8 +1,6 @@
 package se.kth.id1212.globalapps.view;
 
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -11,6 +9,7 @@ import se.kth.id1212.globalapps.common.exception.CodedException;
 import se.kth.id1212.globalapps.common.exception.ExceptionEnumerator;
 import se.kth.id1212.globalapps.controller.Controller;
 import se.kth.id1212.globalapps.dtos.ApplicationDTO;
+import se.kth.id1212.globalapps.utility.PdfCreator;
 import se.kth.id1212.globalapps.view.DTOs.ApplicationSearch;
 import se.kth.id1212.globalapps.view.DTOs.ApplicationUpdate;
 import se.kth.id1212.globalapps.view.DTOs.TimePeriodDTO;
@@ -35,12 +34,24 @@ public class ApplicationLister implements Serializable {
     private ApplicationDTO viewedApplication;
     private boolean status;
     private final FailureNotifier failureNotifier = new FailureNotifier();
-
+    private long viewedApplicationId;
     
     
-    public void setViewedApplication(ApplicationDTO viewedApplication){
-        this.viewedApplication = viewedApplication;
+    public long getViewedApplicationId(){
+        return this.viewedApplicationId;
     }
+    
+    public void setViewedApplicationId(long viewedApplicationId){
+        this.viewedApplicationId = viewedApplicationId;
+        this.viewedApplication = contr.
+    }
+    
+    public void createPdf(){
+        PdfCreator pdfCreator = new PdfCreator();
+        pdfCreator.createPDF(viewedApplication);
+        
+    }
+            
     
     public ApplicationDTO getViewedApplication(){
         return viewedApplication;

@@ -43,6 +43,8 @@ public class AccountType implements Serializable {
                     dbTimeOut = true;
                 }
 //Logger.getLogger(AccountType.class.getName()).log(Level.SEVERE, null, ex);
+            }catch (Exception e){
+                dbTimeOut = true;
             }
         }
     }
