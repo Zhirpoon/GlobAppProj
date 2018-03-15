@@ -3,24 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <h:form>
-            <h:outputLabel value="First Name: "/>
-            <h:inputText value="#{accountHandler.firstName}"/>
-            <h:outputLabel value="Last Name: "/>
-            <h:inputText value="#{accountHandler.lastName}"/>
-            <h:outputLabel value="Email: "/>
-            <h:inputText value="#{accountHandler.email}"/>
-            <h:outputLabel value="Username: "/>
-            <h:inputText value="#{accountHandler.username}"/>
-            <h:outputLabel value="Password: "/>
-            <h:inputText value="#{accountHandler.password}"/>
-            <h:commandButton action="#{accountHandler.register()}" value="Register new user"/>
-        </h:form>
-    </body>
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      style="height:100%">
+    <h:body>
+        <ui:composition template="/resources/templates/pagetemplate.xhtml">
+            <ui:define name="content">
+                <h:panelGroup layout="block" class="section">
+                    <h:outputLabel class="label is-size-3" value="Welcome to OUR application, developed by Group 6"/>
+                    <h:outputText class="is-size-5" value="This application is intended to give recruiters a platform to find applicants. The applications that are created by applicants, give recruiters some interesting alternatives to choose from."/>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
 </html>

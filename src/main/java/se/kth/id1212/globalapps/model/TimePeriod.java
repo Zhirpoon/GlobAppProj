@@ -1,26 +1,32 @@
 package se.kth.id1212.globalapps.model;
 
 import java.util.Date;
-import se.kth.id1212.globalapps.dtos.TimePeriodDTO;
 
 /**
  *
  * @author Johan Rosengren <jrosengr@kth.se>
  */
-public class TimePeriod {
+public class TimePeriod implements se.kth.id1212.globalapps.dtos.TimePeriodDTO {
     private final Date startDate;
     private final Date endDate;
     
-    public TimePeriod(TimePeriodDTO timePeriodDTO) {
-        this.endDate = timePeriodDTO.getEnddate();
-        this.startDate = timePeriodDTO.getStartdate();
+    /**
+     * Constructor for the <code>TimePeriod</code>, this is used to send data from the model to the view.
+     * @param startDate The <code>TimePeriod</code>'s start date.
+     * @param endDate  The <code>TimePeriod</code>'s end date.
+     */
+    public TimePeriod(Date startDate, Date endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public Date getStartDate() {
+    @Override
+    public Date getStartdate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    @Override
+    public Date getEnddate() {
         return endDate;
     }
 }

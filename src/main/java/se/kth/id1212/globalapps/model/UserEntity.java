@@ -1,19 +1,20 @@
 package se.kth.id1212.globalapps.model;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.codec.binary.Hex;
 import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 
 /**
@@ -24,64 +25,135 @@ import se.kth.id1212.globalapps.dtos.RegistrationDTO;
 public class UserEntity implements Serializable {
     
     @Id
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "USERNAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String username;
 
-    @Column(name = "REGISTRATIONDATE", nullable = false)
+    @Column(name = "REGISTRATIONDATE", nullable = true)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date registrationDate;
     
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "EMAIL", nullable = true)
+    @Size(min = 1, max = 255)
     private String email;
     
-    @Column(name = "FIRSTNAME", nullable = false)
+    @Column(name = "FIRSTNAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String firstName;
     
-    @Column(name = "LASTNAME", nullable = false)
+    @Column(name = "LASTNAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String lastName;
 
-    @Column(name = "PASSWORD", nullable = false)
-    private int hashedPassword;
+    @Column(name = "PASSWORD", nullable = true)
+    @Size(min = 1, max = 255)
+    private String hashedPassword;
     
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ACCOUNTTYPE", nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "ACCOUNTTYPE")
     private AccountTypeEntity accountType;
     
+    @Column(name="SSN", nullable = true)
+    @Size(min = 13, max = 13)
+    private String ssn;
+    
+    @Column(name="DATEOFBIRTH", nullable = true)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateOfBirth;
+    
+    /**
+     * Null constructor for USerEntity
+     */
     public UserEntity() {        
     }
     
-    public UserEntity(RegistrationDTO registrationInformation, int hashedPassword) {
+    /**
+     * Constructor for the <code>UserEntity</code> which is used to store and retrieve data in the database. It also hashes the password it is not stored in plain text.
+     * @param registrationInformation The <code>UserEntity</code>'s registration information, such as username, first name, date of birth, etc.
+     * @param accountType The <code>UserEntity</code>'s <code>AccountTypeEntity</code>. 
+     */
+    public UserEntity(RegistrationDTO registrationInformation, AccountTypeEntity accountType) {
         this.username = registrationInformation.getUsername();
         this.firstName = registrationInformation.getFirstname();
         this.lastName = registrationInformation.getLastname();
         this.email = registrationInformation.getMail();
-        this.hashedPassword = hashedPassword;
+        this.dateOfBirth = registrationInformation.getDateOfBirth();
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+            String toHash = registrationInformation.getPassword();
+            byte[] hash = digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
+            this.hashedPassword = new String(Hex.encodeHex(hash));
+        } catch (NoSuchAlgorithmException ex) {
+            this.hashedPassword="couldNotHash";
+            Logger.getLogger(UserEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.registrationDate = new Date();
-        //this.accountType = new AccountTypeEntity("APPLICANT");
+        this.accountType = accountType;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s social security number. 
+     */
+    public String getSsn() {
+        return ssn;
+    }
+
+    /**
+     * @return The <code>UserEntity</code>'s date of birth.
+     */
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    /**
+     * @return The <code>UserEntity</code>'s username.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s date of creation..
+     */
     public Date getRegistrationDate() {
         return registrationDate;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s email.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * @return The <code>UserEntity</code>'s first name.
+     */
     public String getFirstName() {
         return firstName;
     }
-
+    
+    /**
+     * @return The <code>UserEntity</code>'s last name.
+     */
     public String getLastName() {
         return lastName;
     }
 
-    public int getHashedPassword() {
+    /**
+     * @return The <code>UserEntity</code>'s hashed password.
+     */
+    public String getHashedPassword() {
         return hashedPassword;
+    }
+
+    /**
+     * @return The <code>UserEntity</code>'s <code>AccountTypeEntity</code>, is either Recruiter or Applicant.
+     */
+    public AccountTypeEntity getAccountType() {
+        return accountType;
     }
     
     
@@ -95,7 +167,6 @@ public class UserEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof UserEntity)) {
             return false;
         }
@@ -105,7 +176,7 @@ public class UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.UserEntity[ id=" + username + " ]";
+        return "se.kth.id1212.globalapps.model.UserEntity[ UserEntity username= " + username + " ]";
     }
     
 }

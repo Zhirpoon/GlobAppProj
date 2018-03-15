@@ -1,0 +1,68 @@
+-- Copy all account types
+insert ignore into accounttypeentity
+select roles.name from role roles;
+
+-- Copy all expertises
+insert ignore into expertiseentity
+select comp.`name` from competence comp
+
+
+-- Copy all users
+insert ignore into userentity (`USERNAME`, `EMAIL`, `FIRSTNAME`, `PASSWORD`, `LASTNAME`, `REGISTRATIONDATE`, `ACCOUNTTYPE`, `SSN`, `DATEOFBIRTH`)
+select
+  (case when per.username LIKE '' then per.email
+  when per.username IS NULL then per.email
+  else per.username end) as `USERNAME`,
+  per.email as `EMAIL`,
+  per.`name` as `FIRSTNAME`,
+  per.password as `PASSWORD`,
+  per.surname as `LASTNAME`,
+  CURDATE() as `REGISTRATIONDATE`,
+  (select ro.name from role ro where per.role_id = ro.role_id) as `ACCOUNTTYPE`,
+  per.ssn as `SSN`,
+  DATE(SUBSTRING(per.ssn,1,8)) as `DATEOFBIRTH`
+from person per
+
+update userentity set `ACCOUNTTYPE` = 'APPLICANT'
+where `ACCOUNTTYPE` LIKE 'applicant'
+
+update userentity set `ACCOUNTTYPE` = 'RECRUITER'
+where `ACCOUNTTYPE` LIKE 'recruit'
+
+-- Copy all applications
+insert ignore into applicationentity (`APPLICATIONID`, `OWNER`, `STATUS`, `VERSION`)
+select
+  comp.competence_profile_id as `APPLICATIONID`,
+    (case when pers.username like '' then pers.email
+    when pers.username IS NULL then pers.email
+    else pers.username end) as `OWNER`,
+  false as `STATUS`,
+  1 as `VERSION`
+from competence_profile comp, person pers
+where comp.person_id = pers.person_id
+group by pers.person_id
+
+-- Copy all periods of availability
+insert ignore into periodofavailability (applicationid,startdate,enddate)
+select
+  appl.`APPLICATIONID` as applicationid,
+  ava.from_date as startdate,
+  ava.to_date as enddate
+from person pers, availability ava, applicationentity appl
+where pers.person_id = ava.person_id
+and appl.`OWNER` LIKE (case when pers.username LIKE '' then pers.email
+  when pers.username IS NULL then pers.email
+  else pers.username end)
+
+-- Copy all yearswithexpertise
+insert ignore into yearswithexpertise (expertise, applicationid, yearsofexperience)
+select
+    comp.`name` as expertise,
+    appl.`APPLICATIONID` as applicationid,
+    cast(comprof.years_of_experience as SIGNED) as yearsofexperience
+from competence_profile comprof, competence comp, applicationentity appl, person pers
+where appl.`OWNER` LIKE (case when pers.username LIKE '' then pers.email
+  when pers.username IS NULL then pers.email
+  else pers.username end)
+and pers.person_id = comprof.person_id
+and comprof.competence_id = comp.competence_id

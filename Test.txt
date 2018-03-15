@@ -11,3 +11,20 @@ CONSTRAINT ACCOUNTTYPE_pk PRIMARY KEY (NAME));
 
 INSERT INTO ACCOUNTTYPE(NAME)
 values ('APPLICANT'), ('RECRUITER');
+
+CREATE TABLE YearsWithExpertise (
+	expertise varchar(255) NOT NULL,
+	applicationid BIGINT NOT NULL,
+	yearsofexperience int,
+	PRIMARY KEY (expertise, applicationid),
+	FOREIGN KEY (expertise) REFERENCES expertiseentity(EXPERTISENAME),
+	FOREIGN KEY (applicationid) REFERENCES applicationentity(APPLICATIONID)
+);
+
+CREATE TABLE periodofavailability (
+	applicationid BIGINT NOT NULL,
+	startdate DATE NOT NULL,
+	enddate DATE NOT NULL,
+	PRIMARY KEY (applicationid, startdate, enddate),
+	FOREIGN KEY (applicationid) REFERENCES applicationentity (APPLICATIONID)
+);

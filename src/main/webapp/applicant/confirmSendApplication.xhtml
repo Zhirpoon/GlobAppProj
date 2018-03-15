@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:body>
+        <ui:composition template="/resources/templates/pagetemplate.xhtml">
+            <ui:define name="content">
+                <h:panelGroup layout="block" class="section" rendered="#{applicationCreator.applicationSent}">
+                    <h:outputText style="color:green" value="You have succesfully sent your application. Thank you!"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block" class="section">
+                    <h:outputLabel class="subtitle">Added Expertises</h:outputLabel>
+                    <c:forEach items="#{applicationCreator.yearswithExpertises}" var="yearsWithExpertise">
+                        <h:panelGroup layout="block" class="box">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:outputLabel class="label" value="Expertise:"/>
+                                        <h:outputText value="#{yearsWithExpertise.expertise}"/>
+                                        <h:outputLabel class="label" value="Years of experience:"/>
+                                        <h:outputText value="#{yearsWithExpertise.years}"/>        
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+                    </c:forEach>
+                    <br/>
+                    <h:outputLabel class="subtitle">Added availability periods</h:outputLabel>
+                    <c:forEach items="#{applicationCreator.availiabilityPeriods}" var="periods">
+                        <h:panelGroup layout="block" class="box">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:outputLabel class="label" value="Start Date:"/>
+                                        <h:outputText value="#{periods.startdate}">
+                                            <f:convertDateTime pattern="d-M-yyyy"/>
+                                        </h:outputText>
+                                        <h:outputLabel class="label" value="End Date:"/>
+                                        <h:outputText value="#{periods.enddate}">
+                                            <f:convertDateTime pattern="d-M-yyyy"/>
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+                    </c:forEach>
+                    <h:form id="form">
+                        <h:commandButton class="button" action="#{applicationCreator.sendApplication()}" value="Confirm Application"/>
+                        <h:commandButton class="button" action="#{applicationCreator.reset()}" value="Cancel Application"/>
+                    </h:form>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

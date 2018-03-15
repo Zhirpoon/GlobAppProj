@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="/resources/templates/pagetemplate.xhtml">
+            <ui:define name="content">
+                <!-- Main container -->
+                <h:panelGroup layout="block" class="section">
+                    <h:panelGroup layout="block" class="container">
+                        <h1 class="title">
+                            Group 6's Application
+                        </h1>
+                        <p class="subtitle">
+                            The following form will register a new user to this page.
+                        </p>
+                    </h:panelGroup>
+                    <h:panelGroup class="section">
+                        <h:form id="form">
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="First Name: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="firstName" class="input" autocomplete="off" value="#{accountHandler.firstName}"/>
+                                            <h:message for="firstName"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Last Name: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="lastName"  class="input" autocomplete="off" value="#{accountHandler.lastName}"/>
+                                            <h:message for="lastName"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Email: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="email" class="input" autocomplete="off" value="#{accountHandler.email}"/>
+                                            <h:message for="email"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Username: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="username" class="input" autocomplete="off" value="#{accountHandler.username}"/>
+                                            <h:message for="username"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Password: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputSecret id="password" class="input" autocomplete="off" value="#{accountHandler.password}"/>
+                                            <h:message for="password"/>            
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Date of Birth (d-M-yyyy):"/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="dateOfBirth" class="input" p:placeholder="d-m-yyyy" autocomplete="off" value="#{accountHandler.dateOfBirth}">
+                                                <!--<f:convertDateTime pattern="d-M-yyyy" />-->
+                                            </h:inputText>
+                                            <h:message for="dateOfBirth"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup class="level-left" layout="block">
+                                <h:commandButton id="base" class="button" action="#{accountHandler.register()}" value="Register new user"/>
+                                <h:message for="base"/>
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

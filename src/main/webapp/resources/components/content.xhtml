@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:tp="http://java.sun.com/jsf/composite/components">
+    <h:body>
+        <composite:interface>
+            <composite:attribute name="isLoggedIn"/>
+            <composite:attribute name="isRecruiter"/>
+            <composite:attribute name="isApplicant"/>
+            <composite:attribute name="userName"/>
+        </composite:interface>
+        <composite:implementation>
+            <h:panelGroup layout="block" class="section">
+                <h:outputText class="label is-size-5" value="YOU ARE #{request.remoteUser} AND HAVE THE AUTHORIZATION" rendered="#{cc.attrs.isLoggedIn}"/>
+            </h:panelGroup>
+            
+        </composite:implementation>
+    </h:body>
+</html>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="/resources/templates/pagetemplate.xhtml">
+            <ui:define name="content">
+                <h:panelGroup layout="block" class="section">
+                    <h:outputLabel class="title" value="Search for existing applications"/>
+                    <h:panelGroup layout="block" class="section">
+                        <h:form id="form">
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Select Expertise:"/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field is-narrow">
+                                        <h:panelGroup layout="block" class="control">
+                                            <h:panelGroup layout="block" class="select is-fullwidth">
+                                                <h:selectOneMenu value="#{applicationLister.expertise}">    
+                                                    <c:forEach var="expertise" items="#{applicationLister.expertises}">
+                                                        <f:selectItem id="expertise" itemValue="#{expertise}" itemLabel="#{expertise}"/>
+                                                        <h:message for="expertise"/>
+                                                    </c:forEach>
+                                                </h:selectOneMenu>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                    <h:commandButton class="button" id="addCompetence" value="Add" action="#{applicationLister.addCompetence()}"/>
+                                    <h:message for="addCompetence"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Availability Period Start Date: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="startDate" class="input" p:placeholder="d-m-yyyy" autocomplete="off" value="#{applicationLister.startDate}">
+                                                <!--<f:convertDateTime pattern="d-M-yyyy" />-->
+                                            </h:inputText>
+                                            <h:message for="startDate"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Availability Period End Date: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="endDate" class="input" p:placeholder="d-m-yyyy" autocomplete="off" value="#{applicationLister.endDate}">
+                                                <!--<f:convertDateTime pattern="d-M-yyyy" />-->
+                                            </h:inputText>
+                                            <h:message for="endDate"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="field is-horizontal">
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="First Name: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="firstName" class="input" autocomplete="off" value="#{applicationLister.firstName}"/>
+                                            <h:message for="firstName"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup  layout="block" class="field-label">
+                                    <h:outputLabel class="label" value="Last Name: "/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="field-body">
+                                    <h:panelGroup layout="block" class="field">
+                                        <h:panelGroup  class="control is-expanded has-icons-left">
+                                            <h:inputText id="lastName"  class="input" autocomplete="off" value="#{applicationLister.lastName}"/>
+                                            <h:message for="lastName"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:commandButton id="base" class="button" value="Search" action="#{applicationLister.search()}"/>
+                            <h:message for="base"/>
+                        </h:form>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup layout="block" class="section" style="border-top:2px solid black">
+                    <h:outputLabel class="label">Added Expertises</h:outputLabel>
+                    <c:forEach items="#{applicationLister.competences}" var="yearsWithExpertise">
+                        <h:panelGroup layout="block" class="box">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:outputLabel class="label" value="Expertise:"/>
+                                        <h:outputText value="#{yearsWithExpertise}"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+                    </c:forEach>
+                </h:panelGroup>
+                <h:panelGroup layout="block" class="section" style="border-top:2px solid black">
+                    <h:outputLabel class="label">Matching Applications</h:outputLabel>
+                    <c:forEach items="#{applicationLister.applications}" var="application">
+                        <h:panelGroup layout="block" class="box" style="width:50%;">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:panelGrid columns="4">
+                                            <h:outputLabel class="label" value="First Name:"/>
+                                            <h:outputText value="#{application.firstName}"/>
+                                            <h:outputLabel class="label" value="Last Name:"/>
+                                            <h:outputText value="#{application.lastName}"/>
+                                            <h:outputLabel class="label" value="Date Of Registration:"/>
+                                            <h:outputText value="#{application.dateOfRegistration}"/>
+                                        </h:panelGrid>
+                                        <h:form>
+                                            <h:commandButton class="button" value="Choose Application" action="#{applicationLister.setViewedApplicationId(application.applicationId)}"/>
+                                            <h:commandButton class="button" value="View Application" action="/recruiter/viewapplication.xhtml"/>
+                                        </h:form>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+                    </c:forEach>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

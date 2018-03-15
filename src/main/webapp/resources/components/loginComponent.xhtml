@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <h:body>
+        <composite:interface>
+            <composite:attribute name="usernameLabel"/>
+            <composite:attribute name="usernameValue"/>
+            <composite:attribute name="passwordLabel"/>
+            <composite:attribute name="passwordValue"/>
+            <composite:attribute name="loginButtonLabel"/>
+            <composite:attribute name="loginButtonAction"/>
+        </composite:interface>
+        <composite:implementation>
+            <h:form p:action="#{cc.attrs.loginButtonAction}">
+                <h:panelGroup layout="block" class="field is-horizontal">
+                    <h:panelGroup layout="block" class="field-body">
+                        <h:panelGroup layout="block" class="field">
+                            <h:panelGroup class="control is-expanded has-icons-left">
+                                <h:inputText class="input" p:placeholder="#{cc.attrs.usernameLabel}" autocomplete="off" p:name="#{cc.attrs.usernameValue}"/>
+                                <h:panelGroup class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="field-body">
+                        <h:panelGroup layout="block" class="field">
+                            <h:panelGroup class="control is-expanded has-icons-left">
+                                <h:inputText class="input" p:placeholder="#{cc.attrs.passwordLabel}" autocomplete="off" p:name="#{cc.attrs.passwordValue}"/>
+                                <h:panelGroup class="icon is-small is-left">
+                                    <i class="fas fa-key"></i>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="field-body">
+                        <h:commandButton class="button" type="submit" value="#{cc.attrs.loginButtonLabel}"/>
+                        <h:button class="button is-success" outcome="/register" value="Register"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            
+        </composite:implementation>
+    </h:body>
+</html>

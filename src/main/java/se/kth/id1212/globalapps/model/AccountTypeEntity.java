@@ -3,8 +3,6 @@ package se.kth.id1212.globalapps.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
@@ -17,20 +15,34 @@ public class AccountTypeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = true)
+    @Size(min = 1, max = 255)
     private String name;
     
+    /**
+     * The null constructor for AccountTypeEntity
+     */
     public AccountTypeEntity() {
     }
     
+    /**
+     * The constructor for <code>AccountTypeEntity</code> that has a specified name.
+     * @param name The newly created <code>AccountTypeEntity</code>'s name, which is also the primary key.
+     */
     public AccountTypeEntity(String name) {
         this.name = name;
     }
 
+    /**
+     * @return The <code>AccountTypeEntity</code>'s name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @param name The <code>AccountTypeEntity</code>'s new account type.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -44,20 +56,16 @@ public class AccountTypeEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof AccountTypeEntity)) {
             return false;
         }
         AccountTypeEntity other = (AccountTypeEntity) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name))) {
-            return false;
-        }
-        return true;
+        return !((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name)));
     }
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.AccountTypeEntity[ name=" + name + " ]";
+        return "se.kth.id1212.globalapps.model.AccountTypeEntity[ AccountTypeEntity name= " + name + " ]";
     }
     
 }

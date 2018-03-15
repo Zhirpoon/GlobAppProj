@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:body>
+        <ui:composition template="/resources/templates/pagetemplate.xhtml">
+            <ui:define name="content">
+                <h:panelGroup layout="block" class="section box" style="margin:2%">
+                    <h:outputText class="subtitle" value="Viewing the selected application"/>
+                    <h:panelGroup layout="block" class="box">
+                            <article class="media">
+                                <h:panelGroup layout="block" class="media-content">
+                                    <h:panelGroup layout="block" class="content">
+                                        <h:panelGrid columns="4">
+                                            <h:outputLabel class="label" value="First Name:"/>
+                                            <h:outputText value="#{applicationLister.viewedApplication.firstName}"/>
+                                            <h:outputLabel class="label" value="Last Name:"/>
+                                            <h:outputText value="#{applicationLister.viewedApplication.lastName}"/>
+                                            <h:outputLabel class="label" value="Date Of Registration:"/>
+                                            <h:outputText value="#{applicationLister.viewedApplication.dateOfRegistration}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="4">
+                                            <c:forEach items="#{applicationLister.viewedApplication.expertises}" var="expertise">
+                                                <h:outputLabel class="label" value="Expertise:"/>
+                                                <h:outputText value="#{expertise.expertise}"/>
+                                                <h:outputLabel class="label" value="Years of experience:"/>
+                                                <h:outputText value="#{expertise.years}"/>
+                                            </c:forEach>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="4">
+                                            <c:forEach items="#{applicationLister.viewedApplication.availabilityPeriods}" var="period">
+                                                <h:outputLabel class="label" value="Start Date:"/>
+                                                <h:outputText value="#{period.startdate}"/>
+                                                <h:outputLabel class="label" value="End Date:"/>
+                                                <h:outputText value="#{period.enddate}"/>
+                                            </c:forEach>
+                                        </h:panelGrid>
+                                        <h:outputLink value="#{applicationLister.pdfName}">Download as PDF</h:outputLink>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </article>
+                        </h:panelGroup>
+
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

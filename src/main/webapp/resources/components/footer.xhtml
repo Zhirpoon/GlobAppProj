@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:tp="http://java.sun.com/jsf/composite/components">
+    <h:body>
+        <composite:interface>
+            <composite:attribute name="isLoggedIn"/>
+            <composite:attribute name="isRecruiter"/>
+            <composite:attribute name="isApplicant"/>
+            <composite:attribute name="userName"/>
+        </composite:interface>
+        <composite:implementation>
+            <nav class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item">
+                        <p class="is-9">
+                            footer
+                        </p>
+                        <p class="subtitle is-5">
+                            <strong>OUR</strong> Application
+                        </p>
+
+                    </div>
+                </div>
+                <!-- Right side -->
+                <h:panelGroup layout="block" class="level-right"> 
+                    <h:form>
+                        <h:commandButton class="button is-link" action="/welcome" value="First Page" />
+                    </h:form>
+                    <h:form rendered="#{cc.attrs.isLoggedIn}">
+                        <h:commandButton action="#{accountType.logout()}" class="level-item button is-success" value="Log Out"></h:commandButton>
+                    </h:form>
+                </h:panelGroup>
+            </nav>
+        </composite:implementation>
+    </h:body>
+</html>

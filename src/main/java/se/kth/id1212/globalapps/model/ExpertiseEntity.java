@@ -3,8 +3,6 @@ package se.kth.id1212.globalapps.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
@@ -17,21 +15,34 @@ public class ExpertiseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "EXPERTISENAME")
+    @Column(name = "EXPERTISENAME", nullable= true)
     @Size(min = 1, max = 255)
     private String expertiseName;
     
+    /**
+     * Null constructor of <code>ExpertiseEntity</code>
+     */
     public ExpertiseEntity() {
     }
     
+    /**
+     * Constructor of <code>ExpertiseEntity</code> with specified expertise name, used to store data in database.
+     * @param expertiseName The <code>ExpertiseEntity</code>'s name.
+     */
     public ExpertiseEntity(String expertiseName) {
         this.expertiseName = expertiseName;
     }
 
+    /**
+     * @return The <code>ExpertiseEntity</code>'s name.
+     */
     public String getExpertiseName() {
         return expertiseName;
     }
 
+    /**
+     * @param expertiseName Sets the <code>ExpertiseEntity</code>'s name.
+     */
     public void setExpertiseName(String expertiseName) {
         this.expertiseName = expertiseName;
     }
@@ -45,7 +56,6 @@ public class ExpertiseEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ExpertiseEntity)) {
             return false;
         }
@@ -55,7 +65,7 @@ public class ExpertiseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.ExpertiseEntity[ expertise name=" + expertiseName + " ]";
+        return "se.kth.id1212.globalapps.model.ExpertiseEntity[ ExpertiseEntity name=" + expertiseName + " ]";
     }
     
 }

@@ -8,9 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-import se.kth.id1212.globalapps.dtos.ApplicationDTO;
-import se.kth.id1212.globalapps.dtos.YearsWithExpertiseDTO;
 
 /**
  *
@@ -24,38 +21,36 @@ public class ApplicationEntity implements Serializable {
     private Long applicationId;
     
     @ManyToOne
-    @JoinColumn(name= "OWNER", nullable= false)
+    @JoinColumn(name= "OWNER", nullable= true)
     private UserEntity userEntity;
-    
-    @Column(name = "PERIODSOFAVAILABILITY", nullable = false)
-    private TimePeriod[] periodsOfAvailability;
-    
-    @Column(name = "YEARSWITHEXPERTISE", nullable = false)
-    private YearsWithExpertise[] expertises;
-    
-    @Column(name = "STATUS", nullable = false)
+  
+    @Column(name = "STATUS", nullable = true)
     private boolean status;
     
-    @Column(name = "VERSION", nullable = false)
+    @Column(name = "VERSION", nullable = true)
     private int versionNumber;
     
+    /**
+     * The null constructor for ApplicationEntity.
+     */
     public ApplicationEntity() {
     }
     
-    public ApplicationEntity(ApplicationDTO applicationDTO , UserEntity userEntity) {
+    /**
+     * The constructor for <code>ApplicationEntity</code>, it is the entity in which applications are saved to the database.
+     * It automatically initiates the version number to 1 and sets the accepted status to false.
+     * UserEntity in this case is a foreign key in the ApplicationEntity.
+     * @param userEntity The <code>ApplicationEntity</code>'s owner.
+     */
+    public ApplicationEntity(UserEntity userEntity) {
             this.userEntity = userEntity;
-            this.expertises = new YearsWithExpertise[applicationDTO.getExpertises().length];
-            this.periodsOfAvailability = new TimePeriod[applicationDTO.getAvailabilityPeriods().length];
-            for(int i=0;i<this.expertises.length;i++) {
-                this.expertises[i] = new YearsWithExpertise(applicationDTO.getExpertises()[i]);
-            }
-            for(int i=0;i<this.periodsOfAvailability.length;i++) {
-                this.periodsOfAvailability[i] = new TimePeriod(applicationDTO.getAvailabilityPeriods()[i]);
-            }
-            this.status = applicationDTO.getStatus();
+            this.status = false;
             this.versionNumber = 1;
     }
     
+    /**
+     * @return The <code>ApplicationEntity</code>'s generated ID.
+     */
     public Long getApplicationId() {
         return applicationId;
     }
@@ -76,29 +71,44 @@ public class ApplicationEntity implements Serializable {
         return !((this.applicationId == null && other.applicationId != null) || (this.applicationId != null && !this.applicationId.equals(other.applicationId)));
     }
 
+    /**
+     * @return The <code>ApplicationEntity</code>'s owner.
+     */
     public UserEntity getUserEntity() {
         return userEntity;
     }
 
-    public TimePeriod[] getPeriodsOfAvailability() {
-        return periodsOfAvailability;
-    }
-
-    public YearsWithExpertise[] getExpertises() {
-        return expertises;
-    }
-
+    /**
+     * @return Says if the <code>ApplicationEntity</code> is accepted or not.
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     * @return The <code>ApplicationEntity</code>'s version number.
+     */
     public int getVersionNumber() {
         return versionNumber;
+    }
+    
+    /**
+     * @param versionNumber The <code>ApplicationEntity</code>'s new version number.
+     */
+    public void setVersionNumber(int versionNumber) {
+        this.versionNumber = versionNumber;
+    }
+    
+    /**
+     * @param status The <code>ApplicationEntity</code>'s new status.
+     */
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "se.kth.id1212.globalapps.model.ApplicationEntity[ id=" + applicationId + " ]";
+        return "se.kth.id1212.globalapps.model.ApplicationEntity[ ApplicationEntity id= " + applicationId + " ]";
     }
     
 }
